@@ -30,7 +30,7 @@ public class DirectoryFile implements File {
         for (File x : children) {
             size += x.getSize();
         }
-        Collections.sort(children,Collections.reverseOrder());
+        Collections.sort(children, Collections.reverseOrder());
     }
 
     @Override

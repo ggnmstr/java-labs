@@ -18,20 +18,20 @@ public class Main {
             return;
         }
         DirectoryFile curdir = new DirectoryFile(workpath);
-        jduPrint(curdir,3,0,3);
+        jduPrint(curdir, 3, 0, 3);
 
     }
 
-    public static void jduPrint(File curdir,int limit, int start, int maxdepth){
+    public static void jduPrint(File curdir, int limit, int start, int maxdepth) {
         if (start == maxdepth) return;
-        for (int i = 0; i < start; i++){
+        for (int i = 0; i < start; i++) {
             System.out.print("  ");
         }
         System.out.println(curdir);
         if (curdir.getChildren() == null) return;
         int displayed = 0;
-        for (File x : curdir.getChildren()){
-            jduPrint(x,limit,start+1,maxdepth);
+        for (File x : curdir.getChildren()) {
+            jduPrint(x, limit, start + 1, maxdepth);
             displayed++;
             if (displayed == limit) break;
         }
