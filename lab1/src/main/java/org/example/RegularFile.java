@@ -33,4 +33,9 @@ public class RegularFile implements File {
     public List<File> getChildren() {
         return null;
     }
+
+    @Override
+    public int compareTo(File o) {
+        return (int) (size - o.getSize());
+    }
 }

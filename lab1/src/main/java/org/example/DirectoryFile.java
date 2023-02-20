@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -29,6 +30,7 @@ public class DirectoryFile implements File {
         for (File x : children) {
             size += x.getSize();
         }
+        Collections.sort(children,Collections.reverseOrder());
     }
 
     @Override
@@ -44,5 +46,10 @@ public class DirectoryFile implements File {
     @Override
     public List<File> getChildren() {
         return children;
+    }
+
+    @Override
+    public int compareTo(File o) {
+        return (int) (size - o.getSize());
     }
 }
