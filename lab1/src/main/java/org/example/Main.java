@@ -18,7 +18,7 @@ public class Main {
             return;
         }
         DirectoryFile curdir = new DirectoryFile(workpath);
-        jduPrint(curdir, 3, 0, 3);
+        jduPrint(curdir, 5, 0, 5);
 
     }
 

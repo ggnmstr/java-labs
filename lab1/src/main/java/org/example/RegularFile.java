@@ -21,7 +21,7 @@ public class RegularFile implements File {
 
     @Override
     public String toString() {
-        return path.getFileName() + " [" + size + "] bytes";
+        return path.getFileName() + " [" + size + " bytes]";
     }
 
     @Override
