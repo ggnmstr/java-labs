@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class DirectoryFile implements File {
 
@@ -19,10 +18,16 @@ public class DirectoryFile implements File {
         this.size = 0;
         children = new ArrayList<>();
         try {
-            Stream<Path> stream = Files.list(path);
-            List<Path> inside = stream.toList();
+            List<Path> inside = Files.list(path).toList();
             for (Path x : inside) {
-                children.add(Files.isRegularFile(x) ? new RegularFile(x) : new DirectoryFile(x));
+                if (Files.isRegularFile(x)) {
+                    children.add(new RegularFile(x));
+                } else if (Files.isDirectory(x) && !Files.isSymbolicLink(x) ) {
+                    children.add(new DirectoryFile(x));
+                } else if (Files.isSymbolicLink(x)) {
+                    children.add(new SymlinkFile(x));
+                }
+                //children.add(Files.isRegularFile(x) ? new RegularFile(x) : new DirectoryFile(x));
             }
         } catch (IOException e) {
             System.err.println("oops");
@@ -51,5 +56,9 @@ public class DirectoryFile implements File {
     @Override
     public int compareTo(File o) {
         return (int) (size - o.getSize());
+    }
+
+    private void childrenFill(Path path, boolean slsupport){
+
     }
 }
