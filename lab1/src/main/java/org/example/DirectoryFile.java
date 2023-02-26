@@ -7,12 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DirectoryFile implements File {
-
-    private final Path path;
-    private long size;
+public class DirectoryFile extends File {
     private ArrayList<File> children;
 
+    /*
     public DirectoryFile(Path path) {
         this.path = path;
         this.size = 0;
@@ -25,6 +23,7 @@ public class DirectoryFile implements File {
                 } else if (Files.isDirectory(x) && !Files.isSymbolicLink(x) ) {
                     children.add(new DirectoryFile(x));
                 } else if (Files.isSymbolicLink(x)) {
+                    //System.out.println(x.toRealPath());
                     children.add(new SymlinkFile(x));
                 }
                 //children.add(Files.isRegularFile(x) ? new RegularFile(x) : new DirectoryFile(x));
@@ -38,15 +37,21 @@ public class DirectoryFile implements File {
         Collections.sort(children, Collections.reverseOrder());
     }
 
-    @Override
-    public String toString() {
-        return "/" + path.getFileName() + " [" + size + " bytes]";
+     */
+
+    public DirectoryFile(Path path) {
+        this.realPath = path;
+        this.size = 0;
+        children = new ArrayList<>();
     }
 
+
+
     @Override
-    public long getSize() {
-        return size;
+    public String toString() {
+        return "/" + realPath.getFileName() + " [" + size + " bytes]";
     }
+
 
     @Override
     public List<File> getChildren() {
@@ -54,11 +59,8 @@ public class DirectoryFile implements File {
     }
 
     @Override
-    public int compareTo(File o) {
-        return (int) (size - o.getSize());
+    public void setChildren(List<File> children) {
+        this.children = (ArrayList<File>) children;
     }
 
-    private void childrenFill(Path path, boolean slsupport){
-
-    }
 }

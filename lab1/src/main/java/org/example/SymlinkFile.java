@@ -1,31 +1,25 @@
 package org.example;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class SymlinkFile implements File {
-    private Path path;
-    private long size;
+public class SymlinkFile extends File {
+
+    static final long SYMLINK_SIZE = 4096;
 
     public SymlinkFile(Path path){
-        this.path = path;
         try {
-            this.size = Files.size(this.path);
+            this.realPath = path.toRealPath();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("symlink construct error");
         }
+        this.size = 0;
     }
 
     @Override
     public String toString() {
-        return "/" + path.getFileName() + " [" + size + " bytes]";
-    }
-
-    @Override
-    public long getSize() {
-        return this.size;
+        return "/" + realPath.getFileName() + " [" + size + " bytes]";
     }
 
     @Override
@@ -34,7 +28,8 @@ public class SymlinkFile implements File {
     }
 
     @Override
-    public int compareTo(File o) {
-        return 0;
+    public void setChildren(List<File> children) {
+
     }
+
 }

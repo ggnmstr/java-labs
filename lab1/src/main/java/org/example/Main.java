@@ -17,7 +17,9 @@ public class Main {
             System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
-        DirectoryFile curdir = new DirectoryFile(workpath);
+        FileTreeBuilder builder = new FileTreeBuilder();
+        File curdir = builder.build(workpath);
+        //DirectoryFile curdir = new DirectoryFile(workpath);
         jduPrint(curdir, 5, 0, 5);
 
     }

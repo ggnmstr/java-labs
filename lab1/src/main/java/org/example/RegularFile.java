@@ -5,23 +5,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class RegularFile implements File {
-    private final Path path;
-    private long size;
+public class RegularFile extends File {
 
     public RegularFile(Path path) {
-        this.path = path;
+        this.realPath = path;
         try {
             this.size = Files.size(path);
         } catch (IOException e) {
-            //throw new RuntimeException(e);
+            System.err.println("RegularFile size error???");
         }
 
     }
 
     @Override
     public String toString() {
-        return path.getFileName() + " [" + size + " bytes]";
+        return realPath.getFileName() + " [" + size + " bytes]";
     }
 
     @Override
@@ -35,7 +33,8 @@ public class RegularFile implements File {
     }
 
     @Override
-    public int compareTo(File o) {
-        return (int) (size - o.getSize());
+    public void setChildren(List<File> children) {
+
     }
+
 }
