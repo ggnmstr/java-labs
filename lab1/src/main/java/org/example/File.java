@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -9,17 +10,21 @@ public abstract class File implements Comparable<File> {
     protected Path realPath;
     protected long size;
 
-//    protected File(Path path) {
-//        try {
-//            this.path = path.toRealPath();
-//        } catch (IOException e) {
-//            System.err.println("abc");
-//        }
-//    }
+    protected File(Path path) {
+        try {
+            this.realPath = path.toRealPath();
+        } catch (IOException e) {
+            System.err.println("file constructor error");
+        }
+    }
 
     abstract List<File> getChildren();
 
     abstract public void setChildren(List<File> children);
+
+    public void setSize(long size){
+        this.size = size;
+    }
 
 
     public Path getRealPath() {

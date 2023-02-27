@@ -8,7 +8,7 @@ import java.util.List;
 public class RegularFile extends File {
 
     public RegularFile(Path path) {
-        this.realPath = path;
+        super(path);
         try {
             this.size = Files.size(path);
         } catch (IOException e) {

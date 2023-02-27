@@ -8,6 +8,33 @@ import java.util.*;
 public class FileTreeBuilder {
     HashSet<File> visited = new HashSet<>();
 
+    public File buildnew(Path path) {
+        File root = createFile(path);
+        if (root == null || visited.contains(root)) return null;
+        visited.add(root);
+        if (!(root instanceof RegularFile)) {
+            long size = 0;
+            ArrayList<File> children = new ArrayList<>();
+            try {
+                List<Path> inside = Files.list(path).toList();
+                for (Path x : inside) {
+                    File kid = buildnew(x);
+                    if (kid == null) continue;
+                    children.add(kid);
+                }
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+            Collections.sort(children, Collections.reverseOrder());
+            root.setChildren(children);
+            for (File x : children) {
+                size += x.getSize();
+            }
+            root.setSize(size);
+        }
+        return root;
+    }
+
     public File build(Path path) {
         File root = createFile(path);
         if (root == null) return null;

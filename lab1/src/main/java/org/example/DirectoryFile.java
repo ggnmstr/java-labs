@@ -40,7 +40,7 @@ public class DirectoryFile extends File {
      */
 
     public DirectoryFile(Path path) {
-        this.realPath = path;
+        super(path);
         this.size = 0;
         children = new ArrayList<>();
     }

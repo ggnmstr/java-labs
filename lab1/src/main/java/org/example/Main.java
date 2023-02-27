@@ -18,7 +18,7 @@ public class Main {
             return;
         }
         FileTreeBuilder builder = new FileTreeBuilder();
-        File curdir = builder.build(workpath);
+        File curdir = builder.buildnew(workpath);
         //DirectoryFile curdir = new DirectoryFile(workpath);
         jduPrint(curdir, 5, 0, 5);
 
