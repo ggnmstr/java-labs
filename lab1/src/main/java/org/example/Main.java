@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -46,9 +47,9 @@ public class Main {
         // depth, limit, L
         int[] params = {5, 5, 0};
         for (int i = 0; i < args.length; i++){
-            if (args[i] == "-L") params[2] = 1;
-            if (args[i] == "--depth" && isPosInteger(args[i+1]) > 0) params[0] = isPosInteger(args[i+1]);
-            if (args[i] == "--limit" && isPosInteger(args[i+1]) > 0) params[1] = isPosInteger(args[i+1]);
+            if (Objects.equals(args[i], "-L")) params[2] = 1;
+            if (Objects.equals(args[i], "--depth") && isPosInteger(args[i+1]) > 0) params[0] = isPosInteger(args[i+1]);
+            if (Objects.equals(args[i], "--limit") && isPosInteger(args[i+1]) > 0) params[1] = isPosInteger(args[i+1]);
         }
         return params;
     }
