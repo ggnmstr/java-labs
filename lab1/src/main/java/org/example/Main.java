@@ -22,18 +22,19 @@ public class Main {
         File curdir = builder.build(workpath);
         int[] params = parseParams(args);
         //DirectoryFile curdir = new DirectoryFile(workpath);
-        jduPrint(curdir,5,0,5,false);
-        //jduPrint(curdir, params[1], 0, params[0],params[2]);
+        //jduPrint(curdir,5,0,5,false);
+        jduPrint(curdir, params[1], 0, params[0],params[2]);
 
     }
 
-    public static void jduPrint(File curdir, int limit, int start, int maxdepth, boolean golinks) {
+    public static void jduPrint(File curdir, int limit, int start, int maxdepth, int golinks) {
+        //System.out.println("L: "+limit + " D:" + maxdepth);
         if (start == maxdepth) return;
         for (int i = 0; i < start; i++) {
             System.out.print("  ");
         }
         System.out.println(curdir);
-        if (curdir instanceof SymlinkFile && !golinks) return;
+        if (curdir instanceof SymlinkFile && golinks == 0) return;
         if (curdir.getChildren() == null) return;
         int displayed = 0;
         for (File x : curdir.getChildren()) {
