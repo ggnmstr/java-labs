@@ -18,9 +18,11 @@ public class Main {
             return;
         }
         FileTreeBuilder builder = new FileTreeBuilder();
-        File curdir = builder.buildnew(workpath);
+        File curdir = builder.buildrec(workpath);
+        int[] params = parseParams(args);
         //DirectoryFile curdir = new DirectoryFile(workpath);
-        jduPrint(curdir, 5, 0, 5);
+        jduPrint(curdir,5,0,5);
+        //jduPrint(curdir, params[1], 0, params[0]);
 
     }
 
@@ -42,6 +44,21 @@ public class Main {
     public static int[] parseParams(String[] args) {
         // depth, limit, L
         int[] params = {5, 5, 0};
+        for (int i = 0; i < args.length; i++){
+            if (args[i] == "-L") params[2] = 1;
+            if (args[i] == "--depth" && isPosInteger(args[i+1]) > 0) params[0] = isPosInteger(args[i+1]);
+            if (args[i] == "--limit" && isPosInteger(args[i+1]) > 0) params[1] = isPosInteger(args[i+1]);
+        }
         return params;
+    }
+
+    public static int isPosInteger(String arg){
+        int res = -1;
+        try{
+            res = Integer.parseInt(arg);
+        } catch (NumberFormatException e){
+
+        }
+        return res;
     }
 }

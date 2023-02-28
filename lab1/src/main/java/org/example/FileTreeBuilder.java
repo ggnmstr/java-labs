@@ -8,7 +8,7 @@ import java.util.*;
 public class FileTreeBuilder {
     HashSet<File> visited = new HashSet<>();
 
-    public File buildnew(Path path) {
+    public File buildrec(Path path) {
         File root = createFile(path);
         if (root == null || visited.contains(root)) return null;
         visited.add(root);
@@ -18,7 +18,7 @@ public class FileTreeBuilder {
             try {
                 List<Path> inside = Files.list(path).toList();
                 for (Path x : inside) {
-                    File kid = buildnew(x);
+                    File kid = buildrec(x);
                     if (kid == null) continue;
                     children.add(kid);
                 }
@@ -40,11 +40,14 @@ public class FileTreeBuilder {
         if (root == null) return null;
         Deque<File> toVisit = new ArrayDeque<>();
         toVisit.add(root);
+        Stack<File> dirStack = new Stack<>();
         while (!toVisit.isEmpty()) {
             File cur = toVisit.removeLast();
             List<File> children = getChildren(cur);
             if (children == null) continue;
+            dirStack.push(cur);
             cur.setChildren(children);
+            Collections.sort(children,Collections.reverseOrder());
             for (File x : children) {
                 if (!visited.contains(x)) {
                     toVisit.add(x);
@@ -53,7 +56,6 @@ public class FileTreeBuilder {
             }
         }
         return root;
-
     }
 
     public File createFile(Path path) {
