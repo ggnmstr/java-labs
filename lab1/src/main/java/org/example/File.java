@@ -26,11 +26,6 @@ public abstract class File implements Comparable<File> {
         this.size = size;
     }
 
-    public void increaseSize(long val){
-        this.size += val;
-    }
-
-
     public Path getRealPath() {
         return this.realPath;
     }

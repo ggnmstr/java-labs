@@ -18,24 +18,25 @@ public class Main {
             return;
         }
         FileTreeBuilder builder = new FileTreeBuilder();
-        File curdir = builder.buildrec(workpath);
+        File curdir = builder.build(workpath);
         int[] params = parseParams(args);
         //DirectoryFile curdir = new DirectoryFile(workpath);
-        jduPrint(curdir,5,0,5);
-        //jduPrint(curdir, params[1], 0, params[0]);
+        jduPrint(curdir,5,0,5,false);
+        //jduPrint(curdir, params[1], 0, params[0],params[2]);
 
     }
 
-    public static void jduPrint(File curdir, int limit, int start, int maxdepth) {
+    public static void jduPrint(File curdir, int limit, int start, int maxdepth, boolean golinks) {
         if (start == maxdepth) return;
         for (int i = 0; i < start; i++) {
             System.out.print("  ");
         }
         System.out.println(curdir);
+        if (curdir instanceof SymlinkFile && !golinks) return;
         if (curdir.getChildren() == null) return;
         int displayed = 0;
         for (File x : curdir.getChildren()) {
-            jduPrint(x, limit, start + 1, maxdepth);
+            jduPrint(x, limit, start + 1, maxdepth,golinks);
             displayed++;
             if (displayed == limit) break;
         }

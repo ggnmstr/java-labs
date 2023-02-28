@@ -1,35 +1,44 @@
 package org.example;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SymlinkFile extends File {
-
-    static final long SYMLINK_SIZE = 4096;
-
     private ArrayList<File> children;
 
     private Path linkPath;
+    private long linkSize;
 
     public SymlinkFile(Path path){
         super(path);
         this.linkPath = path;
         this.children = new ArrayList<>();
         this.size = 0;
+        try {
+            this.linkSize = Files.size(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public String toString() {
         try {
             String s = String.valueOf(this.realPath.toRealPath());
-            return realPath.getFileName() + " (symlink to " + s + " ) [" + size + " bytes]";
+            return linkPath.getFileName() + " (symlink to " + s + " ) [" + linkSize + " bytes]";
         } catch (IOException e) {
-            return realPath.getFileName() + " (symlink to " + realPath + " [" + size + " bytes]";
+            return linkPath.getFileName() + " (symlink to " + realPath + " [" + linkSize + " bytes]";
 
         }
 
+    }
+
+    @Override
+    public long getSize() {
+        return this.linkSize;
     }
 
     @Override
