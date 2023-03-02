@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SymlinkFile extends File {
+    // Cross CR: private File child;
     private ArrayList<File> children;
 
     private Path linkPath;
@@ -20,6 +21,7 @@ public class SymlinkFile extends File {
         try {
             this.linkSize = Files.size(path);
         } catch (IOException e) {
+            // Cross CR: remove
             throw new RuntimeException(e);
         }
     }
@@ -27,6 +29,7 @@ public class SymlinkFile extends File {
     @Override
     public String toString() {
         try {
+            // Cross CR: toRealPath twice
             String s = String.valueOf(this.realPath.toRealPath());
             return linkPath.getFileName() + " (symlink to " + s + " ) [" + linkSize + " bytes]";
         } catch (IOException e) {

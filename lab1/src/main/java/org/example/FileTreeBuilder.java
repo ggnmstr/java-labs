@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class FileTreeBuilder {
+    // Cross CR: Set<File>
     HashSet<File> visited = new HashSet<>();
 
     public File build(Path path) {
@@ -23,6 +24,7 @@ public class FileTreeBuilder {
                     children.add(kid);
                 }
             } catch (Exception e) {
+                // Cross CR: no print
                 System.err.println(e);
             }
             Collections.sort(children, Collections.reverseOrder());
@@ -60,6 +62,7 @@ public class FileTreeBuilder {
     }
     */
     public File createFile(Path path) {
+        // Cross CR: isSymlink first
         if (Files.isRegularFile(path)) {
             return new RegularFile(path);
         } else if (Files.isDirectory(path) && !Files.isSymbolicLink(path)) {

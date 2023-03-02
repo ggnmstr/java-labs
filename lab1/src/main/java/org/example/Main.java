@@ -1,3 +1,4 @@
+// Cross CR: rename package :D
 package org.example;
 
 import java.io.IOException;
@@ -20,6 +21,8 @@ public class Main {
         }
         FileTreeBuilder builder = new FileTreeBuilder();
         File curdir = builder.build(workpath);
+        // Cross CR: parse params first
+        // Cross CR: make try-catch
         int[] params = parseParams(args);
         if (params == null) {
             usage();
@@ -47,9 +50,11 @@ public class Main {
 
     public static int[] parseParams(String[] args) {
         // depth, limit, L
+        // Cross CR: record
         int[] params = {5, 5, 0};
         int i = 1;
         while (i < args.length){
+            // Cross CR: switch-case
             if (Objects.equals(args[i], "-L")) {
                 params[2] = 1;
                 i++;
@@ -71,6 +76,7 @@ public class Main {
     }
 
     public static int isPosInteger(String arg){
+        // throw something
         int res = -1;
         try{
             res = Integer.parseInt(arg);
