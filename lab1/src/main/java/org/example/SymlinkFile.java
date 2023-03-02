@@ -21,8 +21,6 @@ public class SymlinkFile extends File {
         try {
             this.linkSize = Files.size(path);
         } catch (IOException e) {
-            // Cross CR: remove
-            throw new RuntimeException(e);
         }
     }
 

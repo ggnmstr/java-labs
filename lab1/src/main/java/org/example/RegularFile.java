@@ -12,8 +12,6 @@ public class RegularFile extends File {
         try {
             this.size = Files.size(path);
         } catch (IOException e) {
-            // Cross CR: again
-            System.err.println("RegularFile size error???");
         }
 
     }

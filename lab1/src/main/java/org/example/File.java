@@ -14,8 +14,6 @@ public abstract class File implements Comparable<File> {
         try {
             this.realPath = path.toRealPath();
         } catch (IOException e) {
-            // Cross CR: println in constructor???
-            System.err.println("file constructor error");
         }
     }
 
