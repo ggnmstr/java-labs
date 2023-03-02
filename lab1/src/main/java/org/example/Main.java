@@ -19,15 +19,14 @@ public class Main {
             System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
-        FileTreeBuilder builder = new FileTreeBuilder();
-        File curdir = builder.build(workpath);
-        // Cross CR: parse params first
-        // Cross CR: make try-catch
         int[] params = parseParams(args);
         if (params == null) {
             usage();
             return;
         }
+        FileTreeBuilder builder = new FileTreeBuilder();
+        File curdir = builder.build(workpath);
+        // Cross CR: make try-catch
         jduPrint(curdir, params[1], 0, params[0],params[2]);
 
     }
