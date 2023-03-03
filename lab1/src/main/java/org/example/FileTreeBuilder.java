@@ -13,7 +13,8 @@ public class FileTreeBuilder {
         File root = createFile(path);
         if (root == null || visited.contains(root)) return null;
         visited.add(root);
-        if (!(root instanceof RegularFile)) {
+        if (Files.isDirectory(path)){
+        //if (!(root instanceof RegularFile)) {
             long size = 0;
             ArrayList<File> children = new ArrayList<>();
             try {
@@ -63,13 +64,17 @@ public class FileTreeBuilder {
     */
     public File createFile(Path path) {
         // Cross CR: isSymlink first
+        if (Files.isSymbolicLink(path)){
+            return new SymlinkFile(path);
+        }
         if (Files.isRegularFile(path)) {
             return new RegularFile(path);
-        } else if (Files.isDirectory(path) && !Files.isSymbolicLink(path)) {
+        }
+        if (Files.isDirectory(path)){
             return new DirectoryFile(path);
-        } else if (Files.isSymbolicLink(path)) {
-            return new SymlinkFile(path);
-        } else return null;
+        }
+
+        return null;
     }
 
     public List<File> getChildren(File file) {
