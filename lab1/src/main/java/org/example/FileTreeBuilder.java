@@ -63,7 +63,6 @@ public class FileTreeBuilder {
     }
     */
     public File createFile(Path path) {
-        // Cross CR: isSymlink first
         if (Files.isSymbolicLink(path)){
             return new SymlinkFile(path);
         }
