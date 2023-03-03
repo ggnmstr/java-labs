@@ -26,15 +26,7 @@ public class SymlinkFile extends File {
 
     @Override
     public String toString() {
-        try {
-            // Cross CR: toRealPath twice
-            String s = String.valueOf(this.realPath.toRealPath());
-            return linkPath.getFileName() + " (symlink to " + s + " ) [" + linkSize + " bytes]";
-        } catch (IOException e) {
-            return linkPath.getFileName() + " (symlink to " + realPath + " [" + linkSize + " bytes]";
-
-        }
-
+        return linkPath.getFileName() + " (symlink to " + realPath + " [" + linkSize + " bytes]";
     }
 
     @Override
