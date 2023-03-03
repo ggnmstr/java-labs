@@ -38,6 +38,20 @@ public class FileTreeBuilder {
         return root;
     }
 
+    public File createFile(Path path) {
+        if (Files.isSymbolicLink(path)){
+            return new SymlinkFile(path);
+        }
+        if (Files.isRegularFile(path)) {
+            return new RegularFile(path);
+        }
+        if (Files.isDirectory(path)){
+            return new DirectoryFile(path);
+        }
+
+        return null;
+    }
+
     /*
     public File build(Path path) {
         File root = createFile(path);
@@ -61,20 +75,6 @@ public class FileTreeBuilder {
         }
         return root;
     }
-    */
-    public File createFile(Path path) {
-        if (Files.isSymbolicLink(path)){
-            return new SymlinkFile(path);
-        }
-        if (Files.isRegularFile(path)) {
-            return new RegularFile(path);
-        }
-        if (Files.isDirectory(path)){
-            return new DirectoryFile(path);
-        }
-
-        return null;
-    }
 
     public List<File> getChildren(File file) {
         if (file instanceof RegularFile) return null;
@@ -91,4 +91,5 @@ public class FileTreeBuilder {
         }
         return toreturn;
     }
+    */
 }
