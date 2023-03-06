@@ -1,4 +1,4 @@
-package org.example;
+package lab.ggnmstr;
 
 import java.io.IOException;
 import java.nio.file.Path;
