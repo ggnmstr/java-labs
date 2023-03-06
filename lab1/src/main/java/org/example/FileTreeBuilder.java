@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class FileTreeBuilder {
-    // Cross CR: Set<File>
+
     Set<File> visited = new HashSet<>();
 
     public File build(Path path) {
@@ -39,7 +39,7 @@ public class FileTreeBuilder {
         return root;
     }
 
-    public File createFile(Path path) {
+    private static File createFile(Path path) {
         // CR: move here: path.toRealPath()
         if (Files.isSymbolicLink(path)) {
             return new SymlinkFile(path);
