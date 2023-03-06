@@ -15,26 +15,7 @@ public class FileTreeBuilder {
         // CR: use instead of contains
         visited.add(root);
         if (Files.isDirectory(path)) {
-            // CR: move to separate method
-            long size = 0;
-            List<File> children = new ArrayList<>();
-            try {
-                List<Path> inside = Files.list(path).toList();
-                for (Path x : inside) {
-                    File kid = build(x);
-                    if (kid == null) continue;
-                    children.add(kid);
-                }
-            } catch (IOException e) {
-                System.err.println(root.getRealPath() + " is not accessible");
-            }
-            children.sort(Collections.reverseOrder());
-            //  CR: new Directory(...)?
-            root.setChildren(children);
-            for (File x : children) {
-                size += x.getSize();
-            }
-            root.setSize(size);
+            fillDirectory(root);
         }
         return root;
     }
@@ -52,6 +33,28 @@ public class FileTreeBuilder {
             return new DirectoryFile(path);
         }
         throw new AssertionError("Should not reach");
+    }
+
+    private void fillDirectory(File dirFile){
+        long size = 0;
+        List<File> children = new ArrayList<>();
+        try {
+            List<Path> inside = Files.list(dirFile.getRealPath()).toList();
+            for (Path x : inside) {
+                File kid = build(x);
+                if (kid == null) continue;
+                children.add(kid);
+            }
+        } catch (IOException e) {
+            System.err.println(dirFile.getRealPath() + " is not accessible");
+        }
+        children.sort(Collections.reverseOrder());
+        //  CR: new Directory(...)?
+        dirFile.setChildren(children);
+        for (File x : children) {
+            size += x.getSize();
+        }
+        dirFile.setSize(size);
     }
 
     /*
