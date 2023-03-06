@@ -11,9 +11,7 @@ public class FileTreeBuilder {
 
     public File build(Path path) {
         File root = createFile(path);
-        if (visited.contains(root)) return null;
-        // CR: use instead of contains
-        visited.add(root);
+        if (!visited.add(root)) return null;
         if (Files.isDirectory(path)) {
             fillDirectory(root);
         }
