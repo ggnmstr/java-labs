@@ -14,18 +14,20 @@ public class FileTreeBuilder {
         if (visited.contains(root)) return null;
         // CR: use instead of contains
         visited.add(root);
-        if (Files.isDirectory(path)){
-        //if (!(root instanceof RegularFile)) {
+        if (Files.isDirectory(path)) {
             // CR: move to separate method
             long size = 0;
             List<File> children = new ArrayList<>();
-                // CR: show partial info, notify user about it
+            try {
                 List<Path> inside = Files.list(path).toList();
                 for (Path x : inside) {
                     File kid = build(x);
                     if (kid == null) continue;
                     children.add(kid);
                 }
+            } catch (IOException e) {
+                System.err.println(root.getRealPath() + " is not accessible");
+            }
             children.sort(Collections.reverseOrder());
             //  CR: new Directory(...)?
             root.setChildren(children);
@@ -39,14 +41,14 @@ public class FileTreeBuilder {
 
     public File createFile(Path path) {
         // CR: move here: path.toRealPath()
-        if (Files.isSymbolicLink(path)){
+        if (Files.isSymbolicLink(path)) {
             return new SymlinkFile(path);
         }
         if (Files.isRegularFile(path)) {
             // CR: move size get here
             return new RegularFile(path);
         }
-        if (Files.isDirectory(path)){
+        if (Files.isDirectory(path)) {
             return new DirectoryFile(path);
         }
         throw new AssertionError("Should not reach");
