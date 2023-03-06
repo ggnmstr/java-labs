@@ -7,28 +7,27 @@ import java.util.*;
 
 public class FileTreeBuilder {
     // Cross CR: Set<File>
-    HashSet<File> visited = new HashSet<>();
+    Set<File> visited = new HashSet<>();
 
     public File build(Path path) {
         File root = createFile(path);
-        if (root == null || visited.contains(root)) return null;
+        if (visited.contains(root)) return null;
+        // CR: use instead of contains
         visited.add(root);
         if (Files.isDirectory(path)){
         //if (!(root instanceof RegularFile)) {
+            // CR: move to separate method
             long size = 0;
-            ArrayList<File> children = new ArrayList<>();
-            try {
+            List<File> children = new ArrayList<>();
+                // CR: show partial info, notify user about it
                 List<Path> inside = Files.list(path).toList();
                 for (Path x : inside) {
                     File kid = build(x);
                     if (kid == null) continue;
                     children.add(kid);
                 }
-            } catch (Exception e) {
-                // Cross CR: no print
-                System.err.println(e);
-            }
-            Collections.sort(children, Collections.reverseOrder());
+            children.sort(Collections.reverseOrder());
+            //  CR: new Directory(...)?
             root.setChildren(children);
             for (File x : children) {
                 size += x.getSize();
@@ -39,17 +38,18 @@ public class FileTreeBuilder {
     }
 
     public File createFile(Path path) {
+        // CR: move here: path.toRealPath()
         if (Files.isSymbolicLink(path)){
             return new SymlinkFile(path);
         }
         if (Files.isRegularFile(path)) {
+            // CR: move size get here
             return new RegularFile(path);
         }
         if (Files.isDirectory(path)){
             return new DirectoryFile(path);
         }
-
-        return null;
+        throw new AssertionError("Should not reach");
     }
 
     /*

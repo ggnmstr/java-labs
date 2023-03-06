@@ -8,9 +8,9 @@ import java.util.List;
 
 public class SymlinkFile extends File {
     // Cross CR: private File child;
-    private ArrayList<File> children;
+    private List<File> children;
 
-    private Path linkPath;
+    private final Path linkPath;
     private long linkSize;
 
     public SymlinkFile(Path path){

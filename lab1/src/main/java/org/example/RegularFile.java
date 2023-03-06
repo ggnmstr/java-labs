@@ -18,12 +18,7 @@ public class RegularFile extends File {
 
     @Override
     public String toString() {
-        return realPath.getFileName() + " [" + size + " bytes]";
-    }
-
-    @Override
-    public long getSize() {
-        return size;
+        return getRealPath().getFileName() + " [" + size + " bytes]";
     }
 
     @Override

@@ -31,8 +31,11 @@ public class Main {
 
     }
 
+//    CR: record Options(int limit, boolean followSLink) {}
+
     public static void jduPrint(File curdir, int limit, int start, int maxdepth, int golinks) {
         if (start == maxdepth) return;
+        // CR: make start a field
         for (int i = 0; i < start; i++) {
             System.out.print("  ");
         }
