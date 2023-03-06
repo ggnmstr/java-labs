@@ -89,6 +89,6 @@ public class Main {
     }
 
     public static void usage(){
-        System.out.println("Usage: jdu [options] directory");
+        System.out.println("Usage: jdu [directory] [options]");
     }
 }
