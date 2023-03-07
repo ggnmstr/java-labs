@@ -19,7 +19,7 @@ public class Main {
             System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
-        int[] params = parseParams(args);
+        Options params = parseParams(args);
         if (params == null) {
             usage();
             return;
@@ -27,68 +27,67 @@ public class Main {
         FileTreeBuilder builder = new FileTreeBuilder();
         File curdir = builder.build(workpath);
         // Cross CR: make try-catch
-        jduPrint(curdir, params[1], 0, params[0],params[2]);
+        jduPrint(curdir, params, 0);
 
     }
 
-//    CR: record Options(int limit, boolean followSLink) {}
+    record Options(int depth, int limit, boolean goLinks) {}
 
-    public static void jduPrint(File curdir, int limit, int start, int maxdepth, int golinks) {
-        if (start == maxdepth) return;
+    public static void jduPrint(File curdir, Options params, int start) {
+        if (start == params.depth) return;
         // CR: make start a field
         for (int i = 0; i < start; i++) {
             System.out.print("  ");
         }
         System.out.println(curdir);
-        if (curdir instanceof SymlinkFile && golinks == 0) return;
+        if (curdir instanceof SymlinkFile && !params.goLinks) return;
         if (curdir.getChildren() == null) return;
         int displayed = 0;
         for (File x : curdir.getChildren()) {
-            jduPrint(x, limit, start + 1, maxdepth,golinks);
+            jduPrint(x, params, start + 1);
             displayed++;
-            if (displayed == limit) break;
+            if (displayed == params.limit) break;
         }
     }
 
-    public static int[] parseParams(String[] args) {
-        // depth, limit, L
-        // Cross CR: record
-        int[] params = {5, 5, 0};
+    public static Options parseParams(String[] args) {
+        int depth = 5;
+        int limit = 5;
+        boolean golinks = false;
         int i = 1;
-        while (i < args.length){
-            // Cross CR: switch-case
+        while (i < args.length) {
             if (Objects.equals(args[i], "-L")) {
-                params[2] = 1;
+                golinks = true;
                 i++;
                 continue;
             }
-            if (Objects.equals(args[i], "--depth") && isPosInteger(args[i+1]) > 0) {
-                params[0] = isPosInteger(args[i+1]);
-                i+=2;
+            if (Objects.equals(args[i], "--depth") && isPosInteger(args[i + 1]) > 0) {
+                depth = isPosInteger(args[i + 1]);
+                i += 2;
                 continue;
             }
-            if (Objects.equals(args[i], "--limit") && isPosInteger(args[i+1]) > 0) {
-                params[1] = isPosInteger(args[i+1]);
-                i+=2;
+            if (Objects.equals(args[i], "--limit") && isPosInteger(args[i + 1]) > 0) {
+                limit = isPosInteger(args[i + 1]);
+                i += 2;
                 continue;
             }
             return null;
         }
-        return params;
+        return new Options(depth, limit, golinks);
     }
 
-    public static int isPosInteger(String arg){
+    public static int isPosInteger(String arg) {
         // throw something
         int res = -1;
-        try{
+        try {
             res = Integer.parseInt(arg);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
 
         }
         return res;
     }
 
-    public static void usage(){
+    public static void usage() {
         System.out.println("Usage: jdu [directory] [options]");
     }
 }
