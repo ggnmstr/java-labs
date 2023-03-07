@@ -11,7 +11,11 @@ public class FileTreeBuilder {
 
     public File build(Path path) {
         File root = createFile(path);
-        if (!visited.add(root)) return null;
+        if (!visited.add(root)) {
+            for (File x : visited){
+                if (x.equals(root)) return x;
+            }
+        }
         if (Files.isDirectory(path)) {
             fillDirectory(root);
         }

@@ -47,7 +47,7 @@ public abstract class File implements Comparable<File> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof File)) return false;
-        return this.realPath.equals(((File) obj).getRealPath());
+        return this.realPath.equals(((File) obj).getRealPath()) && this.getClass().equals(obj.getClass());
     }
 
 }
