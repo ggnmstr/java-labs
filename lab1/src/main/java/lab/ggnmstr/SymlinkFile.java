@@ -41,7 +41,7 @@ public class SymlinkFile extends File {
 
     @Override
     public void setChildren(List<File> children) {
-        this.children = (ArrayList<File>) children;
+        this.children = children;
     }
 
 }
