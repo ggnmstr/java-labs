@@ -24,15 +24,22 @@ public class FileTreeBuilder {
 
     private static File createFile(Path path) {
         // CR: move here: path.toRealPath()
-        if (Files.isSymbolicLink(path)) {
-            return new SymlinkFile(path);
+        Path realpath = path;
+        try {
+            realpath = path.toRealPath();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        if (Files.isRegularFile(path)) {
+
+        if (Files.isSymbolicLink(path)) {
+            return new SymlinkFile(realpath);
+        }
+        if (Files.isRegularFile(realpath)) {
             // CR: move size get here
-            return new RegularFile(path);
+            return new RegularFile(realpath);
         }
         if (Files.isDirectory(path)) {
-            return new DirectoryFile(path);
+            return new DirectoryFile(realpath);
         }
         throw new AssertionError("Should not reach");
     }

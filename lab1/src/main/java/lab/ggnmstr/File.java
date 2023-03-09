@@ -11,11 +11,7 @@ public abstract class File implements Comparable<File> {
     protected long size;
 
     protected File(Path path) {
-        // CR: move to caller
-        try {
-            this.realPath = path.toRealPath();
-        } catch (IOException e) {
-        }
+        this.realPath = path;
     }
 
     abstract List<File> getChildren();
