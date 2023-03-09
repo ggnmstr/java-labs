@@ -7,13 +7,9 @@ import java.util.List;
 
 public class RegularFile extends File {
 
-    public RegularFile(Path path) {
+    public RegularFile(Path path, long size) {
         super(path);
-        try {
-            this.size = Files.size(path);
-        } catch (IOException e) {
-        }
-
+        this.size = size;
     }
 
     @Override

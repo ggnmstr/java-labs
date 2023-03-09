@@ -12,7 +12,7 @@ public class FileTreeBuilder {
     public File build(Path path) {
         File root = createFile(path);
         if (!visited.add(root)) {
-            for (File x : visited){
+            for (File x : visited) {
                 if (x.equals(root)) return x;
             }
         }
@@ -23,8 +23,7 @@ public class FileTreeBuilder {
     }
 
     private static File createFile(Path path) {
-        // CR: move here: path.toRealPath()
-        Path realpath = path;
+        Path realpath;
         try {
             realpath = path.toRealPath();
         } catch (IOException e) {
@@ -35,8 +34,13 @@ public class FileTreeBuilder {
             return new SymlinkFile(realpath);
         }
         if (Files.isRegularFile(realpath)) {
-            // CR: move size get here
-            return new RegularFile(realpath);
+            long size;
+            try {
+                size = Files.size(realpath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return new RegularFile(realpath, size);
         }
         if (Files.isDirectory(path)) {
             return new DirectoryFile(realpath);
@@ -44,7 +48,7 @@ public class FileTreeBuilder {
         throw new AssertionError("Should not reach");
     }
 
-    private void fillDirectory(File dirFile){
+    private void fillDirectory(File dirFile) {
         long size = 0;
         List<File> children = new ArrayList<>();
         try {
