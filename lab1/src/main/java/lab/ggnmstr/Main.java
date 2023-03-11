@@ -1,4 +1,3 @@
-// Cross CR: rename package :D
 package lab.ggnmstr;
 
 import java.io.IOException;
