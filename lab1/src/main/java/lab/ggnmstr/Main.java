@@ -26,29 +26,12 @@ public class Main {
         }
         FileTreeBuilder builder = new FileTreeBuilder();
         File curdir = builder.build(workpath);
-        // Cross CR: make try-catch
-        jduPrint(curdir, params, 0);
 
+        JduPrinter jduPrinter = new JduPrinter(System.out);
+        jduPrinter.print(curdir,params);
     }
 
     record Options(int depth, int limit, boolean goLinks) {}
-
-    public static void jduPrint(File curdir, Options params, int start) {
-        if (start == params.depth) return;
-        // CR: make start a field
-        for (int i = 0; i < start; i++) {
-            System.out.print("  ");
-        }
-        System.out.println(curdir);
-        if (curdir instanceof SymlinkFile && !params.goLinks) return;
-        if (curdir.getChildren() == null) return;
-        int displayed = 0;
-        for (File x : curdir.getChildren()) {
-            jduPrint(x, params, start + 1);
-            displayed++;
-            if (displayed == params.limit) break;
-        }
-    }
 
     public static Options parseParams(String[] args) {
         int depth = 5;
@@ -77,7 +60,6 @@ public class Main {
     }
 
     public static int isPosInteger(String arg) {
-        // throw something
         int res = -1;
         try {
             res = Integer.parseInt(arg);
