@@ -1,13 +1,12 @@
 package lab.ggnmstr;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class File implements Comparable<File> {
 
-    protected Path realPath;
+    protected final Path realPath;
     protected long size;
 
     protected File(Path path) {
