@@ -13,11 +13,11 @@ public class JduPrinter {
         this.printStream = printStream;
     }
 
-    public void print(File curdir, Main.Options params){
+    public void print(File curdir, Options params){
         print(curdir,params,0);
     }
 
-    private void print(File curdir, Main.Options params, int depth){
+    private void print(File curdir, Options params, int depth){
         if (depth == params.depth()) return;
         printStream.print("    ".repeat(depth));
         printStream.println(curdir);
@@ -36,7 +36,7 @@ public class JduPrinter {
 /*
         switch (curdir) {
             RegularFile f -> ..;
-            CompoundFile f -> ...;
+            com.github.ggnmstr.jdu.model.CompoundFile f -> ...;
         }
 
         interface Visitor {
@@ -50,7 +50,7 @@ class Printer implements Visitor {
 
     }
 
-    public void visit(CompoundFile file) {
+    public void visit(com.github.ggnmstr.jdu.model.CompoundFile file) {
         //
     }
 }

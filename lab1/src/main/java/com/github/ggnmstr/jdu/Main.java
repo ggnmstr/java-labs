@@ -23,7 +23,7 @@ public class Main {
             return;
         }
         // CR: custom exception
-        Options params = parseParams(args);
+        Options params = OptionsParser.parseParams(args);
         if (params == null) {
             usage();
             return;
@@ -33,45 +33,6 @@ public class Main {
 
         JduPrinter jduPrinter = new JduPrinter(System.out);
         jduPrinter.print(curdir,params);
-    }
-
-    record Options(int depth, int limit, boolean goLinks) {}
-
-    public static Options parseParams(String[] args) {
-        // CR: private static final
-        int depth = 5;
-        int limit = 5;
-        boolean golinks = false;
-        int i = 1;
-        while (i < args.length) {
-            if (Objects.equals(args[i], "-L")) {
-                golinks = true;
-                i++;
-                continue;
-            }
-            if (Objects.equals(args[i], "--depth") && isPosInteger(args[i + 1]) > 0) {
-                depth = isPosInteger(args[i + 1]);
-                i += 2;
-                continue;
-            }
-            if (Objects.equals(args[i], "--limit") && isPosInteger(args[i + 1]) > 0) {
-                limit = isPosInteger(args[i + 1]);
-                i += 2;
-                continue;
-            }
-            return null;
-        }
-        return new Options(depth, limit, golinks);
-    }
-
-    public static int isPosInteger(String arg) {
-        int res = -1;
-        try {
-            res = Integer.parseInt(arg);
-        } catch (NumberFormatException e) {
-            // CR: rethrow custom exception
-        }
-        return res;
     }
 
     public static void usage() {
