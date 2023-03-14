@@ -12,8 +12,7 @@ import java.util.*;
 
 public class FileTreeBuilder {
 
-    // CR: private final
-    Set<DuFile> visited = new HashSet<>();
+    private final Set<DuFile> visited = new HashSet<>();
 
     public DuFile build(Path path) {
         DuFile root = createFile(path);
@@ -77,45 +76,4 @@ public class FileTreeBuilder {
         }
         duDir.setSize(size);
     }
-
-    /*
-    public File build(Path path) {
-        File root = createFile(path);
-        if (root == null) return null;
-        Deque<File> toVisit = new ArrayDeque<>();
-        toVisit.add(root);
-        Stack<File> dirStack = new Stack<>();
-        while (!toVisit.isEmpty()) {
-            File cur = toVisit.removeLast();
-            List<File> children = getChildren(cur);
-            if (children == null) continue;
-            dirStack.push(cur);
-            cur.setChildren(children);
-            Collections.sort(children,Collections.reverseOrder());
-            for (File x : children) {
-                if (!visited.contains(x)) {
-                    toVisit.add(x);
-                    visited.add(x);
-                }
-            }
-        }
-        return root;
-    }
-
-    public List<File> getChildren(File file) {
-        if (file instanceof RegularFile) return null;
-        List<Path> inside;
-        try {
-            inside = Files.list(file.getRealPath()).toList();
-        } catch (IOException e) {
-            System.err.println("getchildren error");
-            return null;
-        }
-        List<File> toreturn = new ArrayList<>();
-        for (Path x : inside) {
-            toreturn.add(createFile(x));
-        }
-        return toreturn;
-    }
-    */
 }
