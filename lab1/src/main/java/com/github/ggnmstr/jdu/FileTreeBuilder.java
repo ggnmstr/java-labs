@@ -58,12 +58,7 @@ public class FileTreeBuilder {
         long size = 0;
         List<DuFile> children = new ArrayList<>();
         try {
-            List<Path> inside = Files.list(duDir.getRealPath()).toList();
-            // CR: use stream
-            for (Path x : inside) {
-                DuFile kid = build(x);
-                children.add(kid);
-            }
+            Files.list(duDir.getRealPath()).forEach(x -> children.add(build(x)));
         } catch (IOException e) {
             System.err.println(duDir.getRealPath() + " is not accessible");
         }
