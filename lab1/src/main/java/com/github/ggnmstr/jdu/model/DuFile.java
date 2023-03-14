@@ -3,7 +3,7 @@ package com.github.ggnmstr.jdu.model;
 import java.nio.file.Path;
 import java.util.List;
 
-public abstract class DuFile implements Comparable<DuFile> {
+public abstract class DuFile {
 
     protected final Path realPath;
     protected long size;
@@ -26,12 +26,6 @@ public abstract class DuFile implements Comparable<DuFile> {
 
     public long getSize() {
         return this.size;
-    }
-
-    // CR: better to use comparator
-    @Override
-    public int compareTo(DuFile o) {
-        return (int) (this.size - o.getSize());
     }
 
     @Override

@@ -67,9 +67,6 @@ public class FileTreeBuilder {
         } catch (IOException e) {
             System.err.println(duDir.getRealPath() + " is not accessible");
         }
-        // CR: move to print stage
-        children.sort(Collections.reverseOrder());
-        //  CR: new Directory(...)?
         duDir.setChildren(children);
         for (DuFile x : children) {
             size += x.getSize();
