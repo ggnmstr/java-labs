@@ -1,4 +1,9 @@
-package lab.ggnmstr;
+package com.github.ggnmstr.jdu;
+
+import com.github.ggnmstr.jdu.model.DirectoryFile;
+import com.github.ggnmstr.jdu.model.File;
+import com.github.ggnmstr.jdu.model.RegularFile;
+import com.github.ggnmstr.jdu.model.SymlinkFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,6 +12,7 @@ import java.util.*;
 
 public class FileTreeBuilder {
 
+    // CR: private final
     Set<File> visited = new HashSet<>();
 
     public File build(Path path) {
@@ -25,6 +31,7 @@ public class FileTreeBuilder {
     private static File createFile(Path path) {
         Path realpath;
         try {
+            // CR: do we need it?
             realpath = path.toRealPath();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -53,14 +60,15 @@ public class FileTreeBuilder {
         List<File> children = new ArrayList<>();
         try {
             List<Path> inside = Files.list(dirFile.getRealPath()).toList();
+            // CR: use stream
             for (Path x : inside) {
                 File kid = build(x);
-                if (kid == null) continue;
                 children.add(kid);
             }
         } catch (IOException e) {
             System.err.println(dirFile.getRealPath() + " is not accessible");
         }
+        // CR: move to print stage
         children.sort(Collections.reverseOrder());
         //  CR: new Directory(...)?
         dirFile.setChildren(children);

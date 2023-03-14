@@ -1,4 +1,4 @@
-package lab.ggnmstr;
+package com.github.ggnmstr.jdu.model;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +10,7 @@ public class SymlinkFile extends File {
     // Cross CR: private File child;
     private List<File> children;
 
+    // CR: remove
     private final Path linkPath;
     private long linkSize;
 
@@ -17,7 +18,9 @@ public class SymlinkFile extends File {
         super(path);
         this.linkPath = path;
         this.children = new ArrayList<>();
+        // CR: use instead of linkSize
         this.size = 0;
+        // CR: move to callee
         try {
             this.linkSize = Files.size(path);
         } catch (IOException e) {

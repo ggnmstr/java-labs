@@ -1,4 +1,6 @@
-package lab.ggnmstr;
+package com.github.ggnmstr.jdu;
+
+import com.github.ggnmstr.jdu.model.File;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -10,14 +12,17 @@ public class Main {
             usage();
             return;
         }
+        // CR: last argument
         Path pathfromarg = Paths.get(args[0]);
         Path workpath;
         try {
+            // CR: do we need it?
             workpath = pathfromarg.toRealPath();
         } catch (IOException x) {
             System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
+        // CR: custom exception
         Options params = parseParams(args);
         if (params == null) {
             usage();
@@ -33,6 +38,7 @@ public class Main {
     record Options(int depth, int limit, boolean goLinks) {}
 
     public static Options parseParams(String[] args) {
+        // CR: private static final
         int depth = 5;
         int limit = 5;
         boolean golinks = false;
@@ -63,7 +69,7 @@ public class Main {
         try {
             res = Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-
+            // CR: rethrow custom exception
         }
         return res;
     }

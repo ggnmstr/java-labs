@@ -1,4 +1,4 @@
-package lab.ggnmstr;
+package com.github.ggnmstr.jdu.model;
 
 import java.nio.file.Path;
 import java.util.List;

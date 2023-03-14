@@ -1,7 +1,11 @@
-package lab.ggnmstr;
+package com.github.ggnmstr.jdu;
+
+import com.github.ggnmstr.jdu.model.File;
+import com.github.ggnmstr.jdu.model.SymlinkFile;
 
 import java.io.PrintStream;
 
+// CR: visitor / sealed classes
 public class JduPrinter {
     private final PrintStream printStream;
 
@@ -27,3 +31,28 @@ public class JduPrinter {
         }
     }
 }
+
+
+/*
+        switch (curdir) {
+            RegularFile f -> ..;
+            CompoundFile f -> ...;
+        }
+
+        interface Visitor {
+    void visit(RegularFile regularFile);
+}
+
+class Printer implements Visitor {
+
+    @Override
+    public void visit(RegularFile regularFile) {
+
+    }
+
+    public void visit(CompoundFile file) {
+        //
+    }
+}
+ */
+

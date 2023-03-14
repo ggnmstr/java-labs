@@ -1,4 +1,4 @@
-package lab.ggnmstr;
+package com.github.ggnmstr.jdu.model;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -11,16 +11,14 @@ public class DirectoryFile extends File {
     public DirectoryFile(Path path) {
         super(path);
         this.size = 0;
+        // CR: useless
         children = new ArrayList<>();
     }
-
-
 
     @Override
     public String toString() {
         return "/" + realPath.getFileName() + " [" + size + " bytes]";
     }
-
 
     @Override
     public List<File> getChildren() {
