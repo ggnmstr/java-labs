@@ -8,7 +8,7 @@ public class OptionsParser {
     private static final int DEFAULT_LIMIT = 5;
     private static final boolean FOLLOW_LINKS = false;
 
-    public static Options parseParams(String[] args) {
+    public static Options parseParams(String[] args) throws ParserException {
         int depth = DEFAULT_DEPTH;
         int limit = DEFAULT_LIMIT;
         boolean golinks = FOLLOW_LINKS;
@@ -34,12 +34,12 @@ public class OptionsParser {
         return new Options(depth, limit, golinks);
     }
 
-    public static int isPosInteger(String arg) {
+    public static int isPosInteger(String arg) throws ParserException {
         int res = -1;
         try {
             res = Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            // CR: rethrow custom exception
+            throw new ParserException("Invalid argument " + arg);
         }
         return res;
     }

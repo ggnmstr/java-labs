@@ -22,8 +22,13 @@ public class Main {
             System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
-        // CR: custom exception
-        Options params = OptionsParser.parseParams(args);
+        Options params;
+        try {
+            params = OptionsParser.parseParams(args);
+        } catch (ParserException e){
+            System.err.println(e.getMessage());
+            return;
+        }
         if (params == null) {
             usage();
             return;
