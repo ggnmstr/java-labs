@@ -3,19 +3,18 @@ package com.github.ggnmstr.jdu.model;
 import java.nio.file.Path;
 import java.util.List;
 
-// CR: rename to DuFile, also rename inheritors
-public abstract class File implements Comparable<File> {
+public abstract class DuFile implements Comparable<DuFile> {
 
     protected final Path realPath;
     protected long size;
 
-    protected File(Path path) {
+    protected DuFile(Path path) {
         this.realPath = path;
     }
 
-    public abstract List<File> getChildren();
+    public abstract List<DuFile> getChildren();
 
-    public abstract void setChildren(List<File> children);
+    public abstract void setChildren(List<DuFile> children);
 
     public void setSize(long size){
         this.size = size;
@@ -31,7 +30,7 @@ public abstract class File implements Comparable<File> {
 
     // CR: better to use comparator
     @Override
-    public int compareTo(File o) {
+    public int compareTo(DuFile o) {
         return (int) (this.size - o.getSize());
     }
 
@@ -44,6 +43,6 @@ public abstract class File implements Comparable<File> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!this.getClass().equals(obj.getClass())) return false;
-        return this.realPath.equals(((File)obj).realPath);
+        return this.realPath.equals(((DuFile)obj).realPath);
     }
 }

@@ -3,9 +3,9 @@ package com.github.ggnmstr.jdu.model;
 import java.nio.file.Path;
 import java.util.List;
 
-public class RegularFile extends File {
+public class DuRegular extends DuFile {
 
-    public RegularFile(Path path, long size) {
+    public DuRegular(Path path, long size) {
         super(path);
         this.size = size;
     }
@@ -16,12 +16,12 @@ public class RegularFile extends File {
     }
 
     @Override
-    public List<File> getChildren() {
+    public List<DuFile> getChildren() {
         return null;
     }
 
     @Override
-    public void setChildren(List<File> children) {
+    public void setChildren(List<DuFile> children) {
 
     }
 

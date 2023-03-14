@@ -4,11 +4,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DirectoryFile extends File {
+public class DuDirectory extends DuFile {
 
-    private List<File> children;
+    private List<DuFile> children;
 
-    public DirectoryFile(Path path) {
+    public DuDirectory(Path path) {
         super(path);
         this.size = 0;
         // CR: useless
@@ -21,12 +21,12 @@ public class DirectoryFile extends File {
     }
 
     @Override
-    public List<File> getChildren() {
+    public List<DuFile> getChildren() {
         return children;
     }
 
     @Override
-    public void setChildren(List<File> children) {
+    public void setChildren(List<DuFile> children) {
         this.children = children;
     }
 

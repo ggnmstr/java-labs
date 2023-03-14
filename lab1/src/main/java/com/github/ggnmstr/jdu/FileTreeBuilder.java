@@ -1,9 +1,9 @@
 package com.github.ggnmstr.jdu;
 
-import com.github.ggnmstr.jdu.model.DirectoryFile;
-import com.github.ggnmstr.jdu.model.File;
-import com.github.ggnmstr.jdu.model.RegularFile;
-import com.github.ggnmstr.jdu.model.SymlinkFile;
+import com.github.ggnmstr.jdu.model.DuDirectory;
+import com.github.ggnmstr.jdu.model.DuFile;
+import com.github.ggnmstr.jdu.model.DuRegular;
+import com.github.ggnmstr.jdu.model.DuSymlink;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,12 +13,12 @@ import java.util.*;
 public class FileTreeBuilder {
 
     // CR: private final
-    Set<File> visited = new HashSet<>();
+    Set<DuFile> visited = new HashSet<>();
 
-    public File build(Path path) {
-        File root = createFile(path);
+    public DuFile build(Path path) {
+        DuFile root = createFile(path);
         if (!visited.add(root)) {
-            for (File x : visited) {
+            for (DuFile x : visited) {
                 if (x.equals(root)) return x;
             }
         }
@@ -28,7 +28,7 @@ public class FileTreeBuilder {
         return root;
     }
 
-    private static File createFile(Path path) {
+    private static DuFile createFile(Path path) {
         Path realpath;
         try {
             // CR: do we need it?
@@ -38,7 +38,7 @@ public class FileTreeBuilder {
         }
 
         if (Files.isSymbolicLink(path)) {
-            return new SymlinkFile(realpath);
+            return new DuSymlink(realpath);
         }
         if (Files.isRegularFile(realpath)) {
             long size;
@@ -47,35 +47,35 @@ public class FileTreeBuilder {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return new RegularFile(realpath, size);
+            return new DuRegular(realpath, size);
         }
         if (Files.isDirectory(path)) {
-            return new DirectoryFile(realpath);
+            return new DuDirectory(realpath);
         }
         throw new AssertionError("Should not reach");
     }
 
-    private void fillDirectory(File dirFile) {
+    private void fillDirectory(DuFile duDir) {
         long size = 0;
-        List<File> children = new ArrayList<>();
+        List<DuFile> children = new ArrayList<>();
         try {
-            List<Path> inside = Files.list(dirFile.getRealPath()).toList();
+            List<Path> inside = Files.list(duDir.getRealPath()).toList();
             // CR: use stream
             for (Path x : inside) {
-                File kid = build(x);
+                DuFile kid = build(x);
                 children.add(kid);
             }
         } catch (IOException e) {
-            System.err.println(dirFile.getRealPath() + " is not accessible");
+            System.err.println(duDir.getRealPath() + " is not accessible");
         }
         // CR: move to print stage
         children.sort(Collections.reverseOrder());
         //  CR: new Directory(...)?
-        dirFile.setChildren(children);
-        for (File x : children) {
+        duDir.setChildren(children);
+        for (DuFile x : children) {
             size += x.getSize();
         }
-        dirFile.setSize(size);
+        duDir.setSize(size);
     }
 
     /*

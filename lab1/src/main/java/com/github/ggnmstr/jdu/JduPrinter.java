@@ -1,7 +1,7 @@
 package com.github.ggnmstr.jdu;
 
-import com.github.ggnmstr.jdu.model.File;
-import com.github.ggnmstr.jdu.model.SymlinkFile;
+import com.github.ggnmstr.jdu.model.DuFile;
+import com.github.ggnmstr.jdu.model.DuSymlink;
 
 import java.io.PrintStream;
 
@@ -13,18 +13,18 @@ public class JduPrinter {
         this.printStream = printStream;
     }
 
-    public void print(File curdir, Options params){
+    public void print(DuFile curdir, Options params){
         print(curdir,params,0);
     }
 
-    private void print(File curdir, Options params, int depth){
+    private void print(DuFile curdir, Options params, int depth){
         if (depth == params.depth()) return;
         printStream.print("    ".repeat(depth));
         printStream.println(curdir);
-        if (curdir instanceof SymlinkFile && !params.goLinks()) return;
+        if (curdir instanceof DuSymlink && !params.goLinks()) return;
         if (curdir.getChildren() == null) return;
         int displayed = 0;
-        for (File x : curdir.getChildren()) {
+        for (DuFile x : curdir.getChildren()) {
             print(x, params,depth+1);
             displayed++;
             if (displayed == params.limit()) break;

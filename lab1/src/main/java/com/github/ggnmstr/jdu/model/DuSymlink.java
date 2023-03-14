@@ -6,15 +6,15 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SymlinkFile extends File {
+public class DuSymlink extends DuFile {
     // Cross CR: private File child;
-    private List<File> children;
+    private List<DuFile> children;
 
     // CR: remove
     private final Path linkPath;
     private long linkSize;
 
-    public SymlinkFile(Path path){
+    public DuSymlink(Path path){
         super(path);
         this.linkPath = path;
         this.children = new ArrayList<>();
@@ -38,12 +38,12 @@ public class SymlinkFile extends File {
     }
 
     @Override
-    public List<File> getChildren() {
+    public List<DuFile> getChildren() {
         return children;
     }
 
     @Override
-    public void setChildren(List<File> children) {
+    public void setChildren(List<DuFile> children) {
         this.children = children;
     }
 

@@ -1,10 +1,9 @@
 package com.github.ggnmstr.jdu;
 
-import com.github.ggnmstr.jdu.model.File;
+import com.github.ggnmstr.jdu.model.DuFile;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -34,7 +33,7 @@ public class Main {
             return;
         }
         FileTreeBuilder builder = new FileTreeBuilder();
-        File curdir = builder.build(workpath);
+        DuFile curdir = builder.build(workpath);
 
         JduPrinter jduPrinter = new JduPrinter(System.out);
         jduPrinter.print(curdir,params);
