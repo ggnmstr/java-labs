@@ -1,7 +1,6 @@
 package com.github.ggnmstr.jdu.model;
 
 import java.nio.file.Path;
-import java.util.List;
 
 public abstract class DuFile {
 
@@ -13,7 +12,7 @@ public abstract class DuFile {
     }
 
 
-    public void setSize(long size){
+    public void setSize(long size) {
         this.size = size;
     }
 
@@ -34,6 +33,6 @@ public abstract class DuFile {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!this.getClass().equals(obj.getClass())) return false;
-        return this.realPath.equals(((DuFile)obj).realPath);
+        return this.realPath.equals(((DuFile) obj).realPath);
     }
 }
