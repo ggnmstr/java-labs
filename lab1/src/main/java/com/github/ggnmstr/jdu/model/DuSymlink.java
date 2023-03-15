@@ -7,18 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DuSymlink extends DuFile {
-    // Cross CR: private File child;
     private DuFile child;
-    private List<DuFile> children;
 
     // CR: remove
     private final Path linkPath;
     private long linkSize;
 
-    public DuSymlink(Path path){
+    public DuSymlink(Path path) {
         super(path);
         this.linkPath = path;
-        this.children = new ArrayList<>();
         // CR: use instead of linkSize
         this.size = 0;
         // CR: move to callee
