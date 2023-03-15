@@ -25,7 +25,6 @@ public class Main {
         Path pathfromarg = Paths.get(args[args.length-1]);
         Path workpath;
         try {
-            // CR: do we need it?
             workpath = pathfromarg.toRealPath();
         } catch (IOException x) {
             System.err.println("No such file or directory: " + pathfromarg);
