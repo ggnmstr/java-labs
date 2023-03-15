@@ -8,6 +8,7 @@ import java.util.List;
 
 public class DuSymlink extends DuFile {
     // Cross CR: private File child;
+    private DuFile child;
     private List<DuFile> children;
 
     // CR: remove
@@ -37,14 +38,12 @@ public class DuSymlink extends DuFile {
         return this.linkSize;
     }
 
-    @Override
-    public List<DuFile> getChildren() {
-        return children;
+    public DuFile getChild() {
+        return child;
     }
 
-    @Override
-    public void setChildren(List<DuFile> children) {
-        this.children = children;
+    public void setChild(DuFile child) {
+        this.child = child;
     }
 
 }

@@ -12,9 +12,6 @@ public abstract class DuFile {
         this.realPath = path;
     }
 
-    public abstract List<DuFile> getChildren();
-
-    public abstract void setChildren(List<DuFile> children);
 
     public void setSize(long size){
         this.size = size;

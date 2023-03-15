@@ -18,12 +18,10 @@ public class DuDirectory extends DuFile {
         return "/" + realPath.getFileName() + " [" + size + " bytes]";
     }
 
-    @Override
     public List<DuFile> getChildren() {
         return children;
     }
 
-    @Override
     public void setChildren(List<DuFile> children) {
         this.children = children;
     }

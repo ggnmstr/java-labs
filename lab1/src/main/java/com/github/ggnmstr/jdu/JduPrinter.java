@@ -1,6 +1,8 @@
 package com.github.ggnmstr.jdu;
 
+import com.github.ggnmstr.jdu.model.DuDirectory;
 import com.github.ggnmstr.jdu.model.DuFile;
+import com.github.ggnmstr.jdu.model.DuRegular;
 import com.github.ggnmstr.jdu.model.DuSymlink;
 
 import java.io.PrintStream;
@@ -23,15 +25,26 @@ public class JduPrinter {
         if (depth == params.depth()) return;
         printStream.print("    ".repeat(depth));
         printStream.println(curdir);
-        if (curdir instanceof DuSymlink && !params.goLinks()) return;
-        if (curdir.getChildren() == null) return;
-        int displayed = 0;
-        List<DuFile> children  = curdir.getChildren();
-        children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
-        for (DuFile x : children) {
-            print(x, params,depth+1);
-            displayed++;
-            if (displayed == params.limit()) break;
+        if (curdir instanceof DuSymlink && !params.goLinks() || curdir instanceof DuRegular) return;
+        if (curdir instanceof DuSymlink symlink && symlink.getChild() instanceof DuDirectory directory){
+            int displayed = 0;
+            List<DuFile> children  = directory.getChildren();
+            children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
+            for (DuFile x : children) {
+                print(x, params,depth+1);
+                displayed++;
+                if (displayed == params.limit()) break;
+            }
+        }
+        if (curdir instanceof DuDirectory directory){
+            int displayed = 0;
+            List<DuFile> children  = directory.getChildren();
+            children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
+            for (DuFile x : children) {
+                print(x, params,depth+1);
+                displayed++;
+                if (displayed == params.limit()) break;
+            }
         }
     }
 }

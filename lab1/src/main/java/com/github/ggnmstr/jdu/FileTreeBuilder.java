@@ -21,8 +21,11 @@ public class FileTreeBuilder {
                 if (x.equals(root)) return x;
             }
         }
-        if (Files.isDirectory(path)) {
-            fillDirectory(root);
+        if (root instanceof DuSymlink symlink){
+            symlink.setChild(build(symlink.getRealPath()));
+        }
+        if (root instanceof DuDirectory directory) {
+            fillDirectory(directory);
         }
         return root;
     }
@@ -54,7 +57,7 @@ public class FileTreeBuilder {
         throw new AssertionError("Should not reach");
     }
 
-    private void fillDirectory(DuFile duDir) {
+    private void fillDirectory(DuDirectory duDir) {
         long size = 0;
         List<DuFile> children = new ArrayList<>();
         try {

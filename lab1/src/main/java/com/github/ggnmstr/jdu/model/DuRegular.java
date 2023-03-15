@@ -15,14 +15,4 @@ public class DuRegular extends DuFile {
         return getRealPath().getFileName() + " [" + size + " bytes]";
     }
 
-    @Override
-    public List<DuFile> getChildren() {
-        return null;
-    }
-
-    @Override
-    public void setChildren(List<DuFile> children) {
-
-    }
-
 }
