@@ -2,7 +2,6 @@ package com.github.ggnmstr.jdu;
 
 import com.github.ggnmstr.jdu.model.DuFile;
 
-import java.io.IOException;
 import java.nio.file.*;
 
 public class Main {
@@ -23,15 +22,12 @@ public class Main {
             return;
         }
         Path pathfromarg = Paths.get(args[args.length-1]);
-        Path workpath;
-        try {
-            workpath = pathfromarg.toRealPath();
-        } catch (IOException x) {
+        if (!Files.exists(pathfromarg)){
             System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
         FileTreeBuilder builder = new FileTreeBuilder();
-        DuFile curdir = builder.build(workpath);
+        DuFile curdir = builder.build(pathfromarg);
 
         JduPrinter jduPrinter = new JduPrinter(System.out);
         jduPrinter.print(curdir,params);
