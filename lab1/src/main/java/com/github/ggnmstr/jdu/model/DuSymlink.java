@@ -13,16 +13,12 @@ public class DuSymlink extends DuFile {
     private final Path linkPath;
     private long linkSize;
 
-    public DuSymlink(Path path) {
+    public DuSymlink(Path path, long linkSize) {
         super(path);
         this.linkPath = path;
         // CR: use instead of linkSize
         this.size = 0;
-        // CR: move to callee
-        try {
-            this.linkSize = Files.size(path);
-        } catch (IOException e) {
-        }
+        this.linkSize = linkSize;
     }
 
     @Override

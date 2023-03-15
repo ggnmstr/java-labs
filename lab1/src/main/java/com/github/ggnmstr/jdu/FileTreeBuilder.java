@@ -31,28 +31,28 @@ public class FileTreeBuilder {
     }
 
     private static DuFile createFile(Path path) {
-        Path realpath;
-        try {
-            // CR: do we need it?
-            realpath = path.toRealPath();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         if (Files.isSymbolicLink(path)) {
-            return new DuSymlink(realpath);
-        }
-        if (Files.isRegularFile(realpath)) {
-            long size;
+            Path realpath;
+            long linksize;
             try {
-                size = Files.size(realpath);
+                realpath = path.toRealPath();
+                linksize = Files.size(path);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return new DuRegular(realpath, size);
+            return new DuSymlink(realpath, linksize);
+        }
+        if (Files.isRegularFile(path)) {
+            long size;
+            try {
+                size = Files.size(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return new DuRegular(path, size);
         }
         if (Files.isDirectory(path)) {
-            return new DuDirectory(realpath);
+            return new DuDirectory(path);
         }
         throw new AssertionError("Should not reach");
     }
