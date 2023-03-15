@@ -8,67 +8,51 @@ import com.github.ggnmstr.jdu.model.DuSymlink;
 import java.io.PrintStream;
 import java.util.List;
 
-// CR: visitor / sealed classes
-public class JduPrinter {
+public class JduPrinter implements DuVisitor {
     private final PrintStream printStream;
 
-    public JduPrinter(PrintStream printStream) {
+    private int depth = 0;
+    private final Options params;
+
+    public JduPrinter(PrintStream printStream, Options params) {
         this.printStream = printStream;
+        this.params = params;
     }
 
-    public void print(DuFile curdir, Options params) {
-        print(curdir, params, 0);
+    public void print(DuFile curdir) {
+        curdir.accept(this);
     }
-
-    private void print(DuFile curdir, Options params, int depth) {
-        if (depth == params.depth()) return;
-        printStream.print("    ".repeat(depth));
-        printStream.println(curdir);
-        if (curdir instanceof DuSymlink && !params.goLinks() || curdir instanceof DuRegular) return;
-        if (curdir instanceof DuSymlink symlink && symlink.getChild() instanceof DuDirectory directory) {
-            int displayed = 0;
-            List<DuFile> children = directory.getChildren();
-            children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
-            for (DuFile x : children) {
-                print(x, params, depth + 1);
-                displayed++;
-                if (displayed == params.limit()) break;
-            }
-        }
-        if (curdir instanceof DuDirectory directory) {
-            int displayed = 0;
-            List<DuFile> children = directory.getChildren();
-            children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
-            for (DuFile x : children) {
-                print(x, params, depth + 1);
-                displayed++;
-                if (displayed == params.limit()) break;
-            }
-        }
-    }
-}
-
-
-/*
-        switch (curdir) {
-            RegularFile f -> ..;
-            com.github.ggnmstr.jdu.model.CompoundFile f -> ...;
-        }
-
-        interface Visitor {
-    void visit(RegularFile regularFile);
-}
-
-class Printer implements Visitor {
 
     @Override
-    public void visit(RegularFile regularFile) {
+    public void visit(DuSymlink symlink) {
+        if (depth == params.depth()) return;
+        System.out.print("    ".repeat(depth));
+        System.out.println(symlink);
+        if (params.goLinks()) symlink.getChild().accept(this);
 
     }
 
-    public void visit(com.github.ggnmstr.jdu.model.CompoundFile file) {
-        //
+    @Override
+    public void visit(DuDirectory directory) {
+        if (depth == params.depth()) return;
+        printStream.print("    ".repeat(depth));
+        printStream.println(directory);
+        depth++;
+        List<DuFile> children = directory.getChildren();
+        children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
+        int i = 0;
+        for (DuFile x : children) {
+            x.accept(this);
+            i++;
+            if (i == params.limit()) break;
+        }
+        depth--;
+    }
+
+    @Override
+    public void visit(DuRegular regular) {
+        if (depth == params.depth()) return;
+        printStream.print("    ".repeat(depth));
+        printStream.println(regular);
     }
 }
- */
-

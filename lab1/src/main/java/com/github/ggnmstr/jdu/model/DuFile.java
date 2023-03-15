@@ -1,5 +1,7 @@
 package com.github.ggnmstr.jdu.model;
 
+import com.github.ggnmstr.jdu.DuVisitor;
+
 import java.nio.file.Path;
 
 public abstract class DuFile {
@@ -28,6 +30,7 @@ public abstract class DuFile {
     public int hashCode() {
         return realPath.hashCode();
     }
+    public abstract void accept(DuVisitor visitor);
 
     @Override
     public boolean equals(Object obj) {

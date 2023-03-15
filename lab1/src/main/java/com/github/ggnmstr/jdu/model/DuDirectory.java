@@ -1,5 +1,7 @@
 package com.github.ggnmstr.jdu.model;
 
+import com.github.ggnmstr.jdu.DuVisitor;
+
 import java.nio.file.Path;
 import java.util.List;
 
@@ -10,6 +12,11 @@ public class DuDirectory extends DuFile {
     public DuDirectory(Path path) {
         super(path);
         this.size = 0;
+    }
+
+    @Override
+    public void accept(DuVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

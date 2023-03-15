@@ -1,5 +1,7 @@
 package com.github.ggnmstr.jdu.model;
 
+import com.github.ggnmstr.jdu.DuVisitor;
+
 import java.nio.file.Path;
 
 public class DuSymlink extends DuFile {
@@ -22,6 +24,11 @@ public class DuSymlink extends DuFile {
     @Override
     public long getSize() {
         return this.linkSize;
+    }
+
+    @Override
+    public void accept(DuVisitor visitor) {
+        visitor.visit(this);
     }
 
     public DuFile getChild() {

@@ -29,8 +29,8 @@ public class Main {
         FileTreeBuilder builder = new FileTreeBuilder();
         DuFile curdir = builder.build(pathfromarg);
 
-        JduPrinter jduPrinter = new JduPrinter(System.out);
-        jduPrinter.print(curdir,params);
+        JduPrinter jduPrinter = new JduPrinter(System.out, params);
+        jduPrinter.print(curdir);
     }
 
     public static void usage() {
