@@ -11,16 +11,6 @@ public class Main {
             usage();
             return;
         }
-        // CR: last argument
-        Path pathfromarg = Paths.get(args[0]);
-        Path workpath;
-        try {
-            // CR: do we need it?
-            workpath = pathfromarg.toRealPath();
-        } catch (IOException x) {
-            System.err.println("No such file or directory: " + pathfromarg);
-            return;
-        }
         Options params;
         try {
             params = OptionsParser.parseParams(args);
@@ -30,6 +20,15 @@ public class Main {
         }
         if (params == null) {
             usage();
+            return;
+        }
+        Path pathfromarg = Paths.get(args[args.length-1]);
+        Path workpath;
+        try {
+            // CR: do we need it?
+            workpath = pathfromarg.toRealPath();
+        } catch (IOException x) {
+            System.err.println("No such file or directory: " + pathfromarg);
             return;
         }
         FileTreeBuilder builder = new FileTreeBuilder();

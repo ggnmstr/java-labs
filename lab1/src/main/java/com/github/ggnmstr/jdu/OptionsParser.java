@@ -12,8 +12,8 @@ public class OptionsParser {
         int depth = DEFAULT_DEPTH;
         int limit = DEFAULT_LIMIT;
         boolean golinks = FOLLOW_LINKS;
-        int i = 1;
-        while (i < args.length) {
+        int i = 0;
+        while (i < args.length-1) {
             if (Objects.equals(args[i], "-L")) {
                 golinks = true;
                 i++;
