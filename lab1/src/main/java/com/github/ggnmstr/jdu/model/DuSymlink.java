@@ -1,29 +1,22 @@
 package com.github.ggnmstr.jdu.model;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DuSymlink extends DuFile {
     private DuFile child;
-
-    // CR: remove
     private final Path linkPath;
-    private long linkSize;
+    private final long linkSize;
 
     public DuSymlink(Path path, long linkSize) {
         super(path);
         this.linkPath = path;
-        // CR: use instead of linkSize
-        this.size = 0;
         this.linkSize = linkSize;
     }
 
     @Override
     public String toString() {
-        return linkPath.getFileName() + " (symlink to " + realPath + ") [" + linkSize + " bytes]";
+        return linkPath.getFileName() + " [" + linkSize + " bytes]" +
+                " (symlink to " + realPath + " [" + child.getSize() + " bytes])";
     }
 
     @Override
