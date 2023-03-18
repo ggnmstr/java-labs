@@ -12,9 +12,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static com.github.ggnmstr.jdu.core.DuTreeElement.*;
-import static com.github.ggnmstr.jdu.core.DuTreeElement.file;
-
 public class JduPrinterTest extends DuTest {
 
     @Test
