@@ -8,26 +8,18 @@ import com.github.ggnmstr.jdu.model.DuSymlink;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 // CR: comment with how recursion
 public class FileTreeBuilder {
 
-    // CR: Map<Path, DuFile>
-    private final Set<DuFile> visited = new HashSet<>();
+    private final Map<Path,DuFile> mvisited = new HashMap<>();
 
     public DuFile build(Path path) {
         DuFile root = createFile(path);
-        if (!visited.add(root)) {
-            // CR: O(n)
-            for (DuFile x : visited) {
-                if (x.equals(root)) return x;
-            }
-        }
+        DuFile ex = mvisited.put(path,root);
+        if (ex != null) return ex;
         if (root instanceof DuSymlink symlink) {
             // CR: maybe do this in createFile in Symlink ctor
             symlink.setChild(build(symlink.getRealPath()));
