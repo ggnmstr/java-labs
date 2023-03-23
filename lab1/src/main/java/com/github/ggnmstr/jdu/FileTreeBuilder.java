@@ -18,8 +18,9 @@ public class FileTreeBuilder {
 
     public DuFile build(Path path) {
         DuFile root = createFile(path);
-        DuFile ex = mvisited.put(path,root);
+        DuFile ex = mvisited.get(path);
         if (ex != null) return ex;
+        mvisited.put(path,root);
         if (root instanceof DuSymlink symlink) {
             // CR: maybe do this in createFile in Symlink ctor
             symlink.setChild(build(symlink.getRealPath()));
