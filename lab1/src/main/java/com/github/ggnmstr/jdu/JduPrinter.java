@@ -29,7 +29,6 @@ public class JduPrinter implements DuVisitor {
     @Override
     public void visit(DuSymlink symlink) {
         if (depth == params.depth()) return;
-        // CR: use PrintStream
         printStream.print("    ".repeat(depth));
         printStream.println(symlink);
         if (params.goLinks()) symlink.getChild().accept(this);
