@@ -41,8 +41,7 @@ public class JduPrinter implements DuVisitor {
         printStream.println(directory);
         depth++;
         List<DuFile> children = directory.getChildren();
-        // CR: use standard comparator Comparator.comparingLong()
-        children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
+        children.sort(Comparator.comparingLong(DuFile::getSize).reversed());
         int i = 0;
         for (DuFile x : children) {
             x.accept(this);
