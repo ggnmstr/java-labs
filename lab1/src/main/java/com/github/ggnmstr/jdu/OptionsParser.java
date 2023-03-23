@@ -39,8 +39,7 @@ public class OptionsParser {
     public static int isPosInteger(String arg) throws DuParserException {
         int res;
         try {
-            // CR: parse unsigned
-            res = Integer.parseInt(arg);
+            res = Integer.parseUnsignedInt(arg);
         } catch (NumberFormatException e) {
             throw new DuParserException("Invalid argument " + arg);
         }
