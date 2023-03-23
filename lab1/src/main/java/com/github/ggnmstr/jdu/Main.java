@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
-            usage();
+            System.err.println(usage());
             return;
         }
         Options params;
@@ -18,11 +18,11 @@ public class Main {
             params = OptionsParser.parseParams(args);
         } catch (DuParserException e) {
             System.err.println(e.getMessage());
-            // CR: System.err usage
+            System.err.println(usage());
             return;
         }
         if (params == null) {
-            usage();
+            System.err.println(usage());
             return;
         }
         Path rootPath = Paths.get(args[args.length - 1]);
@@ -36,10 +36,13 @@ public class Main {
         JduPrinter jduPrinter = new JduPrinter(System.out, params);
         jduPrinter.print(root);
     }
-
-    // CR: options description
-    // C: text block
-    public static void usage() {
-        System.out.println("Usage: jdu [directory] [options]");
+    public static String usage() {
+        return """
+                Usage: jdu [options] [directory]
+                Available options:
+                -L - follow symlinks 
+                --depth <n> - display files n levels deeper than source
+                --limit <n> - display top n files inside
+                """;
     }
 }
