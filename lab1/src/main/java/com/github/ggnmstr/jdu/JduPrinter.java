@@ -30,8 +30,8 @@ public class JduPrinter implements DuVisitor {
     public void visit(DuSymlink symlink) {
         if (depth == params.depth()) return;
         // CR: use PrintStream
-        System.out.print("    ".repeat(depth));
-        System.out.println(symlink);
+        printStream.print("    ".repeat(depth));
+        printStream.println(symlink);
         if (params.goLinks()) symlink.getChild().accept(this);
     }
 
