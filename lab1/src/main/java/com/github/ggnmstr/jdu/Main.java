@@ -21,10 +21,6 @@ public class Main {
             System.err.println(usage());
             return;
         }
-        if (params == null) {
-            System.err.println(usage());
-            return;
-        }
         Path rootPath = Paths.get(args[args.length - 1]);
         if (!Files.exists(rootPath)) {
             System.err.println("No such file or directory: " + rootPath);
