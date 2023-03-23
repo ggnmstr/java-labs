@@ -1,5 +1,7 @@
 package com.github.ggnmstr.jdu;
 
+import com.github.ggnmstr.jdu.exception.DuParserException;
+
 import java.util.Objects;
 
 public class OptionsParser {
@@ -8,12 +10,12 @@ public class OptionsParser {
     private static final int DEFAULT_LIMIT = 5;
     private static final boolean FOLLOW_LINKS = false;
 
-    public static Options parseParams(String[] args) throws ParserException {
+    public static Options parseParams(String[] args) throws DuParserException {
         int depth = DEFAULT_DEPTH;
         int limit = DEFAULT_LIMIT;
         boolean golinks = FOLLOW_LINKS;
         int i = 0;
-        while (i < args.length-1) {
+        while (i < args.length - 1) {
             if (Objects.equals(args[i], "-L")) {
                 golinks = true;
                 i++;
@@ -29,17 +31,19 @@ public class OptionsParser {
                 i += 2;
                 continue;
             }
+            // CR: use exception instead
             return null;
         }
         return new Options(depth, limit, golinks);
     }
 
-    public static int isPosInteger(String arg) throws ParserException {
-        int res = -1;
+    public static int isPosInteger(String arg) throws DuParserException {
+        int res;
         try {
+            // CR: parse unsigned
             res = Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            throw new ParserException("Invalid argument " + arg);
+            throw new DuParserException("Invalid argument " + arg);
         }
         return res;
     }

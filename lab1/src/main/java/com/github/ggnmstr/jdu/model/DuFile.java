@@ -6,13 +6,14 @@ import java.nio.file.Path;
 
 public abstract class DuFile {
 
+    // CR: private?
     protected final Path realPath;
     protected long size;
 
+    // CR: ctor with size and path
     protected DuFile(Path path) {
         this.realPath = path;
     }
-
 
     public void setSize(long size) {
         this.size = size;
@@ -26,12 +27,15 @@ public abstract class DuFile {
         return this.size;
     }
 
+    public abstract void accept(DuVisitor visitor);
+
+    // CR: probably remove
     @Override
     public int hashCode() {
         return realPath.hashCode();
     }
-    public abstract void accept(DuVisitor visitor);
 
+    // CR: probably remove
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

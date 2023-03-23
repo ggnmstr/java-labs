@@ -6,13 +6,16 @@ import com.github.ggnmstr.jdu.model.DuRegular;
 import com.github.ggnmstr.jdu.model.DuSymlink;
 
 import java.io.PrintStream;
+import java.util.Comparator;
 import java.util.List;
 
+// CR: comment with examples of printing
 public class JduPrinter implements DuVisitor {
+
     private final PrintStream printStream;
+    private final Options params;
 
     private int depth = 0;
-    private final Options params;
 
     public JduPrinter(PrintStream printStream, Options params) {
         this.printStream = printStream;
@@ -26,10 +29,10 @@ public class JduPrinter implements DuVisitor {
     @Override
     public void visit(DuSymlink symlink) {
         if (depth == params.depth()) return;
+        // CR: use PrintStream
         System.out.print("    ".repeat(depth));
         System.out.println(symlink);
         if (params.goLinks()) symlink.getChild().accept(this);
-
     }
 
     @Override
@@ -39,6 +42,7 @@ public class JduPrinter implements DuVisitor {
         printStream.println(directory);
         depth++;
         List<DuFile> children = directory.getChildren();
+        // CR: use standard comparator Comparator.comparingLong()
         children.sort((o1, o2) -> (int) (o2.getSize() - o1.getSize()));
         int i = 0;
         for (DuFile x : children) {

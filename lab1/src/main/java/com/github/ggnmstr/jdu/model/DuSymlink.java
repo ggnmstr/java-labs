@@ -6,7 +6,9 @@ import java.nio.file.Path;
 
 public class DuSymlink extends DuFile {
     private DuFile child;
+    // CR: remove
     private final Path linkPath;
+    // CR: remove
     private final long linkSize;
 
     public DuSymlink(Path path, long linkSize) {

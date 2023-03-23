@@ -19,7 +19,7 @@ public record DuTreeElement(Type type, String path, List<DuTreeElement> children
     private static DuFile buildTree(DuTreeElement treeElement, Path parentPath) {
         Path currentPath = parentPath.resolve(treeElement.path);
         if (treeElement.type == Type.FILE) {
-            long size = 0;
+            long size;
             try {
                 size = Files.size(currentPath);
             } catch (IOException e) {

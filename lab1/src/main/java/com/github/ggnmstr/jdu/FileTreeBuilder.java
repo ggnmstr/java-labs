@@ -8,20 +8,28 @@ import com.github.ggnmstr.jdu.model.DuSymlink;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
+// CR: comment with how recursion
 public class FileTreeBuilder {
 
+    // CR: Map<Path, DuFile>
     private final Set<DuFile> visited = new HashSet<>();
 
     public DuFile build(Path path) {
         DuFile root = createFile(path);
         if (!visited.add(root)) {
+            // CR: O(n)
             for (DuFile x : visited) {
                 if (x.equals(root)) return x;
             }
         }
-        if (root instanceof DuSymlink symlink){
+        if (root instanceof DuSymlink symlink) {
+            // CR: maybe do this in createFile in Symlink ctor
             symlink.setChild(build(symlink.getRealPath()));
         }
         if (root instanceof DuDirectory directory) {
@@ -31,13 +39,26 @@ public class FileTreeBuilder {
     }
 
     private static DuFile createFile(Path path) {
+
+//        try {
+//            if (Files.isDirectory()) {
+//                createDirectory();
+//            }
+//        } catch (IOException e) {
+//            throw new MyException(e);
+//        }
+
         if (Files.isSymbolicLink(path)) {
+            // CR: extract branches to methods
             Path realpath;
             long linksize;
             try {
                 realpath = path.toRealPath();
                 linksize = Files.size(path);
             } catch (IOException e) {
+                // CR: log error
+                // CR: continue building tree
+                // CR: return new DuUnknownFile(path); || DuSymLink(null, -1);
                 throw new RuntimeException(e);
             }
             return new DuSymlink(realpath, linksize);
@@ -60,9 +81,10 @@ public class FileTreeBuilder {
     private void fillDirectory(DuDirectory duDir) {
         long size = 0;
         List<DuFile> children = new ArrayList<>();
-        try {
-            Files.list(duDir.getRealPath()).forEach(x -> children.add(build(x)));
+        try(Stream<Path> files = Files.list(duDir.getRealPath())) {
+            files.forEach(x -> children.add(build(x)));
         } catch (IOException e) {
+            // CR: same
             System.err.println(duDir.getRealPath() + " is not accessible");
         }
         duDir.setChildren(children);

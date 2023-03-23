@@ -11,7 +11,6 @@ public class DuDirectory extends DuFile {
 
     public DuDirectory(Path path) {
         super(path);
-        this.size = 0;
     }
 
     @Override

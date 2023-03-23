@@ -69,9 +69,8 @@ public class DuTreeBuilderTest extends DuTest {
                 file("txt3"),file("txt4"),file("txt5")));
 
         TestCase.assertEquals(expected, actual);
-
-
-
     }
 
+    // CR: test symlinks, test recursion
+    // CR: root is a regular file
 }
