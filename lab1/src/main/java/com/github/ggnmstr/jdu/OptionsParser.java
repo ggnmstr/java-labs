@@ -31,8 +31,7 @@ public class OptionsParser {
                 i += 2;
                 continue;
             }
-            // CR: use exception instead
-            return null;
+            throw new DuParserException("Unknown option: " + args[i]);
         }
         return new Options(depth, limit, golinks);
     }
