@@ -7,8 +7,7 @@ import java.nio.file.Path;
 public class DuRegular extends DuFile {
 
     public DuRegular(Path path, long size) {
-        super(path);
-        this.size = size;
+        super(path,size);
     }
 
     @Override

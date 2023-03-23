@@ -61,7 +61,7 @@ public class FileTreeBuilder {
                 // CR: return new DuUnknownFile(path); || DuSymLink(null, -1);
                 throw new RuntimeException(e);
             }
-            return new DuSymlink(realpath, linksize);
+            return new DuSymlink(realpath, path,linksize);
         }
         if (Files.isRegularFile(path)) {
             long size;

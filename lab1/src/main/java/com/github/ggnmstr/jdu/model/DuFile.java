@@ -9,10 +9,13 @@ public abstract class DuFile {
     // CR: private?
     protected final Path realPath;
     protected long size;
-
-    // CR: ctor with size and path
     protected DuFile(Path path) {
         this.realPath = path;
+    }
+
+    protected DuFile(Path path, long size){
+        this.realPath = path;
+        this.size = size;
     }
 
     public void setSize(long size) {

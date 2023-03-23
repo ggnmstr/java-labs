@@ -6,26 +6,23 @@ import java.nio.file.Path;
 
 public class DuSymlink extends DuFile {
     private DuFile child;
-    // CR: remove
-    private final Path linkPath;
-    // CR: remove
-    private final long linkSize;
 
-    public DuSymlink(Path path, long linkSize) {
-        super(path);
-        this.linkPath = path;
-        this.linkSize = linkSize;
+    private final Path linkPath;
+
+    public DuSymlink(Path realPath, Path linkPath, long linkSize) {
+        super(realPath,linkSize);
+        this.linkPath = linkPath;
     }
 
     @Override
     public String toString() {
-        return linkPath.getFileName() + " [" + linkSize + " bytes]" +
-                " (symlink to " + realPath + " [" + child.getSize() + " bytes])";
+        return linkPath.getFileName() + " [" + size + " bytes]" +
+                " (symlink to " + child.getRealPath() + " [" + child.getSize() + " bytes])";
     }
 
     @Override
     public long getSize() {
-        return this.linkSize;
+        return this.size;
     }
 
     @Override
