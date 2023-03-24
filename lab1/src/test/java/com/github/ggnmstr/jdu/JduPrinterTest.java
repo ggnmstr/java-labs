@@ -18,11 +18,13 @@ import java.util.List;
 
 public class JduPrinterTest extends DuTest {
 
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(outputStream, true, StandardCharsets.UTF_8);
+
+
     @Test
     public void testOneFile() throws IOException {
         // CR: field
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream, true, StandardCharsets.UTF_8);
         JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
 
         FileSystem fs = fileSystem();
@@ -46,8 +48,6 @@ public class JduPrinterTest extends DuTest {
 
     @Test
     public void testFileInsideDirectory() throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream, true, StandardCharsets.UTF_8);
         JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
 
         FileSystem fs = fileSystem();
