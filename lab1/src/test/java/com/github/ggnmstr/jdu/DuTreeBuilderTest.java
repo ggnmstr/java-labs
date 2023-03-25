@@ -56,11 +56,11 @@ public class DuTreeBuilderTest extends DuTest {
         Path path3 = fs.getPath("/root/txt3");
         Path path4 = fs.getPath("/root/txt4");
         Path path5 = fs.getPath("/root/txt5");
-        Files.createDirectory(path1);
-        Files.createDirectory(path2);
-        Files.createDirectory(path3);
-        Files.createDirectory(path4);
-        Files.createDirectory(path5);
+        Files.createFile(path1);
+        Files.createFile(path2);
+        Files.createFile(path3);
+        Files.createFile(path4);
+        Files.createFile(path5);
 
         FileTreeBuilder builder = new FileTreeBuilder();
 
@@ -71,6 +71,19 @@ public class DuTreeBuilderTest extends DuTest {
         TestCase.assertEquals(expected, actual);
     }
 
+    @Test
+    public void testRegularRoot() throws IOException {
+        FileSystem fs = fileSystem();
+        Path rootPath = fs.getPath("/root");
+        Files.createFile(rootPath);
+
+        FileTreeBuilder builder = new FileTreeBuilder();
+
+        DuFile actual = builder.build(rootPath);
+        DuFile expected = tree(fs,file("root"));
+
+        TestCase.assertEquals(expected,actual);
+    }
+
     // CR: test symlinks, test recursion
-    // CR: root is a regular file
 }
