@@ -6,7 +6,6 @@ import java.nio.file.Path;
 
 public abstract class DuFile {
 
-    // CR: private?
     protected final Path realPath;
     protected long size;
     protected DuFile(Path path) {
@@ -32,13 +31,6 @@ public abstract class DuFile {
 
     public abstract void accept(DuVisitor visitor);
 
-    // CR: probably remove
-    @Override
-    public int hashCode() {
-        return realPath.hashCode();
-    }
-
-    // CR: probably remove
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
