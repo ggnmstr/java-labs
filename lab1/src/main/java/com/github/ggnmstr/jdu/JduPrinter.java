@@ -9,7 +9,25 @@ import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.List;
 
-// CR: comment with examples of printing
+/**
+ * Prints DuFile (result of FileTreeBuilder's build() method)
+ * For example:
+ *  /foo [12 bytes]
+ *      bar [8 bytes]
+ *      baz [4 bytes]
+ * Uses Options (limit, depth, followlinks)
+ * In case of symlink recursion prints it until depth/limit reached.
+ * For example (with depth = 5):
+ * /Videos [44 bytes]
+ *     musiclink [44 bytes] (symlink to /home/User/Music [25743 bytes])
+ *     /Music [25743 bytes]
+ *         videolink [18 bytes] (symlink to /home/User/Videos [44 bytes])
+ *         /Videos [44 bytes]
+ *             musiclink [44 bytes] (symlink to /home/User/Music [25743 bytes])
+ *             /Music [25743 bytes]
+ *                 videolink [18 bytes] (symlink to /home/User/Videos [44 bytes])
+ *                 /Videos [44 bytes]
+ */
 public class JduPrinter implements DuVisitor {
 
     private final PrintStream printStream;
