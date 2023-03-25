@@ -11,16 +11,22 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-// CR: comment with how recursion
+/**
+ * Build a file tree in specified root path
+ * <p>
+ * In case of symbolic link recursion does not create new instance
+ * of class for every recursion iteration, instead uses already created
+ * ones from HashMap of visited files.
+ */
 public class FileTreeBuilder {
 
-    private final Map<Path,DuFile> mvisited = new HashMap<>();
+    private final Map<Path,DuFile> visited = new HashMap<>();
 
     public DuFile build(Path path) {
         DuFile root = createFile(path);
-        DuFile ex = mvisited.get(path);
+        DuFile ex = visited.get(path);
         if (ex != null) return ex;
-        mvisited.put(path,root);
+        visited.put(path,root);
         if (root instanceof DuSymlink symlink) {
             // CR: maybe do this in createFile in Symlink ctor
             symlink.setChild(build(symlink.getRealPath()));
