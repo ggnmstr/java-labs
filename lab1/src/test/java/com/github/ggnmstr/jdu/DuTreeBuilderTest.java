@@ -34,9 +34,9 @@ public class DuTreeBuilderTest extends DuTest {
         FileSystem fs = fileSystem();
         Path rootPath = fs.getPath("/root");
         Files.createDirectory(rootPath);
-        Path fooPath = fs.getPath("/root/foo");
+        Path fooPath = rootPath.resolve("foo");
         Files.createDirectory(fooPath);
-        Path foo2Path = fs.getPath("/root/foo2");
+        Path foo2Path = rootPath.resolve("foo2");
         Files.createDirectory(foo2Path);
 
         FileTreeBuilder builder = new FileTreeBuilder();
@@ -51,11 +51,11 @@ public class DuTreeBuilderTest extends DuTest {
         FileSystem fs = fileSystem();
         Path rootPath = fs.getPath("/root");
         Files.createDirectory(rootPath);
-        Path path1 = fs.getPath("/root/txt1");
-        Path path2 = fs.getPath("/root/txt2");
-        Path path3 = fs.getPath("/root/txt3");
-        Path path4 = fs.getPath("/root/txt4");
-        Path path5 = fs.getPath("/root/txt5");
+        Path path1 = rootPath.resolve("txt1");
+        Path path2 = rootPath.resolve("txt2");
+        Path path3 = rootPath.resolve("txt3");
+        Path path4 = rootPath.resolve("txt4");
+        Path path5 = rootPath.resolve("txt5");
         Files.createFile(path1);
         Files.createFile(path2);
         Files.createFile(path3);
@@ -85,5 +85,32 @@ public class DuTreeBuilderTest extends DuTest {
         TestCase.assertEquals(expected,actual);
     }
 
+    /*
+    @Test
+    public void testSymlink() throws IOException {
+        FileSystem fs = fileSystem();
+        Path rootpath = fs.getPath("/root");
+        Path dir1 = fs.getPath("/root/dir1");
+        Path dir2 = fs.getPath("/root/dir2");
+        Path l1 = fs.getPath("/root/dir1/l1");
+        Path l2 = fs.getPath("/root/dir2/l2");
+
+        Files.createDirectory(rootpath);
+        Files.createDirectory(dir1);
+        Files.createDirectory(dir2);
+
+        Files.createSymbolicLink(l1,dir2);
+        Files.createSymbolicLink(l2,dir1);
+
+        FileTreeBuilder builder = new FileTreeBuilder();
+        DuFile actual = builder.build(rootpath);
+        DuFile expected = tree(fs,dir("root",dir("dir1"),dir("dir2")));
+
+        TestCase.assertEquals(expected,actual);
+
+
+    }
+
+     */
     // CR: test symlinks, test recursion
 }
