@@ -50,27 +50,28 @@ public class OptionParserTest {
         TestCase.assertEquals(excepted,options);
     }
 
-    @Test
-    public void testWrongParameters() throws DuParserException {
-        // CR: expected = DuParserException.class
-        // CR: separate tests
+    @Test(expected = DuParserException.class)
+    public void testInvalidNumber() throws DuParserException {
         String[] args = {"--limit","-1","--depth","7","-L","/foo/bar"};
         Options options = OptionsParser.parseParams(args);
-        TestCase.assertNull(options);
-
-        args = new String[]{"--limit", "10", "--depth", "-1", "-L", "/foo/bar"};
-        options = OptionsParser.parseParams(args);
-        TestCase.assertNull(options);
-
-        args = new String[]{"--limit", "10", "--depth", "7", "-fake", "/foo/bar"};
-        options = OptionsParser.parseParams(args);
-        TestCase.assertNull(options);
     }
 
-    @Test
+    @Test(expected = DuParserException.class)
+    public void testInvalidNumber2() throws DuParserException {
+        String[] args = new String[]{"--limit", "10", "--depth", "-1", "-L", "/foo/bar"};
+        Options options = OptionsParser.parseParams(args);
+    }
+
+    @Test(expected = DuParserException.class)
+    public void testInvalidKey() throws DuParserException {
+        String[] args = new String[]{"--limit", "10", "--depth", "7", "-fake", "/foo/bar"};
+        Options options = OptionsParser.parseParams(args);
+    }
+
+
+    @Test(expected = DuParserException.class)
     public void testWrongOrder() throws DuParserException {
         String[] args = {"/foo/bar","--limit","-1","--depth","7","-L"};
         Options options = OptionsParser.parseParams(args);
-        TestCase.assertNull(options);
     }
 }
