@@ -45,7 +45,7 @@ public class FileTreeBuilder {
                 return new DuDirectory(path);
             }
         } catch (IOException e) {
-            System.err.println("Error: " + path + "is not accessible, returning DuUnknown file type.");
+            System.err.println("Error: " + path + " is not accessible, returning DuUnknown file type.");
         }
         return new DuUnknown(path);
     }
