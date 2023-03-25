@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JduPrinterTest extends DuTest {
@@ -24,20 +25,10 @@ public class JduPrinterTest extends DuTest {
 
     @Test
     public void testOneFile() throws IOException {
-        // CR: field
         JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
 
-        FileSystem fs = fileSystem();
-        Path fooPath = fs.getPath("/foo.txt");
-        Files.createFile(fooPath);
-
-        FileTreeBuilder builder = new FileTreeBuilder();
-
-        DuFile file = builder.build(fooPath);
-        // CR:
-        // DuDirectory duDirectory = new DuDirectory("bar");
-        // duDirectory.setChildren(List.of(new DuRegular("foo")));
-        printer.print(file);
+        DuRegular duRegular = new DuRegular(Path.of("/foo.txt"),0);
+        printer.print(duRegular);
 
 
         String output = outputStream.toString();
@@ -50,18 +41,9 @@ public class JduPrinterTest extends DuTest {
     public void testFileInsideDirectory() throws IOException {
         JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
 
-        FileSystem fs = fileSystem();
-
-        Path fooPath = fs.getPath("/foo");
-        Files.createDirectory(fooPath);
-
-        Path barPath = fs.getPath("/foo/bar.txt");
-        Files.createFile(barPath);
-
-        FileTreeBuilder builder = new FileTreeBuilder();
-
-        DuFile file = builder.build(fooPath);
-        printer.print(file);
+        DuDirectory directory = new DuDirectory(Path.of("/foo"));
+        directory.setChildren(new ArrayList<> (List.of(new DuRegular(Path.of("/bar.txt"),0))));
+        printer.print(directory);
 
 
         String output = outputStream.toString();
