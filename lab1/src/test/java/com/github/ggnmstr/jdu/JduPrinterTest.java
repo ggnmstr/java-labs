@@ -111,6 +111,19 @@ public class JduPrinterTest extends DuTest {
 
     }
 
+    @Test
+    public void testRegularSize(){
+        JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
+        DuRegular root = new DuRegular(Path.of("/rootfile"),15);
+
+        printer.print(root);
+        String output = outputStream.toString();
+        String expected = """
+                rootfile [15 bytes]
+                """;
+        TestCase.assertEquals(expected,output);
+    }
+
     // CR: check if options work
     // CR: check every type of file as a root
     // CR: check directories with different content
