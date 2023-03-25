@@ -1,9 +1,6 @@
 package com.github.ggnmstr.jdu;
 
-import com.github.ggnmstr.jdu.model.DuDirectory;
-import com.github.ggnmstr.jdu.model.DuFile;
-import com.github.ggnmstr.jdu.model.DuRegular;
-import com.github.ggnmstr.jdu.model.DuSymlink;
+import com.github.ggnmstr.jdu.model.*;
 
 import java.io.PrintStream;
 import java.util.Comparator;
@@ -78,5 +75,12 @@ public class JduPrinter implements DuVisitor {
         if (depth == params.depth()) return;
         printStream.print("    ".repeat(depth));
         printStream.println(regular);
+    }
+
+    @Override
+    public void visit(DuUnknown unknown){
+        if (depth == params.depth()) return;
+        printStream.print("    ".repeat(depth));
+        printStream.println(unknown);
     }
 }
