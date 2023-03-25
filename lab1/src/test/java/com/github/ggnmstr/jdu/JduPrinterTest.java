@@ -3,6 +3,7 @@ package com.github.ggnmstr.jdu;
 import com.github.ggnmstr.jdu.core.DuTest;
 import com.github.ggnmstr.jdu.model.DuDirectory;
 import com.github.ggnmstr.jdu.model.DuRegular;
+import com.github.ggnmstr.jdu.model.DuSymlink;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -112,6 +113,94 @@ public class JduPrinterTest extends DuTest {
     }
 
     @Test
+    public void testSymlinkOption(){
+        JduPrinter printer = new JduPrinter(printStream,new Options(5,5,false));
+        DuDirectory root = new DuDirectory(Path.of("/root"));
+        DuDirectory d1 = new DuDirectory(Path.of("/root/d1"));
+        DuDirectory d2 = new DuDirectory(Path.of("/root/d2"));
+
+        DuRegular f1 = new DuRegular(Path.of("/root/d1/file1"),0);
+        DuSymlink l2 = new DuSymlink(d1.getRealPath(),Path.of("/root/d2/link2"),0);
+        l2.setChild(d1);
+        d1.setChildren(new ArrayList<>(List.of(f1)));
+        d2.setChildren(new ArrayList<>(List.of(l2)));
+        root.setChildren(new ArrayList<>(List.of(d1,d2)));
+
+        printer.print(root);
+        printer = new JduPrinter(printStream,new Options(5,5,true));
+        printer.print(root);
+
+        String expected = """
+                /root [0 bytes]
+                    /d1 [0 bytes]
+                        file1 [0 bytes]
+                    /d2 [0 bytes]
+                        link2 [0 bytes] (symlink to /root/d1 [0 bytes])
+                /root [0 bytes]
+                    /d1 [0 bytes]
+                        file1 [0 bytes]
+                    /d2 [0 bytes]
+                        link2 [0 bytes] (symlink to /root/d1 [0 bytes])
+                        /d1 [0 bytes]
+                            file1 [0 bytes]
+                """;
+        String actual = outputStream.toString();
+        TestCase.assertEquals(expected,actual);
+    }
+
+    @Test
+    public void testSymlinkRecursion(){
+        JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
+        DuDirectory root = new DuDirectory(Path.of("/root"));
+        DuDirectory d1 = new DuDirectory(Path.of("/root/d1"));
+        DuDirectory d2 = new DuDirectory(Path.of("/root/d2"));
+
+        DuSymlink l1 = new DuSymlink(d2.getRealPath(),Path.of("root/d1/link1"),0);
+        l1.setChild(d2);
+        DuSymlink l2 = new DuSymlink(d1.getRealPath(),Path.of("/root/d2/link2"),0);
+        l2.setChild(d1);
+
+        d1.setChildren(new ArrayList<>(List.of(l1)));
+        d2.setChildren(new ArrayList<>(List.of(l2)));
+        root.setChildren(new ArrayList<>(List.of(d1,d2)));
+
+        printer.print(d1);
+
+
+        String expected = """
+                /d1 [0 bytes]
+                    link1 [0 bytes] (symlink to /root/d2 [0 bytes])
+                    /d2 [0 bytes]
+                        link2 [0 bytes] (symlink to /root/d1 [0 bytes])
+                        /d1 [0 bytes]
+                            link1 [0 bytes] (symlink to /root/d2 [0 bytes])
+                            /d2 [0 bytes]
+                                link2 [0 bytes] (symlink to /root/d1 [0 bytes])
+                                /d1 [0 bytes]
+                """;
+        String actual = outputStream.toString();
+        TestCase.assertEquals(expected,actual);
+    }
+
+    @Test
+    public void testSymlinkAsRoot(){
+        JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
+        DuRegular sample = new DuRegular(Path.of("/test/sample"),0);
+
+        DuSymlink symlink = new DuSymlink(sample.getRealPath(), Path.of("/root/slink"),0);
+        symlink.setChild(sample);
+        printer.print(symlink);
+
+        String expected = """
+                slink [0 bytes] (symlink to /test/sample [0 bytes])
+                sample [0 bytes]
+                """;
+        String actual = outputStream.toString();
+        TestCase.assertEquals(expected,actual);
+    }
+
+
+    @Test
     public void testRegularSize(){
         JduPrinter printer = new JduPrinter(printStream,new Options(5,5,true));
         DuRegular root = new DuRegular(Path.of("/rootfile"),15);
@@ -123,8 +212,4 @@ public class JduPrinterTest extends DuTest {
                 """;
         TestCase.assertEquals(expected,output);
     }
-
-    // CR: check if options work
-    // CR: check every type of file as a root
-    // CR: check directories with different content
 }
