@@ -32,6 +32,9 @@ public class MainMenu extends JFrame implements TanksView {
         aboutMenu = new JMenuItem("About");
         exitMenu = new JMenuItem("Exit");
 
+
+        newGameMenu.addActionListener(e -> presenter.startNewGame());
+        aboutMenu.addActionListener(e -> presenter.launchAboutMenu());
         exitMenu.addActionListener(e -> System.exit(0));
 
         menuBar.add(newGameMenu);
