@@ -16,11 +16,7 @@ public class Presenter {
     }
     
     public void startNewGame(){
-        
+
     }
 
-    public void launchAboutMenu() {
-        AboutDialogMenu dialogMenu = new AboutDialogMenu((MainMenu)view,"About");
-        dialogMenu.setVisible(true);
-    }
 }

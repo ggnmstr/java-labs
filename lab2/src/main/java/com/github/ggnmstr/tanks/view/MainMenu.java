@@ -4,8 +4,6 @@ import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainMenu extends JFrame implements TanksView {
     //  Exit, About, New Game, High Scores.
@@ -34,7 +32,7 @@ public class MainMenu extends JFrame implements TanksView {
 
 
         newGameMenu.addActionListener(e -> presenter.startNewGame());
-        aboutMenu.addActionListener(e -> presenter.launchAboutMenu());
+        aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> System.exit(0));
 
         menuBar.add(newGameMenu);
@@ -49,6 +47,11 @@ public class MainMenu extends JFrame implements TanksView {
     @Override
     public void run() {
 
+    }
+
+    public void launchAboutMenu() {
+        AboutDialogMenu dialogMenu = new AboutDialogMenu(this,"About");
+        dialogMenu.setVisible(true);
     }
 
     @Override

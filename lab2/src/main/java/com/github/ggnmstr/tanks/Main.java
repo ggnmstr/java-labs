@@ -6,7 +6,9 @@ import com.github.ggnmstr.tanks.view.MainMenu;
 public class Main {
     public static void main(String[] args) {
         Presenter presenter = new Presenter();
-        presenter.setView(new MainMenu());
+        MainMenu mainMenu = new MainMenu();
+        presenter.setView(mainMenu);
+        mainMenu.setPresenter(presenter);
         presenter.run();
     }
 }
