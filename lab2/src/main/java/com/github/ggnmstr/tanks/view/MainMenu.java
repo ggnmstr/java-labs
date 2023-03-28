@@ -1,13 +1,16 @@
 package com.github.ggnmstr.tanks.view;
 
+import com.github.ggnmstr.tanks.model.Tank;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainMenu extends JFrame implements TanksView {
+public class MainMenu extends JFrame implements MainView {
     //  Exit, About, New Game, High Scores.
     private  Presenter presenter;
+
+    private GameView gameView;
     private JMenuBar menuBar;
     private JMenuItem newGameMenu, highScoresMenu, aboutMenu, exitMenu;
     public MainMenu(){
@@ -45,8 +48,21 @@ public class MainMenu extends JFrame implements TanksView {
     }
 
     @Override
-    public void run() {
+    public void prepareGame() {
+        GameView gameView = new GameView();
+        this.gameView = gameView;
+        gameView.setPresenter(presenter);
+        add(gameView);
+        pack();
 
+    }
+
+
+
+    @Override
+    public void update(Tank tank) {
+        System.out.println("aaaa");
+        gameView.repaint();
     }
 
     public void launchAboutMenu() {

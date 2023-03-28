@@ -13,7 +13,15 @@ public class Tank {
         this.yPos = yPos;
     }
 
-    void move(int xDelta, int yDelta){
+    public int getxPos() {
+        return xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public void move(int xDelta, int yDelta){
         this.xPos += xDelta;
         this.yPos += yDelta;
     }
