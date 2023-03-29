@@ -1,7 +1,6 @@
 package com.github.ggnmstr.tanks.presenter;
 
 import com.github.ggnmstr.tanks.model.GameManager;
-import com.github.ggnmstr.tanks.model.Tank;
 import com.github.ggnmstr.tanks.view.MainView;
 
 public class Presenter {
@@ -21,7 +20,7 @@ public class Presenter {
         mainView.update(gm.toGVData());
     }
 
-    public void moveTank(String actionCommand) {
+    public void responseToKey(String actionCommand) {
         switch (actionCommand){
             case "move up" -> {
                 gm.moveMainPlayer(0,-20);
@@ -39,6 +38,10 @@ public class Presenter {
             }
             case "move left" -> {
                 gm.moveMainPlayer(-20,0);
+                mainView.update(gm.toGVData());
+            }
+            case "shoot" -> {
+                gm.shootTank();
                 mainView.update(gm.toGVData());
             }
         }

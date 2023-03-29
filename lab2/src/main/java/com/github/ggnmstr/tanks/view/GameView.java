@@ -1,7 +1,7 @@
 package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
-import com.github.ggnmstr.tanks.model.Tank;
+import com.github.ggnmstr.tanks.model.GameObject;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
@@ -41,15 +41,24 @@ public class GameView extends JPanel {
         inputMap.put(KeyStroke.getKeyStroke("D"),"right");
         actionMap.put("right",new KeyAction("move right"));
 
+        inputMap.put(KeyStroke.getKeyStroke("SPACE"),"shoot");
+        actionMap.put("shoot",new KeyAction("shoot"));
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.RED);
-        System.out.println("adasd");
-        g.fillRect(gvData.tankX,gvData.tankY,100,100);
-        g.drawRect(gvData.tankX,gvData.tankY, 100,100);
+        for (GameObject x : gvData.objlist){
+            drawObject(g,x);
+        }
+    }
+
+    private void drawObject(Graphics g, GameObject x){
+        g.drawRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
+        g.fillRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
+
     }
 
     private void draw(){
@@ -72,7 +81,7 @@ public class GameView extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent actionEvt) {
-            presenter.moveTank(actionEvt.getActionCommand());
+            presenter.responseToKey(actionEvt.getActionCommand());
         }
     }
 }

@@ -2,11 +2,20 @@ package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.GVData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameManager {
+
+    public List<GameObject> objlist = new ArrayList<>();
+
+    public GVData gvData;
     public BattleField battleField;
     public GameManager(){
+        gvData = new GVData(objlist);
         battleField = new BattleField();
         battleField.initField();
+        objlist.add(battleField.mainPlayer);
     }
 
     public void performAction(){
@@ -14,12 +23,20 @@ public class GameManager {
     }
 
     public GVData toGVData(){
-
-        return new GVData(battleField.mainPlayer.getxPos(),battleField.mainPlayer.getyPos());
+        return gvData;
     }
 
     public void moveMainPlayer(int x, int y){
         battleField.mainPlayer.move(x,y);
+    }
+
+    public void shootTank(){
+        battleField.mainPlayer.shoot();
+        Bullet bullet = new Bullet(battleField.mainPlayer.getxPos()+50,
+                battleField.mainPlayer.getyPos()+50,Direction.RIGHT);
+        System.out.println(bullet.getxPos()+ ' ' +bullet.getyPos());
+        objlist.add(bullet);
+
     }
 
 }

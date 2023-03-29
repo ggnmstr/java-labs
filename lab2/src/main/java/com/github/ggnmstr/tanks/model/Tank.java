@@ -1,12 +1,12 @@
 package com.github.ggnmstr.tanks.model;
 
-public class Tank {
+public class Tank extends GameObject {
     private int bullets;
     private int health;
 
-    private int xPos, yPos;
-
     public Tank(int xPos, int yPos){
+        this.width = 100;
+        this.height = 100;
         this.health = 100;
         this.bullets = 10;
         this.xPos = xPos;
