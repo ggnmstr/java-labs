@@ -9,16 +9,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class GameView extends JPanel {
-    private Color color;
 
     private GVData gvData;
     private Presenter presenter;
 
     public GameView() {
         super();
-        color = Color.ORANGE;
-        //setBorder(BorderFactory.createMatteBorder(10,10,10,10,color));
-        //setBackground(color);
+        setBackground(Color.darkGray);
         setFocusable(true);
         setKeyBindings();
 
@@ -43,7 +40,6 @@ public class GameView extends JPanel {
 
         inputMap.put(KeyStroke.getKeyStroke("SPACE"),"shoot");
         actionMap.put("shoot",new KeyAction("shoot"));
-
     }
 
     @Override

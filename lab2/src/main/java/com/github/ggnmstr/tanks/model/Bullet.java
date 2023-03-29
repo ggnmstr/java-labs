@@ -4,8 +4,13 @@ public class Bullet extends GameObject {
     private Direction direction;
 
     public Bullet(int startX, int startY, Direction direction){
-        this.width = 10;
-        this.height = 40;
+        if (direction == Direction.DOWN || direction == Direction.UP){
+            this.width = 10;
+            this.height = 40;
+        } else {
+            this.width = 40;
+            this.height = 10;
+        }
         this.xPos = startX;
         this.yPos = startY;
         this.direction = direction;

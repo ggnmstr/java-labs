@@ -1,6 +1,7 @@
 package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.GVData;
+import com.github.ggnmstr.tanks.view.GameView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,17 @@ public class GameManager {
     public void shootTank(){
         battleField.mainPlayer.shoot();
         Bullet bullet = new Bullet(battleField.mainPlayer.getxPos()+50,
-                battleField.mainPlayer.getyPos()+50,Direction.RIGHT);
+                battleField.mainPlayer.getyPos()+100,battleField.mainPlayer.getLastMove());
         System.out.println(bullet.getxPos()+ ' ' +bullet.getyPos());
         objlist.add(bullet);
 
     }
 
+    public void updateModel() {
+        for (GameObject x : objlist){
+            if (x instanceof Bullet bullet){
+                bullet.move();
+            }
+        }
+    }
 }
