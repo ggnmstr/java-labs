@@ -1,5 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
+import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.model.Tank;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
@@ -9,6 +10,8 @@ import java.awt.event.ActionEvent;
 
 public class GameView extends JPanel {
     private Color color;
+
+    private GVData gvData;
     private Presenter presenter;
 
     public GameView() {
@@ -40,22 +43,13 @@ public class GameView extends JPanel {
 
     }
 
-
-    public void update(Tank tank) {
-    }
-
-
-
-
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        Tank tank = presenter.getTank();
         g.setColor(Color.RED);
-        g.fillRect(tank.getxPos(),tank.getyPos(),100,100);
-        g.drawRect(tank.getxPos(), tank.getyPos(), 100,100);
+        System.out.println("adasd");
+        g.fillRect(gvData.tankX,gvData.tankY,100,100);
+        g.drawRect(gvData.tankX,gvData.tankY, 100,100);
     }
 
     private void draw(){
@@ -65,6 +59,10 @@ public class GameView extends JPanel {
 
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    public void setGVData(GVData data) {
+        this.gvData = data;
     }
 
     private class KeyAction extends AbstractAction {

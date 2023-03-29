@@ -1,5 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
+import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.model.Tank;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
@@ -60,8 +61,8 @@ public class MainMenu extends JFrame implements MainView {
 
 
     @Override
-    public void update(Tank tank) {
-        System.out.println("aaaa");
+    public void update(GVData data) {
+        gameView.setGVData(data);
         gameView.repaint();
     }
 
