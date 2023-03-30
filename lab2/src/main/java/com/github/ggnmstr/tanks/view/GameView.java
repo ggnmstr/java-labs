@@ -18,7 +18,7 @@ public class GameView extends JPanel {
         setBackground(Color.darkGray);
         setFocusable(true);
         setKeyBindings();
-
+        System.out.println(getSize());
         setVisible(true);
     }
 
@@ -45,9 +45,10 @@ public class GameView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.RED);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setColor(Color.RED);
         for (GameObject x : gvData.objlist){
-            drawObject(g,x);
+            drawObject(g2d,x);
         }
     }
 
@@ -56,11 +57,6 @@ public class GameView extends JPanel {
         g.fillRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
 
     }
-
-    private void draw(){
-
-    }
-
 
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;

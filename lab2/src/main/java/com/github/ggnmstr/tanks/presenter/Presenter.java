@@ -1,20 +1,20 @@
 package com.github.ggnmstr.tanks.presenter;
 
 import com.github.ggnmstr.tanks.model.GameManager;
-import com.github.ggnmstr.tanks.view.MainView;
+import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Presenter {
-    private MainView mainView;
+    private MainMenu mainMenu;
     private GameManager gm;
 
     private Timer timer;
 
-    public void setView(MainView mainView){
-        this.mainView = mainView;
+    public void setView(MainMenu mainView){
+        this.mainMenu = mainView;
     }
 
     public void run(){
@@ -22,8 +22,8 @@ public class Presenter {
     
     public void startNewGame(){
         gm = new GameManager();
-        mainView.prepareGame();
-        mainView.update(gm.getGVData());
+        mainMenu.prepareGame();
+        mainMenu.update(gm.getGVData());
         timer = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -36,7 +36,7 @@ public class Presenter {
 
     private void updateGame() {
         gm.updateModel();
-        mainView.update(gm.getGVData());
+        mainMenu.update(gm.getGVData());
 
     }
 

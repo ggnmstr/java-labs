@@ -16,6 +16,7 @@ public class GameManager {
         battleField = new BattleField();
         battleField.initField();
         objlist.add(battleField.mainPlayer);
+        objlist.add(battleField.enemyPlayer);
     }
 
 
