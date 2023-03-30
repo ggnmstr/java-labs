@@ -1,7 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.GVData;
-import com.github.ggnmstr.tanks.view.GameView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +18,8 @@ public class GameManager {
         objlist.add(battleField.mainPlayer);
     }
 
-    public void performAction(){
 
-    }
-
-    public GVData toGVData(){
+    public GVData getGVData(){
         return gvData;
     }
 
