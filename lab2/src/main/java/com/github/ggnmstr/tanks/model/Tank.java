@@ -13,6 +13,7 @@ public class Tank extends GameObject {
         this.bullets = 10;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.lastMove = Direction.DOWN;
     }
 
     public int getxPos() {
@@ -38,7 +39,27 @@ public class Tank extends GameObject {
 
     void shoot(){
         if (bullets == 0) return;
-        Bullet bullet = new Bullet((xPos+width/2)+30, (yPos+height/2)+30,lastMove);
+        int startX = 0, startY = 0;
+        switch (lastMove){
+            case UP -> {
+                startX = xPos + width/2;
+                // -10 - small space, -40 - height of bullet
+                startY = yPos - 10 - 40;
+            }
+            case DOWN -> {
+                startX = xPos + width/2;
+                startY = yPos + height + 10;
+            }
+            case RIGHT -> {
+                startX = xPos + width + 10;
+                startY = yPos + height / 2;
+            }
+            case LEFT -> {
+                startX = xPos - 10 - 40;
+                startY = yPos + height / 2;
+            }
+        }
+        Bullet bullet = new Bullet(startX, startY,lastMove);
         GameManager.objList.add(bullet);
         bullets--;
     }
