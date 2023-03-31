@@ -2,17 +2,16 @@ package com.github.ggnmstr.tanks;
 
 import com.github.ggnmstr.tanks.model.GameObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GVData {
-    public List<GameObject> objlist;
-    public GVData(List<GameObject> objects){
-        this.objlist = objects;
+    public List<GameObject> objList;
+    public GVData(List<GameObject> objList){
+        this.objList = objList;
     }
 
     public List<GameObject> getList(){
-        return objlist;
+        return objList;
     }
 
 }

@@ -27,6 +27,7 @@ public class Presenter {
         timer = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //System.out.println(gm.objlist.size());
                 updateGame();
 
             }

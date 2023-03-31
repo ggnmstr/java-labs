@@ -47,7 +47,7 @@ public class GameView extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(Color.RED);
-        for (GameObject x : gvData.objlist){
+        for (GameObject x : gvData.objList){
             drawObject(g2d,x);
         }
     }

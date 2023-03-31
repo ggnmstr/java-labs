@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.model;
 
 public class Bullet extends GameObject {
     private Direction direction;
+    //private Tank owner;
 
     public Bullet(int startX, int startY, Direction direction){
         if (direction == Direction.DOWN || direction == Direction.UP){
@@ -22,6 +23,12 @@ public class Bullet extends GameObject {
             case DOWN -> yPos +=10;
             case LEFT -> xPos -= 10;
             case RIGHT -> xPos += 10;
+        }
+        for (GameObject x : GameManager.objList){
+            if (this != x && GameManager.isCollision(this,x) ){
+                GameManager.destroy(this);
+                GameManager.destroy(x);
+            }
         }
     }
 }

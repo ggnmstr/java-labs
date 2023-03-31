@@ -7,8 +7,8 @@ public class Tank extends GameObject {
     private Direction lastMove;
 
     public Tank(int xPos, int yPos){
-        this.width = 100;
-        this.height = 100;
+        this.width = 80;
+        this.height = 80;
         this.health = 100;
         this.bullets = 10;
         this.xPos = xPos;
@@ -38,6 +38,8 @@ public class Tank extends GameObject {
 
     void shoot(){
         if (bullets == 0) return;
+        Bullet bullet = new Bullet((xPos+width/2)+30, (yPos+height/2)+30,lastMove);
+        GameManager.objList.add(bullet);
         bullets--;
     }
 }
