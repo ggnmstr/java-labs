@@ -9,20 +9,22 @@ public class GameManager {
 
     public static List<GameObject> objList = new ArrayList<>();
     public static List<GameObject> toRemove = new ArrayList<>();
-    //public static List<GameObject> bulletlist = new ArrayList<>();
+
+    private int enemyCount = 0;
 
     public GVData gvData;
-    public BattleField battleField;
+    public static BattleField battleField;
     public GameManager(){
         gvData = new GVData(objList);
         battleField = new BattleField();
         battleField.initField();
-        objList.add(battleField.mainPlayer);
-        objList.add(battleField.enemyPlayer);
     }
 
     public static void destroy(GameObject x) {
-        if (x instanceof EnemyTank tank) tank.die();
+        if (x instanceof EnemyTank tank) {
+            tank.die();
+            battleField.enemies.remove(tank);
+        }
         toRemove.add(x);
     }
 
@@ -40,7 +42,7 @@ public class GameManager {
     }
 
     public void updateModel() {
-        battleField.enemyPlayer.makeMove();
+        battleField.updateField();
         objList.removeAll(toRemove);
         toRemove.clear();
         for (GameObject x : objList){
