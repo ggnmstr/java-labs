@@ -2,15 +2,57 @@ package com.github.ggnmstr.tanks.model;
 
 public class BattleField {
     public Tank mainPlayer;
-    public Tank enemyPlayer;
+    public EnemyTank enemyPlayer;
+
+    // 26 (width) x 56 (height)
+    private int[][] mapTemplate = {
+        {0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,1,0,1,0,1,0,1,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,0,1,0},
+        {0,1,0,1,0,0,0,0,0,1,0,1,0},
+        {0,0,0,0,0,1,0,1,0,0,0,0,0},
+        {1,0,1,1,0,0,0,0,0,1,1,0,1},
+        {0,1,0,1,0,0,0,0,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,0,1,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+    };
+
+    private int[][] mapwithborders = {
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,1,0,1,0,0,0,0,0,1,0,1,0,1},
+            {1,0,0,0,0,0,1,0,1,0,0,0,0,0,1},
+            {1,1,0,1,1,0,0,0,0,0,1,1,0,1,1},
+            {1,0,1,0,1,0,0,0,0,0,1,0,1,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+
+    };
+
+
     void initField(){
         buildMap();
         mainPlayer = new Tank(0,0);
-        enemyPlayer = new Tank(500,500);
+        enemyPlayer = new EnemyTank(500,500);
     }
 
     void buildMap(){
-        Block block = new Block(20,20,false);
-        GameManager.objList.add(block);
+        for (int i = 0; i < mapTemplate.length; i++){
+            for (int j = 0; j < mapTemplate[i].length; j++){
+                if (mapTemplate[i][j] != 1) continue;
+                Block block = new Block(j*80,i*60,false);
+                GameManager.objList.add(block);
+            }
+        }
     }
 }

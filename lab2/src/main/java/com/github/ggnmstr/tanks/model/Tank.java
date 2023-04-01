@@ -6,9 +6,9 @@ public class Tank extends GameObject {
 
     private Direction lastMove;
 
-    public Tank(int xPos, int yPos){
-        this.width = 80;
-        this.height = 80;
+    public Tank(int xPos, int yPos) {
+        this.width = GameParameters.TANKSIZE;
+        this.height = GameParameters.TANKSIZE;
         this.health = 100;
         this.bullets = 10;
         this.xPos = xPos;
@@ -28,26 +28,32 @@ public class Tank extends GameObject {
         return lastMove;
     }
 
-    public void move(int xDelta, int yDelta){
+    public void move(int xDelta, int yDelta) {
         this.xPos += xDelta;
         this.yPos += yDelta;
+        for (GameObject x : GameManager.objList) {
+            if (x != this && GameManager.isCollision(x, this)) {
+                this.xPos -= xDelta;
+                this.yPos -= yDelta;
+            }
+        }
         if (xDelta > 0) lastMove = Direction.RIGHT;
         if (xDelta < 0) lastMove = Direction.LEFT;
         if (yDelta < 0) lastMove = Direction.UP;
         if (yDelta > 0) lastMove = Direction.DOWN;
     }
 
-    void shoot(){
+    void shoot() {
         if (bullets == 0) return;
         int startX = 0, startY = 0;
-        switch (lastMove){
+        switch (lastMove) {
             case UP -> {
-                startX = xPos + width/2;
-                // -10 - small space, -40 - height of bullet
-                startY = yPos - 10 - 40;
+                startX = xPos + width / 2;
+                // -40 - height of bullet
+                startY = yPos - 40;
             }
             case DOWN -> {
-                startX = xPos + width/2;
+                startX = xPos + width / 2;
                 startY = yPos + height + 10;
             }
             case RIGHT -> {
@@ -55,13 +61,13 @@ public class Tank extends GameObject {
                 startY = yPos + height / 2;
             }
             case LEFT -> {
-                startX = xPos - 10 - 40;
+                startX = xPos - 40;
                 startY = yPos + height / 2;
             }
         }
-        Bullet bullet = new Bullet(startX, startY,lastMove);
+        Bullet bullet = new Bullet(startX, startY, lastMove);
         GameManager.objList.add(bullet);
-        bullets--;
+        //bullets--;
     }
 }
 

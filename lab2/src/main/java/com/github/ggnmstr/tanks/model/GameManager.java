@@ -22,6 +22,7 @@ public class GameManager {
     }
 
     public static void destroy(GameObject x) {
+        if (x instanceof EnemyTank tank) tank.die();
         toRemove.add(x);
     }
 
@@ -39,6 +40,7 @@ public class GameManager {
     }
 
     public void updateModel() {
+        battleField.enemyPlayer.makeMove();
         objList.removeAll(toRemove);
         toRemove.clear();
         for (GameObject x : objList){

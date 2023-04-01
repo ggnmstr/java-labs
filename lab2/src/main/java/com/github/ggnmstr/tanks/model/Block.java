@@ -6,7 +6,7 @@ public class Block extends GameObject {
         this.isInvincible = isInvincible;
         this.xPos = x;
         this.yPos = y;
-        this.height = 10;
-        this.width = 40;
+        this.height = GameParameters.BLOCKHEIGHT;
+        this.width = GameParameters.BLOCKWIDTH;
     }
 }
