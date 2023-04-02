@@ -13,18 +13,13 @@ public class GameManager {
     public static List<GameObject> objList = new ArrayList<>();
     public static List<GameObject> toRemove = new ArrayList<>();
 
-    public static GVData gvData;
+    public static GVData gvData = new GVData(objList);
     public static BattleField battleField;
-    public GameManager(Presenter presenter){
-        GameManager.presenter = presenter;
-        gvData = new GVData(objList);
-        battleField = new BattleField();
-        battleField.initField();
-    }
 
     public static void initGameManager(Presenter presenter){
+        objList.clear();
+        toRemove.clear();
         GameManager.presenter = presenter;
-        gvData = new GVData(objList);
         battleField = new BattleField();
         battleField.initField();
 
@@ -48,19 +43,19 @@ public class GameManager {
     }
 
 
-    public GVData getGVData(){
+    public static GVData getGVData(){
         return gvData;
     }
 
-    public void moveMainPlayer(int x, int y){
+    public static void moveMainPlayer(int x, int y){
         battleField.mainPlayer.move(x,y);
     }
 
-    public void shootTank(){
+    public static void shootTank(){
         battleField.mainPlayer.shoot();
     }
 
-    public void updateModel() {
+    public static void updateModel() {
         battleField.updateField();
         objList.removeAll(toRemove);
         toRemove.clear();

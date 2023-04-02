@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.presenter.Presenter;
+import com.github.ggnmstr.tanks.util.HighScoresWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,7 @@ public class MainMenu extends JFrame {
 
 
         newGameMenu.addActionListener(e -> presenter.startNewGame());
+        highScoresMenu.addActionListener(e -> showHighScores());
         aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> System.exit(0));
 
@@ -45,6 +47,11 @@ public class MainMenu extends JFrame {
 
         this.setJMenuBar(menuBar);
 
+    }
+
+    private void showHighScores() {
+        HighScoresDialog highScores = new HighScoresDialog(this,"High Scores");
+        highScores.setVisible(true);
     }
 
     public void prepareGame() {
