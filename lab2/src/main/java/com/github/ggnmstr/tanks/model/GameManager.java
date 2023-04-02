@@ -1,18 +1,22 @@
 package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.GVData;
+import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
 
+    private static Presenter presenter;
+
     public static List<GameObject> objList = new ArrayList<>();
     public static List<GameObject> toRemove = new ArrayList<>();
 
     public GVData gvData;
     public static BattleField battleField;
-    public GameManager(){
+    public GameManager(Presenter presenter){
+        this.presenter = presenter;
         gvData = new GVData(objList);
         battleField = new BattleField();
         battleField.initField();
@@ -31,6 +35,8 @@ public class GameManager {
     }
 
     private static void gameLost() {
+        presenter.gameLost();
+
     }
 
 

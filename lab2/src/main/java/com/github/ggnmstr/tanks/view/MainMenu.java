@@ -71,4 +71,9 @@ public class MainMenu extends JFrame {
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
+
+    public void launchLostMenu() {
+        GameLostMenu lostMenu = new GameLostMenu(this,"You lost!", presenter);
+        lostMenu.setVisible(true);
+    }
 }

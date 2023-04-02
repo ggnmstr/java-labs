@@ -6,7 +6,7 @@ public final class GameParameters {
     public static int TANKSIZE = 60;
     public static int TANKSPEED = 10;
 
-    public static int BULLETLONG = 40;
+    public static int BULLETLONG = 15;
     public static int BULLETSHORT = 10;
     public static int BULLETSPEED = 5;
 

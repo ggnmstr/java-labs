@@ -1,6 +1,7 @@
 package com.github.ggnmstr.tanks.presenter;
 
 import com.github.ggnmstr.tanks.model.GameManager;
+import com.github.ggnmstr.tanks.view.GameLostMenu;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ public class Presenter {
     private MainMenu mainMenu;
     private GameManager gm;
 
-    private Timer timer;
+    private Timer gameCycle;
 
     public void setView(MainMenu mainView){
         this.mainMenu = mainView;
@@ -21,17 +22,17 @@ public class Presenter {
     }
     
     public void startNewGame(){
-        gm = new GameManager();
+        gm = new GameManager(this);
         mainMenu.prepareGame();
         mainMenu.update(gm.getGVData());
-        timer = new Timer(1000 / 60, new ActionListener() {
+        gameCycle = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateGame();
 
             }
         });
-        timer.start();
+        gameCycle.start();
     }
 
     private void updateGame() {
@@ -60,5 +61,10 @@ public class Presenter {
                 gm.shootTank();
             }
         }
+    }
+
+    public void gameLost() {
+        gameCycle.stop();
+        mainMenu.launchLostMenu();
     }
 }
