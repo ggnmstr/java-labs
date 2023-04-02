@@ -1,7 +1,7 @@
 package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
-import com.github.ggnmstr.tanks.model.GameObject;
+import com.github.ggnmstr.tanks.model.*;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
@@ -48,6 +48,9 @@ public class GameView extends JPanel {
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(Color.RED);
         for (GameObject x : gvData.objList){
+            if (x instanceof Tank && !(x instanceof EnemyTank)) g2d.setColor(Color.GREEN);
+            if (x instanceof Block) g2d.setColor(Color.ORANGE);
+            if (x instanceof Base) g2d.setColor(Color.CYAN);
             drawObject(g2d,x);
         }
     }

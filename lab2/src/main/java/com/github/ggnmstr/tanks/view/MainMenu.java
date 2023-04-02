@@ -15,7 +15,7 @@ public class MainMenu extends JFrame {
     private JMenuItem newGameMenu, highScoresMenu, aboutMenu, exitMenu;
     public MainMenu(){
         super("Tanks");
-        this.setPreferredSize(new Dimension(1024,768));
+        this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setupMenuBar();

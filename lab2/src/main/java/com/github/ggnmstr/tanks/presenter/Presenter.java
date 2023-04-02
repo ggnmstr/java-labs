@@ -27,7 +27,6 @@ public class Presenter {
         timer = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println(gm.objlist.size());
                 updateGame();
 
             }
@@ -44,18 +43,18 @@ public class Presenter {
     public void responseToKey(String actionCommand) {
         switch (actionCommand){
             case "move up" -> {
-                gm.moveMainPlayer(0,-20);
+                gm.moveMainPlayer(0,-15);
             }
             case "move down"-> {
-                gm.moveMainPlayer(0,20);
+                gm.moveMainPlayer(0,15);
 
             }
             case "move right" -> {
-                gm.moveMainPlayer(20,0);
+                gm.moveMainPlayer(15,0);
 
             }
             case "move left" -> {
-                gm.moveMainPlayer(-20,0);
+                gm.moveMainPlayer(-15,0);
             }
             case "shoot" -> {
                 gm.shootTank();

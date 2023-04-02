@@ -10,8 +10,6 @@ public class GameManager {
     public static List<GameObject> objList = new ArrayList<>();
     public static List<GameObject> toRemove = new ArrayList<>();
 
-    private int enemyCount = 0;
-
     public GVData gvData;
     public static BattleField battleField;
     public GameManager(){
@@ -21,11 +19,18 @@ public class GameManager {
     }
 
     public static void destroy(GameObject x) {
+        if (x instanceof Base){
+            gameLost();
+        }
+        if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
             tank.die();
             battleField.enemies.remove(tank);
         }
         toRemove.add(x);
+    }
+
+    private static void gameLost() {
     }
 
 
