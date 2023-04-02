@@ -49,8 +49,10 @@ public class GameView extends JPanel {
         g2d.setColor(Color.RED);
         for (GameObject x : gvData.objList){
             if (x instanceof Tank && !(x instanceof EnemyTank)) g2d.setColor(Color.GREEN);
-            if (x instanceof Block) g2d.setColor(Color.ORANGE);
-            if (x instanceof Base) g2d.setColor(Color.CYAN);
+            else if (x instanceof Bullet) g2d.setColor(Color.LIGHT_GRAY);
+            else if (x instanceof EnemyTank) g2d.setColor(Color.RED);
+            else if (x instanceof Block) g2d.setColor(Color.ORANGE);
+            else if (x instanceof Base) g2d.setColor(Color.CYAN);
             drawObject(g2d,x);
         }
     }
