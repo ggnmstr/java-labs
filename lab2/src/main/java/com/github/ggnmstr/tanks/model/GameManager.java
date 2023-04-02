@@ -13,13 +13,21 @@ public class GameManager {
     public static List<GameObject> objList = new ArrayList<>();
     public static List<GameObject> toRemove = new ArrayList<>();
 
-    public GVData gvData;
+    public static GVData gvData;
     public static BattleField battleField;
     public GameManager(Presenter presenter){
-        this.presenter = presenter;
+        GameManager.presenter = presenter;
         gvData = new GVData(objList);
         battleField = new BattleField();
         battleField.initField();
+    }
+
+    public static void initGameManager(Presenter presenter){
+        GameManager.presenter = presenter;
+        gvData = new GVData(objList);
+        battleField = new BattleField();
+        battleField.initField();
+
     }
 
     public static void destroy(GameObject x) {

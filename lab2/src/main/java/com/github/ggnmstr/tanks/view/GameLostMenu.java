@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameLostMenu extends JDialog {
-    public GameLostMenu(Frame owner, String title, Presenter presenter){
+    public GameLostMenu(Frame owner, String title){
         super(owner, title);
         this.setPreferredSize(new Dimension(420,300));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

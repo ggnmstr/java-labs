@@ -73,7 +73,7 @@ public class MainMenu extends JFrame {
     }
 
     public void launchLostMenu() {
-        GameLostMenu lostMenu = new GameLostMenu(this,"You lost!", presenter);
+        GameLostMenu lostMenu = new GameLostMenu(this,"You lost!");
         lostMenu.setVisible(true);
     }
 }
