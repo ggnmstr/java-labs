@@ -65,4 +65,8 @@ public class Presenter {
         gameCycle.stop();
         mainMenu.launchLostMenu(score);
     }
+
+    public void updateScore(int score) {
+        mainMenu.updateMenu(score);
+    }
 }

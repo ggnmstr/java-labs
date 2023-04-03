@@ -35,6 +35,7 @@ public class GameManager {
         if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
             score+=100;
+            presenter.updateScore(score);
             tank.die();
             battleField.enemies.remove(tank);
         }

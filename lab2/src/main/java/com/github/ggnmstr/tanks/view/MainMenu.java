@@ -1,6 +1,7 @@
 package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
+import com.github.ggnmstr.tanks.model.GameParameters;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
@@ -11,15 +12,18 @@ public class MainMenu extends JFrame {
     private  Presenter presenter;
 
     private GameView gameView;
+
+    private GameStatMenu statMenu;
     private JMenuBar menuBar;
     private JMenuItem newGameMenu, highScoresMenu, aboutMenu, exitMenu;
     public MainMenu(){
         super("Tanks");
-        this.setPreferredSize(new Dimension(1200,900));
+        this.setPreferredSize(new Dimension(1000,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setupMenuBar();
 
+        setLayout(new BorderLayout());
         this.pack();
         this.setVisible(true);
 
@@ -54,15 +58,21 @@ public class MainMenu extends JFrame {
     }
 
     public void prepareGame() {
-        GameView gameView = new GameView();
-        this.gameView = gameView;
-        gameView.setPresenter(presenter);
-        add(gameView);
-        pack();
+        if (gameView == null){
+            gameView = new GameView();
+            statMenu = new GameStatMenu();
+            gameView.setPresenter(presenter);
+            add(gameView);
+            add(statMenu,BorderLayout.LINE_END);
+            pack();
+        }
 
     }
 
 
+    public void updateMenu(int score){
+        statMenu.update(1,score);
+    }
 
     public void update(GVData data) {
         gameView.setGVData(data);
