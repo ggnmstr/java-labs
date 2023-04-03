@@ -29,20 +29,23 @@ public class GameManager {
     }
 
     public static void destroy(GameObject x) {
+        if (x instanceof Tank && !(x instanceof EnemyTank)){
+            battleField.damageMainPlayer();
+        }
         if (x instanceof Base){
             gameLost();
         }
         if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
             score+=100;
-            presenter.updateScore(score);
+            presenter.updateStats(battleField.getEnemiesLeft(),score);
             tank.die();
             battleField.enemies.remove(tank);
         }
         toRemove.add(x);
     }
 
-    private static void gameLost() {
+    public static void gameLost() {
         presenter.gameLost(score);
 
     }

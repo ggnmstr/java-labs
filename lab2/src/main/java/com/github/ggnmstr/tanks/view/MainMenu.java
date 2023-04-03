@@ -70,8 +70,8 @@ public class MainMenu extends JFrame {
     }
 
 
-    public void updateMenu(int score){
-        statMenu.update(1,score);
+    public void updateMenu(int enemiesLeft, int score){
+        statMenu.update(enemiesLeft,score);
     }
 
     public void update(GVData data) {

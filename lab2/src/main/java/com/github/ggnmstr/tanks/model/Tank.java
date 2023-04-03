@@ -2,14 +2,11 @@ package com.github.ggnmstr.tanks.model;
 
 public class Tank extends GameObject {
     private int bullets;
-    private int health;
-
     private Direction lastMove;
 
     public Tank(int xPos, int yPos) {
         this.width = GameParameters.TANKSIZE;
         this.height = GameParameters.TANKSIZE;
-        this.health = 100;
         this.bullets = 10;
         this.xPos = xPos;
         this.yPos = yPos;

@@ -11,6 +11,7 @@ public class Presenter {
     private MainMenu mainMenu;
 
     private Timer gameCycle;
+    private Timer enemySpawner;
 
     public void setView(MainMenu mainView){
         this.mainMenu = mainView;
@@ -30,7 +31,14 @@ public class Presenter {
 
             }
         });
+        enemySpawner = new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameManager.battleField.spawnEnemy();
+            }
+        });
         gameCycle.start();
+        enemySpawner.start();
     }
 
     private void updateGame() {
@@ -63,10 +71,11 @@ public class Presenter {
 
     public void gameLost(int score) {
         gameCycle.stop();
+        enemySpawner.stop();
         mainMenu.launchLostMenu(score);
     }
 
-    public void updateScore(int score) {
-        mainMenu.updateMenu(score);
+    public void updateStats(int enemiesLeft,int score) {
+        mainMenu.updateMenu(enemiesLeft,score);
     }
 }

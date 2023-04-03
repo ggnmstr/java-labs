@@ -12,6 +12,10 @@ public class BattleField {
     private int playerSpawnX;
     private int playerSpawnY;
 
+    private int enemiesSpawned = 0;
+    private int enemyLimit = 10;
+
+    private int playerHP = 0;
 
     // 52 x 52
     // 0 - empty, 1 - wall, 2 - enemy spawn point
@@ -76,20 +80,25 @@ public class BattleField {
         buildMap();
         mainPlayer = new Tank(playerSpawnX,playerSpawnY);
         generateBorders();
-        EnemySpawnPoint spawnPoint = enemySpawnPoints.get(0);
-        spawnPoint.spawnEnemyTank();
+        spawnEnemy();
         GameManager.objList.add(this.mainPlayer);
         GameManager.objList.add(enemies.get(0));
     }
 
     public void updateField(){
-        if (enemies.size() == 0){
-            EnemySpawnPoint spawnPoint = enemySpawnPoints.get(0);
-            spawnPoint.spawnEnemyTank();
-        }
         for (EnemyTank x : enemies){
             x.makeMove();
         }
+    }
+
+    public int getEnemiesLeft(){
+        return enemyLimit - enemiesSpawned;
+    }
+
+    public void spawnEnemy(){
+        if (enemiesSpawned >= enemyLimit) return;
+        enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
+        enemiesSpawned++;
     }
 
     void generateBorders(){
@@ -126,5 +135,11 @@ public class BattleField {
 
             }
         }
+    }
+
+    public void damageMainPlayer() {
+        if (playerHP <= 0) GameManager.gameLost();
+        playerHP--;
+
     }
 }
