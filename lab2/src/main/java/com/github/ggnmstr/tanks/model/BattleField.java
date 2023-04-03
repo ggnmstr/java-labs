@@ -75,7 +75,7 @@ public class BattleField {
     void initField(){
         buildMap();
         mainPlayer = new Tank(playerSpawnX,playerSpawnY);
-        //generateBorders();
+        generateBorders();
         EnemySpawnPoint spawnPoint = enemySpawnPoints.get(0);
         spawnPoint.spawnEnemyTank();
         GameManager.objList.add(this.mainPlayer);
@@ -93,10 +93,10 @@ public class BattleField {
     }
 
     void generateBorders(){
-        Block left = new Block(0,0,0,1000,true);
-        Block top = new Block(0,0,1000,0,true);
-        Block bottom = new Block(0,700,1000,0,true);
-        Block right = new Block(1024,0,0,1000,true);
+        Block left = new Block(0,0,0,GameParameters.FIELDWIDTH,true);
+        Block top = new Block(0,0,GameParameters.FIELDHEIGHT,0,true);
+        Block bottom = new Block(0,GameParameters.FIELDHEIGHT,GameParameters.FIELDWIDTH,0,true);
+        Block right = new Block(GameParameters.FIELDWIDTH,0,0,GameParameters.FIELDHEIGHT,true);
         GameManager.objList.add(left);
         GameManager.objList.add(right);
         GameManager.objList.add(top);

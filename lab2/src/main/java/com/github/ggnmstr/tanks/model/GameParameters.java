@@ -1,6 +1,9 @@
 package com.github.ggnmstr.tanks.model;
 
 public final class GameParameters {
+
+    public static int FIELDWIDTH = 832;
+    public static int FIELDHEIGHT = 832;
     public static int BASEHEIGHT = 60;
     public static int BASEWIDTH = 60;
     public static int TANKSIZE = 60;

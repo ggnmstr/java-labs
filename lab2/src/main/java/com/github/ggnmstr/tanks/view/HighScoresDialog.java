@@ -27,7 +27,8 @@ public class HighScoresDialog extends JDialog {
             model.addRow(toadd);
         }
         table.setFillsViewportHeight(true);
-        table.setFont(new Font("Source Code Pro",Font.PLAIN,18));
+        table.setFont(new Font("Source Code Pro",Font.PLAIN,24));
+        table.setRowHeight(30);
         JScrollPane scrollPane = new JScrollPane(table);
         this.add(scrollPane);
         this.pack();

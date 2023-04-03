@@ -2,7 +2,6 @@ package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.presenter.Presenter;
-import com.github.ggnmstr.tanks.util.HighScoresWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +15,7 @@ public class MainMenu extends JFrame {
     private JMenuItem newGameMenu, highScoresMenu, aboutMenu, exitMenu;
     public MainMenu(){
         super("Tanks");
-        this.setPreferredSize(new Dimension(900,900));
+        this.setPreferredSize(new Dimension(1200,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setupMenuBar();
@@ -80,7 +79,7 @@ public class MainMenu extends JFrame {
     }
 
     public void launchLostMenu(int score) {
-        JDialog lostMenu = GameLostMenu.getLostDialog(this,"You lost!",score);
+        JDialog lostMenu = GameLostDialog.getLostDialog(this,"You lost!",score);
         lostMenu.setVisible(true);
     }
 }

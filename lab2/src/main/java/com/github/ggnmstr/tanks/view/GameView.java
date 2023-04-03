@@ -5,6 +5,7 @@ import com.github.ggnmstr.tanks.model.*;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -18,7 +19,6 @@ public class GameView extends JPanel {
         setBackground(Color.darkGray);
         setFocusable(true);
         setKeyBindings();
-        System.out.println(getSize());
         setVisible(true);
     }
 
