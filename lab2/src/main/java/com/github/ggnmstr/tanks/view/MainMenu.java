@@ -80,7 +80,7 @@ public class MainMenu extends JFrame {
     }
 
     public void launchLostMenu() {
-        GameLostMenu lostMenu = new GameLostMenu(this,"You lost!");
+        JDialog lostMenu = GameLostMenu.getLostDialog(this,"You lost!");
         lostMenu.setVisible(true);
     }
 }

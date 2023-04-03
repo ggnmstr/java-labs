@@ -14,7 +14,12 @@ public class HighScoresDialog extends JDialog {
         this.setPreferredSize(new Dimension(420,600));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         String[] columnNames = {"Player","Score"};
-        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+        DefaultTableModel model = new DefaultTableModel(columnNames,0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable table = new JTable(model);
         List<String> list = HighScoresWorker.getScores();
         for (String rec : list){
