@@ -15,13 +15,16 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class GameLostMenu {
 
-    public static JDialog getLostDialog(Frame owner, String title){
+    public static JDialog getLostDialog(Frame owner, String title, int score){
         JDialog dialog = new JDialog(owner,title);
         dialog.setPreferredSize(new Dimension(420,300));
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        JLabel label = new JLabel("Enter your name below: ",SwingConstants.CENTER);
-        label.setFont(new Font("Source Code Pro",Font.PLAIN,18));
+        JLabel scoreLabel = new JLabel("Your score: " + score,SwingConstants.CENTER);
+        scoreLabel.setFont(new Font("Source Code Pro",Font.PLAIN,18));
+
+        JLabel nameLabel = new JLabel("Enter your name below: ",SwingConstants.CENTER);
+        nameLabel.setFont(new Font("Source Code Pro",Font.PLAIN,18));
 
         JTextField nameField = new JTextField(30);
         nameField.addActionListener(e -> {
@@ -30,7 +33,9 @@ public class GameLostMenu {
         });
 
         JPanel panel = new JPanel();
-        panel.add(label);
+        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        panel.add(scoreLabel);
+        panel.add(nameLabel);
         panel.add(nameField);
 
         dialog.add(panel);

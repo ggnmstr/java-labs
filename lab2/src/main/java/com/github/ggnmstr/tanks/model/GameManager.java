@@ -16,7 +16,10 @@ public class GameManager {
     public static GVData gvData = new GVData(objList);
     public static BattleField battleField;
 
+    public static int score = 0;
+
     public static void initGameManager(Presenter presenter){
+        score = 0;
         objList.clear();
         toRemove.clear();
         GameManager.presenter = presenter;
@@ -31,6 +34,7 @@ public class GameManager {
         }
         if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
+            score+=100;
             tank.die();
             battleField.enemies.remove(tank);
         }
@@ -38,7 +42,7 @@ public class GameManager {
     }
 
     private static void gameLost() {
-        presenter.gameLost();
+        presenter.gameLost(score);
 
     }
 

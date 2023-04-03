@@ -61,8 +61,8 @@ public class Presenter {
         }
     }
 
-    public void gameLost() {
+    public void gameLost(int score) {
         gameCycle.stop();
-        mainMenu.launchLostMenu();
+        mainMenu.launchLostMenu(score);
     }
 }

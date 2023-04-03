@@ -20,7 +20,7 @@ public class HighScoresWorker {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                int linescore = Integer.parseInt(line.split(" ")[2]);
+                int linescore = Integer.parseInt(line.split(" : ")[1]);
                 if (!added && linescore < newScore){
                     lines.add(name + " : " + newScore);
                     added = true;
@@ -49,7 +49,7 @@ public class HighScoresWorker {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                int linescore = Integer.parseInt(line.split(" ")[2]);
+                int linescore = Integer.parseInt(line.split(" : ")[1]);
                 lines.add(line);
             }
         } catch (IOException e) {
