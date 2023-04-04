@@ -15,7 +15,7 @@ public class EnemySpawnPoint extends GameObject {
 
     public void spawnEnemyTank(){
         EnemyTank newEnemyTank = new EnemyTank(this.xPos,this.yPos);
-        GameManager.objList.add(newEnemyTank);
+        GameManager.getInstance().objList.add(newEnemyTank);
         BattleField.enemies.add(newEnemyTank);
     }
 }

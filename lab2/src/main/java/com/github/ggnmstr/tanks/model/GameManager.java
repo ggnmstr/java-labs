@@ -10,17 +10,26 @@ public class GameManager {
 
     private static Presenter presenter;
 
-    public static List<GameObject> objList = new ArrayList<>();
-    public static List<GameObject> toRemove = new ArrayList<>();
+    public List<GameObject> objList = new ArrayList<>();
+    public List<GameObject> toRemove = new ArrayList<>();
 
-    public static GVData gvData = new GVData(objList);
-    public static BattleField battleField;
+    public GVData gvData = new GVData(objList);
+    public BattleField battleField;
 
-    public static int score = 0;
+    public int score = 0;
 
-    public static void initGameManager(Presenter presenter){
+    private static final GameManager instance = new GameManager();
+
+    private GameManager(){}
+
+    public static GameManager getInstance(){
+        return instance;
+    }
+
+    public void initGameManager(Presenter presenter){
         score = 0;
         objList.clear();
+        BattleField.enemies.clear();
         toRemove.clear();
         GameManager.presenter = presenter;
         battleField = new BattleField();
@@ -28,12 +37,14 @@ public class GameManager {
 
     }
 
-    public static void destroy(GameObject x) {
+    public void destroy(GameObject x) {
         if (x instanceof Tank && !(x instanceof EnemyTank)){
             battleField.damageMainPlayer();
+            presenter.updateStats(battleField.getHPleft());
+            return;
         }
         if (x instanceof Base){
-            gameLost();
+            getInstance().gameLost();
         }
         if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
@@ -45,25 +56,25 @@ public class GameManager {
         toRemove.add(x);
     }
 
-    public static void gameLost() {
+    public void gameLost() {
         presenter.gameLost(score);
 
     }
 
 
-    public static GVData getGVData(){
+    public GVData getGVData(){
         return gvData;
     }
 
-    public static void moveMainPlayer(int x, int y){
+    public void moveMainPlayer(int x, int y){
         battleField.mainPlayer.move(x,y);
     }
 
-    public static void shootTank(){
+    public void shootTank(){
         battleField.mainPlayer.shoot();
     }
 
-    public static void updateModel() {
+    public void updateModel() {
         battleField.updateField();
         objList.removeAll(toRemove);
         toRemove.clear();

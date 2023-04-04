@@ -92,4 +92,8 @@ public class MainMenu extends JFrame {
         JDialog lostMenu = GameLostDialog.getLostDialog(this,"You lost!",score);
         lostMenu.setVisible(true);
     }
+
+    public void updateMenu(int hPleft) {
+        statMenu.update(hPleft);
+    }
 }

@@ -15,7 +15,7 @@ public class BattleField {
     private int enemiesSpawned = 0;
     private int enemyLimit = 10;
 
-    private int playerHP = 0;
+    private int playerHP = 2;
 
     // 52 x 52
     // 0 - empty, 1 - wall, 2 - enemy spawn point
@@ -81,8 +81,8 @@ public class BattleField {
         mainPlayer = new Tank(playerSpawnX,playerSpawnY);
         generateBorders();
         spawnEnemy();
-        GameManager.objList.add(this.mainPlayer);
-        GameManager.objList.add(enemies.get(0));
+        GameManager.getInstance().objList.add(this.mainPlayer);
+        GameManager.getInstance().objList.add(enemies.get(0));
     }
 
     public void updateField(){
@@ -106,10 +106,10 @@ public class BattleField {
         Block top = new Block(0,0,GameParameters.FIELDHEIGHT,0,true);
         Block bottom = new Block(0,GameParameters.FIELDHEIGHT,GameParameters.FIELDWIDTH,0,true);
         Block right = new Block(GameParameters.FIELDWIDTH,0,0,GameParameters.FIELDHEIGHT,true);
-        GameManager.objList.add(left);
-        GameManager.objList.add(right);
-        GameManager.objList.add(top);
-        GameManager.objList.add(bottom);
+        GameManager.getInstance().objList.add(left);
+        GameManager.getInstance().objList.add(right);
+        GameManager.getInstance().objList.add(top);
+        GameManager.getInstance().objList.add(bottom);
     }
 
     void buildMap(){
@@ -118,7 +118,7 @@ public class BattleField {
                 if (mapTemplate[i][j] == 0) continue;
                 if (mapTemplate[i][j] == 1){
                     Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false);
-                    GameManager.objList.add(block);
+                    GameManager.getInstance().objList.add(block);
                 }
                 if (mapTemplate[i][j] == 2){
                     EnemySpawnPoint spawnPoint = new EnemySpawnPoint(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
@@ -126,7 +126,7 @@ public class BattleField {
                 }
                 if (mapTemplate[i][j] == 3){
                     Base base = new Base(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
-                    GameManager.objList.add(base);
+                    GameManager.getInstance().objList.add(base);
                 }
                 if (mapTemplate[i][j] == 4){
                     playerSpawnX = j * GameParameters.BLOCKWIDTH;
@@ -138,8 +138,18 @@ public class BattleField {
     }
 
     public void damageMainPlayer() {
-        if (playerHP <= 0) GameManager.gameLost();
+        if (playerHP <= 0) GameManager.getInstance().gameLost();
         playerHP--;
+        respawnPlayer();
 
+    }
+
+    private void respawnPlayer() {
+        mainPlayer.xPos = playerSpawnX;
+        mainPlayer.yPos = playerSpawnY;
+    }
+
+    public int getHPleft() {
+        return playerHP;
     }
 }

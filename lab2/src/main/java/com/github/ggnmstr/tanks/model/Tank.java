@@ -28,7 +28,7 @@ public class Tank extends GameObject {
     public void move(int xDelta, int yDelta) {
         this.xPos += xDelta;
         this.yPos += yDelta;
-        for (GameObject x : GameManager.objList) {
+        for (GameObject x : GameManager.getInstance().objList) {
             if (x != this && GameManager.isCollision(x, this)) {
                 this.xPos -= xDelta;
                 this.yPos -= yDelta;
@@ -63,7 +63,7 @@ public class Tank extends GameObject {
             }
         }
         Bullet bullet = new Bullet(startX, startY, lastMove);
-        GameManager.objList.add(bullet);
+        GameManager.getInstance().objList.add(bullet);
         //bullets--;
     }
 }

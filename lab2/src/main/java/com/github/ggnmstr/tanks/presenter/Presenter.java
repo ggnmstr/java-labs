@@ -21,9 +21,9 @@ public class Presenter {
     }
     
     public void startNewGame(){
-        GameManager.initGameManager(this);
+        GameManager.getInstance().initGameManager(this);
         mainMenu.prepareGame();
-        mainMenu.update(GameManager.getGVData());
+        mainMenu.update(GameManager.getInstance().getGVData());
         gameCycle = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -34,7 +34,7 @@ public class Presenter {
         enemySpawner = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameManager.battleField.spawnEnemy();
+                GameManager.getInstance().battleField.spawnEnemy();
             }
         });
         gameCycle.start();
@@ -42,29 +42,29 @@ public class Presenter {
     }
 
     private void updateGame() {
-        GameManager.updateModel();
-        mainMenu.update(GameManager.getGVData());
+        GameManager.getInstance().updateModel();
+        mainMenu.update(GameManager.getInstance().getGVData());
 
     }
 
     public void responseToKey(String actionCommand) {
         switch (actionCommand){
             case "move up" -> {
-                GameManager.moveMainPlayer(0,-15);
+                GameManager.getInstance().moveMainPlayer(0,-15);
             }
             case "move down"-> {
-                GameManager.moveMainPlayer(0,15);
+                GameManager.getInstance().moveMainPlayer(0,15);
 
             }
             case "move right" -> {
-                GameManager.moveMainPlayer(15,0);
+                GameManager.getInstance().moveMainPlayer(15,0);
 
             }
             case "move left" -> {
-                GameManager.moveMainPlayer(-15,0);
+                GameManager.getInstance().moveMainPlayer(-15,0);
             }
             case "shoot" -> {
-                GameManager.shootTank();
+                GameManager.getInstance().shootTank();
             }
         }
     }
@@ -77,5 +77,9 @@ public class Presenter {
 
     public void updateStats(int enemiesLeft,int score) {
         mainMenu.updateMenu(enemiesLeft,score);
+    }
+
+    public void updateStats(int hPleft) {
+        mainMenu.updateMenu(hPleft);
     }
 }
