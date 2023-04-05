@@ -45,21 +45,20 @@ public class Tank extends GameObject {
         int startX = 0, startY = 0;
         switch (lastMove) {
             case UP -> {
-                startX = xPos + width / 2;
-                // -40 - height of bullet
+                startX = xPos + width / 2 - GameParameters.BULLETSHORT/2;
                 startY = yPos - GameParameters.BULLETLONG;
             }
             case DOWN -> {
-                startX = xPos + width / 2;
+                startX = xPos + width / 2 - GameParameters.BULLETSHORT/2;
                 startY = yPos + height;
             }
             case RIGHT -> {
                 startX = xPos + width;
-                startY = yPos + height / 2;
+                startY = yPos + height / 2 - GameParameters.BULLETSHORT/2;
             }
             case LEFT -> {
                 startX = xPos - GameParameters.BULLETLONG;
-                startY = yPos + height / 2;
+                startY = yPos + height / 2 - GameParameters.BULLETSHORT/2;
             }
         }
         Bullet bullet = new Bullet(startX, startY, lastMove);
