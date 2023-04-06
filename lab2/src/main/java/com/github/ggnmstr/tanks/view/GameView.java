@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GameView extends JPanel {
 
@@ -23,6 +25,8 @@ public class GameView extends JPanel {
     }
 
     private void setKeyBindings() {
+        // CR: add GameActionListener interface { move(Direction); shoot() }
+        // CR: call presenter as listener
         ActionMap actionMap = getActionMap();
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
@@ -57,7 +61,7 @@ public class GameView extends JPanel {
         }
     }
 
-    private void drawObject(Graphics g, GameObject x){
+    private void drawObject(Graphics g, GameObject x) {
         g.drawRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
         g.fillRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
 

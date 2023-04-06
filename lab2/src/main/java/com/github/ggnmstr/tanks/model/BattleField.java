@@ -1,7 +1,66 @@
 package com.github.ggnmstr.tanks.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+
+/*
+
+Field
+Tank
+Bullet
+Block
+Spawn
+Base extends Block
+
+Direction
+
+
+ */
+
+class Field {
+
+    private final List<Tank> enemies = new ArrayList<>();
+    private final Tank player;
+    private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Block> blocks = new ArrayList<>();
+    private final List<Spawn> enemySpawns = new ArrayList<>();
+
+    private final int height;
+    private final int width;
+
+
+    public void update() {
+        moveBullets();
+        moveEnemyTanks();
+    }
+
+    private void moveBullets() {
+        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
+            Bullet bullet = iterator.next();
+            bullet.move();
+            if (hasCollision(bullet)) {
+                iterator.remove();
+            }
+            // move bullet, check collision
+        }
+    }
+
+    private boolean hasCollision(Bullet bullet) {
+        for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext(); ) {
+            Block block = iterator.next();
+            if (isCollision(bullet, block)) {
+                if (!block.isInvincible) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+
+}
+
 
 public class BattleField {
     public Tank mainPlayer;

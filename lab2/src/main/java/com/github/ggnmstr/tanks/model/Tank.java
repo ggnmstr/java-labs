@@ -1,6 +1,7 @@
 package com.github.ggnmstr.tanks.model;
 
 public class Tank extends GameObject {
+
     private int bullets;
     private Direction lastMove;
 

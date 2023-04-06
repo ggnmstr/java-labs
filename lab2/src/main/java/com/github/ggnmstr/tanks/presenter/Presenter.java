@@ -24,18 +24,11 @@ public class Presenter {
         GameManager.getInstance().initGameManager(this);
         mainMenu.prepareGame();
         mainMenu.update(GameManager.getInstance().getGVData());
-        gameCycle = new Timer(1000 / 60, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateGame();
-
-            }
+        gameCycle = new Timer(1000 / 60, e -> {
+            updateGame();
         });
-        enemySpawner = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameManager.getInstance().battleField.spawnEnemy();
-            }
+        enemySpawner = new Timer(5000, e -> {
+            GameManager.getInstance().battleField.spawnEnemy();
         });
         gameCycle.start();
         enemySpawner.start();
@@ -50,6 +43,7 @@ public class Presenter {
     public void responseToKey(String actionCommand) {
         switch (actionCommand){
             case "move up" -> {
+                // CR: call field methods
                 GameManager.getInstance().moveMainPlayer(0,-15);
             }
             case "move down"-> {

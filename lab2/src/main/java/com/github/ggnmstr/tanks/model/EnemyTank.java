@@ -2,7 +2,7 @@ package com.github.ggnmstr.tanks.model;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class EnemyTank extends Tank{
+public class EnemyTank extends Tank {
 
     private boolean isAlive;
     public EnemyTank(int xPos, int yPos) {
@@ -10,9 +10,11 @@ public class EnemyTank extends Tank{
         isAlive = true;
     }
 
+    // CR: rename
     public void makeMove(){
         if (!isAlive) return;
         // THIS THING IS CRAZY LOL
+        // CR: https://en.wikipedia.org/wiki/A*_search_algorithm
         int c = ThreadLocalRandom.current().nextInt(1, 100 + 1);
         switch (c){
             case 2 ->{

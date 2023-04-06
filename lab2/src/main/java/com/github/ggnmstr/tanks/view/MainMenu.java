@@ -1,7 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
-import com.github.ggnmstr.tanks.model.GameParameters;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
@@ -14,6 +13,7 @@ public class MainMenu extends JFrame {
     private GameView gameView;
 
     private GameStatMenu statMenu;
+    // CR: move to separate class
     private JMenuBar menuBar;
     private JMenuItem newGameMenu, highScoresMenu, aboutMenu, exitMenu;
     public MainMenu(){

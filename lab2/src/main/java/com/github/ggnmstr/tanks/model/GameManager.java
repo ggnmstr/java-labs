@@ -44,7 +44,7 @@ public class GameManager {
             return;
         }
         if (x instanceof Base){
-            getInstance().gameLost();
+            gameLost();
         }
         if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
