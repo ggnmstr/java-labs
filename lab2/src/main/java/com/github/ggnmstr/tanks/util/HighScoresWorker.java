@@ -46,6 +46,13 @@ public class HighScoresWorker {
     public static List<String> getScores(){
         List<String> lines = new ArrayList<>();
         File file = new File("scores.txt");
+        if (!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e){
+
+            }
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -53,7 +60,7 @@ public class HighScoresWorker {
                 lines.add(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
         return lines;
     }

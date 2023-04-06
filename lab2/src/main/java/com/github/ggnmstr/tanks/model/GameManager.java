@@ -49,11 +49,19 @@ public class GameManager {
         if (x instanceof Block b && b.isInvincible) return;
         if (x instanceof EnemyTank tank) {
             score+=100;
-            presenter.updateStats(battleField.getEnemiesLeft(),score);
+            int enemiesLeft = battleField.getEnemiesLeft();
+            presenter.updateStats(enemiesLeft,score);
             tank.die();
             battleField.enemies.remove(tank);
+            if (enemiesLeft == 0){
+                getInstance().gameWon();
+            }
         }
         toRemove.add(x);
+    }
+
+    private void gameWon() {
+        presenter.gameWon(score);
     }
 
     public void gameLost() {

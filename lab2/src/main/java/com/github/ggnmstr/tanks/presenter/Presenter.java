@@ -82,4 +82,8 @@ public class Presenter {
     public void updateStats(int hPleft) {
         mainMenu.updateMenu(hPleft);
     }
+
+    public void gameWon(int score) {
+
+    }
 }
