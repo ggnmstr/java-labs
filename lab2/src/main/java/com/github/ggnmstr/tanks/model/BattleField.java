@@ -312,6 +312,16 @@ public class BattleField {
                 return;
             }
         }
+        for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
+            Tank enemytank = iterator.next();
+            if (tank != enemytank && isCollision(tank,enemytank)){
+                tank.move(Direction.getOpposite(direction),false);
+                return;
+            }
+        }
+        if (tank != mainPlayer && isCollision(tank,mainPlayer)){
+            tank.move(Direction.getOpposite(direction),false);
+        }
     }
 
     public void moveMainPlayer(Direction direction){
