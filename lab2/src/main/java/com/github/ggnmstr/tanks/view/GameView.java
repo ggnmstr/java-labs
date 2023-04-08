@@ -56,6 +56,8 @@ public class GameView extends JPanel {
         }
         g2d.setColor(Color.ORANGE);
         for (GameObject x : gvData.blocks()){
+            g2d.setColor(Color.ORANGE);
+            if (x == gvData.base()) g2d.setColor(Color.CYAN);
             drawObject(g2d,x);
         }
         g2d.setColor(Color.LIGHT_GRAY);
