@@ -108,6 +108,8 @@ public class BattleField {
         for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
             Tank enemy = iterator.next();
             if (isCollision(bullet,enemy)){
+                score+=100;
+                presenter.updateStats(getEnemiesLeft(),score);
                 iterator.remove();
                 return true;
             }
@@ -121,11 +123,23 @@ public class BattleField {
     }
 
     public void initField(){
+        clearMap();
         buildMap();
         mainPlayer = new Tank(playerSpawnX,playerSpawnY);
         gvData = new GVData(mainPlayer,base,blocks,enemies,bullets);
         generateBorders();
         spawnEnemy();
+        presenter.updateStats(getHPleft());
+        presenter.updateStats(getEnemiesLeft(),score);
+
+    }
+
+    private void clearMap() {
+        blocks.clear();
+        enemies.clear();
+        bullets.clear();
+        enemySpawnPoints.clear();
+        bulletsToRemove.clear();
     }
 
     public void setPresenter(Presenter presenter){
@@ -141,6 +155,7 @@ public class BattleField {
         Tank newEnemy = enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
         if (newEnemy == null) return;
         enemiesSpawned++;
+        presenter.updateStats(getEnemiesLeft(),score);
         enemies.add(newEnemy);
     }
 

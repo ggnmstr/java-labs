@@ -11,8 +11,8 @@ public class Presenter {
     private BattleField battleField;
     private MainMenu mainMenu;
 
-    private Timer gameCycle;
-    private Timer enemySpawner;
+    private final Timer gameCycle = new Timer(1000/60, e -> updateGame());
+    private final Timer enemySpawner = new Timer(5000, e -> battleField.spawnEnemy());
 
     public void setView(MainMenu mainView){
         this.mainMenu = mainView;
@@ -27,13 +27,8 @@ public class Presenter {
     
     public void startNewGame(){
         mainMenu.prepareGame();
+        battleField.initField();
         mainMenu.update(battleField.getGvData());
-        gameCycle = new Timer(1000 / 60, e -> {
-            updateGame();
-        });
-        enemySpawner = new Timer(5000, e -> {
-            battleField.spawnEnemy();
-        });
         gameCycle.start();
         enemySpawner.start();
     }

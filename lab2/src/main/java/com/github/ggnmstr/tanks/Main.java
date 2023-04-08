@@ -7,7 +7,6 @@ import com.github.ggnmstr.tanks.view.MainMenu;
 public class Main {
     public static void main(String[] args) {
         BattleField field = new BattleField();
-        field.initField();
         Presenter presenter = new Presenter(field);
         field.setPresenter(presenter);
         MainMenu mainMenu = new MainMenu();
