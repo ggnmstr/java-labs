@@ -1,17 +1,32 @@
 package com.github.ggnmstr.tanks;
 
+import com.github.ggnmstr.tanks.model.Block;
+import com.github.ggnmstr.tanks.model.Bullet;
+import com.github.ggnmstr.tanks.model.EnemyTank;
 import com.github.ggnmstr.tanks.model.GameObject;
 
 import java.util.List;
 
-public class GVData {
-    public List<GameObject> objList;
-    public GVData(List<GameObject> objList){
-        this.objList = objList;
+public record GVData(GameObject mainPlayer, List<Block> blocks,
+                     List<EnemyTank> enemies, List<Bullet> bullets) {
+
+    @Override
+    public GameObject mainPlayer() {
+        return mainPlayer;
     }
 
-    public List<GameObject> getList(){
-        return objList;
+    @Override
+    public List<Block> blocks() {
+        return blocks;
     }
 
+    @Override
+    public List<EnemyTank> enemies() {
+        return enemies;
+    }
+
+    @Override
+    public List<Bullet> bullets() {
+        return bullets;
+    }
 }

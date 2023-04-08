@@ -1,5 +1,7 @@
 package com.github.ggnmstr.tanks.model;
 
+import static com.github.ggnmstr.tanks.model.BattleField.isCollision;
+
 public class Tank extends GameObject {
 
     private int bullets;
@@ -14,14 +16,6 @@ public class Tank extends GameObject {
         this.lastMove = Direction.DOWN;
     }
 
-    public int getxPos() {
-        return xPos;
-    }
-
-    public int getyPos() {
-        return yPos;
-    }
-
     public Direction getLastMove() {
         return lastMove;
     }
@@ -29,20 +23,14 @@ public class Tank extends GameObject {
     public void move(int xDelta, int yDelta) {
         this.xPos += xDelta;
         this.yPos += yDelta;
-        for (GameObject x : GameManager.getInstance().objList) {
-            if (x != this && GameManager.isCollision(x, this)) {
-                this.xPos -= xDelta;
-                this.yPos -= yDelta;
-            }
-        }
         if (xDelta > 0) lastMove = Direction.RIGHT;
         if (xDelta < 0) lastMove = Direction.LEFT;
         if (yDelta < 0) lastMove = Direction.UP;
         if (yDelta > 0) lastMove = Direction.DOWN;
     }
 
-    void shoot() {
-        if (bullets == 0) return;
+    Bullet shoot() {
+        if (bullets == 0) return null;
         int startX = 0, startY = 0;
         switch (lastMove) {
             case UP -> {
@@ -63,7 +51,7 @@ public class Tank extends GameObject {
             }
         }
         Bullet bullet = new Bullet(startX, startY, lastMove);
-        GameManager.getInstance().objList.add(bullet);
+        return bullet;
         //bullets--;
     }
 }

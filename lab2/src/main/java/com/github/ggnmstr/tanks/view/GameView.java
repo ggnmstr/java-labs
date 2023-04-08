@@ -51,14 +51,19 @@ public class GameView extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(Color.RED);
-        for (GameObject x : gvData.objList){
-            if (x instanceof Tank && !(x instanceof EnemyTank)) g2d.setColor(Color.GREEN);
-            else if (x instanceof Bullet) g2d.setColor(Color.LIGHT_GRAY);
-            else if (x instanceof EnemyTank) g2d.setColor(Color.RED);
-            else if (x instanceof Block) g2d.setColor(Color.ORANGE);
-            else if (x instanceof Base) g2d.setColor(Color.CYAN);
+        for (GameObject x : gvData.enemies()){
             drawObject(g2d,x);
         }
+        g2d.setColor(Color.ORANGE);
+        for (GameObject x : gvData.blocks()){
+            drawObject(g2d,x);
+        }
+        g2d.setColor(Color.LIGHT_GRAY);
+        for (GameObject x : gvData.bullets()){
+            drawObject(g2d,x);
+        }
+        g2d.setColor(Color.GREEN);
+        drawObject(g2d, gvData.mainPlayer());
     }
 
     private void drawObject(Graphics g, GameObject x) {

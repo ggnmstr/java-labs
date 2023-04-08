@@ -1,13 +1,13 @@
 package com.github.ggnmstr.tanks.presenter;
 
-import com.github.ggnmstr.tanks.model.GameManager;
+import com.github.ggnmstr.tanks.model.BattleField;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Presenter {
+
+    private BattleField battleField;
     private MainMenu mainMenu;
 
     private Timer gameCycle;
@@ -17,26 +17,29 @@ public class Presenter {
         this.mainMenu = mainView;
     }
 
+    public Presenter(BattleField battleField){
+        this.battleField = battleField;
+    }
+
     public void run(){
     }
     
     public void startNewGame(){
-        GameManager.getInstance().initGameManager(this);
         mainMenu.prepareGame();
-        mainMenu.update(GameManager.getInstance().getGVData());
+        mainMenu.update(battleField.getGvData());
         gameCycle = new Timer(1000 / 60, e -> {
             updateGame();
         });
         enemySpawner = new Timer(5000, e -> {
-            GameManager.getInstance().battleField.spawnEnemy();
+            battleField.spawnEnemy();
         });
         gameCycle.start();
         enemySpawner.start();
     }
 
     private void updateGame() {
-        GameManager.getInstance().updateModel();
-        mainMenu.update(GameManager.getInstance().getGVData());
+        battleField.updateField();
+        mainMenu.update(battleField.getGvData());
 
     }
 
@@ -44,21 +47,21 @@ public class Presenter {
         switch (actionCommand){
             case "move up" -> {
                 // CR: call field methods
-                GameManager.getInstance().moveMainPlayer(0,-15);
+                battleField.moveMainPlayer(0,-15);
             }
             case "move down"-> {
-                GameManager.getInstance().moveMainPlayer(0,15);
+                battleField.moveMainPlayer(0,15);
 
             }
             case "move right" -> {
-                GameManager.getInstance().moveMainPlayer(15,0);
+                battleField.moveMainPlayer(15,0);
 
             }
             case "move left" -> {
-                GameManager.getInstance().moveMainPlayer(-15,0);
+                battleField.moveMainPlayer(-15,0);
             }
             case "shoot" -> {
-                GameManager.getInstance().shootTank();
+                battleField.shootTank();
             }
         }
     }

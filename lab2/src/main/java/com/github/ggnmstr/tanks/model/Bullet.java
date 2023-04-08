@@ -24,11 +24,5 @@ public class Bullet extends GameObject {
             case LEFT -> xPos -= GameParameters.BULLETSPEED;
             case RIGHT -> xPos += GameParameters.BULLETSPEED;
         }
-        for (GameObject x : GameManager.getInstance().objList) {
-            if (this != x && GameManager.isCollision(this, x)) {
-                GameManager.getInstance().destroy(this);
-                GameManager.getInstance().destroy(x);
-            }
-        }
     }
 }

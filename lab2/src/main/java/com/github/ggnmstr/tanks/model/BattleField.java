@@ -1,8 +1,12 @@
 package com.github.ggnmstr.tanks.model;
 
+import com.github.ggnmstr.tanks.GVData;
+import com.github.ggnmstr.tanks.presenter.Presenter;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 
 
 /*
@@ -17,7 +21,7 @@ Base extends Block
 Direction
 
 
- */
+
 
 class Field {
 
@@ -60,13 +64,18 @@ class Field {
 
 
 }
-
+*/
 
 public class BattleField {
-    public Tank mainPlayer;
-    public static List<EnemyTank> enemies = new ArrayList<>();
 
-    public static List<EnemySpawnPoint> enemySpawnPoints = new ArrayList<>();
+    private Presenter presenter;
+    private Tank mainPlayer;
+    private final List<EnemyTank> enemies = new ArrayList<>();
+
+    public final List<EnemySpawnPoint> enemySpawnPoints = new ArrayList<>();
+
+    private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Block> blocks = new ArrayList<>();
 
     private int playerSpawnX;
     private int playerSpawnY;
@@ -75,6 +84,11 @@ public class BattleField {
     private int enemyLimit = 10;
 
     private int playerHP = 2;
+
+    private int score = 0;
+
+    private GVData gvData;
+
 
     // 52 x 52
     // 0 - empty, 1 - wall, 2 - enemy spawn point
@@ -135,19 +149,67 @@ public class BattleField {
     };
 
 
-    void initField(){
-        buildMap();
-        mainPlayer = new Tank(playerSpawnX,playerSpawnY);
-        generateBorders();
-        spawnEnemy();
-        GameManager.getInstance().objList.add(this.mainPlayer);
-        GameManager.getInstance().objList.add(enemies.get(0));
+    public void updateField(){
+        moveBullets();
+        moveEnemyTanks();
+
     }
 
-    public void updateField(){
-        for (EnemyTank x : enemies){
-            x.makeMove();
+    private void moveEnemyTanks() {
+        for (EnemyTank enemyTank : enemies){
+            enemyTank.makeMove();
         }
+    }
+
+    private void moveBullets() {
+        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();){
+            Bullet bullet = iterator.next();
+            bullet.move();
+            if (bulletHasCollision(bullet)){
+                iterator.remove();
+            }
+        }
+    }
+
+    private boolean bulletHasCollision(Bullet bullet) {
+        for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext(); ) {
+            Block block = iterator.next();
+            if (isCollision(bullet, block)) {
+                if (!block.isInvincible) {
+                    iterator.remove();
+                    return true;
+                }
+                if (block instanceof Base){
+                    presenter.gameLost(score);
+                    return true;
+                }
+            }
+        }
+        for (Iterator<EnemyTank> iterator = enemies.iterator(); iterator.hasNext();){
+            Tank enemy = iterator.next();
+            if (isCollision(bullet,enemy)){
+                iterator.remove();
+                return true;
+            }
+        }
+        if (isCollision(bullet,mainPlayer)){
+            damageMainPlayer();
+            presenter.updateStats(getHPleft());
+            return true;
+        }
+        return false;
+    }
+
+    public void initField(){
+        buildMap();
+        mainPlayer = new Tank(playerSpawnX,playerSpawnY);
+        gvData = new GVData(mainPlayer,blocks,enemies,bullets);
+        generateBorders();
+        spawnEnemy();
+    }
+
+    public void setPresenter(Presenter presenter){
+        this.presenter = presenter;
     }
 
     public int getEnemiesLeft(){
@@ -156,7 +218,7 @@ public class BattleField {
 
     public void spawnEnemy(){
         if (enemiesSpawned >= enemyLimit) return;
-        enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
+        enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank(enemies);
         enemiesSpawned++;
     }
 
@@ -165,10 +227,10 @@ public class BattleField {
         Block top = new Block(0,0,GameParameters.FIELDHEIGHT,0,true);
         Block bottom = new Block(0,GameParameters.FIELDHEIGHT,GameParameters.FIELDWIDTH,0,true);
         Block right = new Block(GameParameters.FIELDWIDTH,0,0,GameParameters.FIELDHEIGHT,true);
-        GameManager.getInstance().objList.add(left);
-        GameManager.getInstance().objList.add(right);
-        GameManager.getInstance().objList.add(top);
-        GameManager.getInstance().objList.add(bottom);
+        blocks.add(left);
+        blocks.add(right);
+        blocks.add(top);
+        blocks.add(bottom);
     }
 
     void buildMap(){
@@ -177,15 +239,15 @@ public class BattleField {
                 if (mapTemplate[i][j] == 0) continue;
                 if (mapTemplate[i][j] == 1){
                     Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false);
-                    GameManager.getInstance().objList.add(block);
+                    blocks.add(block);
                 }
                 if (mapTemplate[i][j] == 2){
                     EnemySpawnPoint spawnPoint = new EnemySpawnPoint(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
-                    this.enemySpawnPoints.add(spawnPoint);
+                    enemySpawnPoints.add(spawnPoint);
                 }
                 if (mapTemplate[i][j] == 3){
                     Base base = new Base(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
-                    GameManager.getInstance().objList.add(base);
+                    blocks.add(base);
                 }
                 if (mapTemplate[i][j] == 4){
                     playerSpawnX = j * GameParameters.BLOCKWIDTH;
@@ -197,7 +259,7 @@ public class BattleField {
     }
 
     public void damageMainPlayer() {
-        if (playerHP <= 0) GameManager.getInstance().gameLost();
+        if (playerHP <= 0) presenter.gameLost(score);
         playerHP--;
         respawnPlayer();
 
@@ -210,5 +272,32 @@ public class BattleField {
 
     public int getHPleft() {
         return playerHP;
+    }
+
+    public static boolean isCollision(GameObject o1, GameObject o2){
+        return o1.xPos < o2.xPos + o2.width &&
+                o1.xPos + o1.width > o2.xPos &&
+                o1.yPos < o2.yPos + o2.height &&
+                o1.height + o1.yPos > o2.yPos;
+    }
+
+    public void moveMainPlayer(int xDelta, int yDelta){
+        mainPlayer.move(xDelta,yDelta);
+        for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext();){
+            Block block = iterator.next();
+            if (isCollision(mainPlayer,block)){
+                mainPlayer.move(-xDelta,-yDelta);
+                return;
+            }
+        }
+    }
+
+    public void shootTank() {
+        Bullet bullet = mainPlayer.shoot();
+        if (bullet != null) bullets.add(bullet);
+    }
+
+    public GVData getGvData() {
+        return gvData;
     }
 }
