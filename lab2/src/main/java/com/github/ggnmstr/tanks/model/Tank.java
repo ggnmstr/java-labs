@@ -20,13 +20,15 @@ public class Tank extends GameObject {
         return lastMove;
     }
 
-    public void move(int xDelta, int yDelta) {
-        this.xPos += xDelta;
-        this.yPos += yDelta;
-        if (xDelta > 0) lastMove = Direction.RIGHT;
-        if (xDelta < 0) lastMove = Direction.LEFT;
-        if (yDelta < 0) lastMove = Direction.UP;
-        if (yDelta > 0) lastMove = Direction.DOWN;
+    public void move(Direction direction, boolean changeDir) {
+        switch (direction){
+            case UP -> this.yPos -= GameParameters.TANKSPEED;
+            case DOWN -> this.yPos += GameParameters.TANKSPEED;
+            case RIGHT -> this.xPos += GameParameters.TANKSPEED;
+            case LEFT -> this.xPos -= GameParameters.TANKSPEED;
+        }
+        if (changeDir) this.lastMove = direction;
+
     }
 
     Bullet shoot() {

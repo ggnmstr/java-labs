@@ -6,6 +6,7 @@ import com.github.ggnmstr.tanks.presenter.Presenter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 
@@ -70,7 +71,7 @@ public class BattleField {
 
     private Presenter presenter;
     private Tank mainPlayer;
-    private final List<EnemyTank> enemies = new ArrayList<>();
+    private final List<Tank> enemies = new ArrayList<>();
 
     public final List<EnemySpawnPoint> enemySpawnPoints = new ArrayList<>();
 
@@ -156,8 +157,27 @@ public class BattleField {
     }
 
     private void moveEnemyTanks() {
-        for (EnemyTank enemyTank : enemies){
-            enemyTank.makeMove();
+        for (Tank enemyTank : enemies){
+            int decision = ThreadLocalRandom.current().nextInt(1, 100 + 1);
+            switch (decision){
+                case 2 -> {
+                    moveTank(enemyTank,Direction.UP);
+                }
+                case 3 -> {
+                    moveTank(enemyTank,Direction.DOWN);
+                }
+                case 4 -> {
+                    moveTank(enemyTank,Direction.LEFT);
+                }
+                case 5 -> {
+                    moveTank(enemyTank,Direction.RIGHT);
+                }
+                case 6 -> {
+                    Bullet bullet = enemyTank.shoot();
+                    if (bullet == null) return;
+                    bullets.add(bullet);
+                }
+            }
         }
     }
 
@@ -185,7 +205,7 @@ public class BattleField {
                 }
             }
         }
-        for (Iterator<EnemyTank> iterator = enemies.iterator(); iterator.hasNext();){
+        for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
             Tank enemy = iterator.next();
             if (isCollision(bullet,enemy)){
                 iterator.remove();
@@ -218,8 +238,10 @@ public class BattleField {
 
     public void spawnEnemy(){
         if (enemiesSpawned >= enemyLimit) return;
-        enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank(enemies);
+        Tank newEnemy = enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
+        if (newEnemy == null) return;
         enemiesSpawned++;
+        enemies.add(newEnemy);
     }
 
     void generateBorders(){
@@ -281,15 +303,19 @@ public class BattleField {
                 o1.height + o1.yPos > o2.yPos;
     }
 
-    public void moveMainPlayer(int xDelta, int yDelta){
-        mainPlayer.move(xDelta,yDelta);
+    private void moveTank(Tank tank, Direction direction){
+        tank.move(direction,true);
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext();){
             Block block = iterator.next();
-            if (isCollision(mainPlayer,block)){
-                mainPlayer.move(-xDelta,-yDelta);
+            if (isCollision(tank,block)){
+                tank.move(Direction.getOpposite(direction),false);
                 return;
             }
         }
+    }
+
+    public void moveMainPlayer(Direction direction){
+        moveTank(mainPlayer,direction);
     }
 
     public void shootTank() {

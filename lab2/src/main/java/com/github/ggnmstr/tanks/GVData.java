@@ -1,14 +1,11 @@
 package com.github.ggnmstr.tanks;
 
-import com.github.ggnmstr.tanks.model.Block;
-import com.github.ggnmstr.tanks.model.Bullet;
-import com.github.ggnmstr.tanks.model.EnemyTank;
-import com.github.ggnmstr.tanks.model.GameObject;
+import com.github.ggnmstr.tanks.model.*;
 
 import java.util.List;
 
 public record GVData(GameObject mainPlayer, List<Block> blocks,
-                     List<EnemyTank> enemies, List<Bullet> bullets) {
+                     List<Tank> enemies, List<Bullet> bullets) {
 
     @Override
     public GameObject mainPlayer() {
@@ -21,7 +18,7 @@ public record GVData(GameObject mainPlayer, List<Block> blocks,
     }
 
     @Override
-    public List<EnemyTank> enemies() {
+    public List<Tank> enemies() {
         return enemies;
     }
 

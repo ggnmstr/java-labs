@@ -1,6 +1,7 @@
 package com.github.ggnmstr.tanks.presenter;
 
 import com.github.ggnmstr.tanks.model.BattleField;
+import com.github.ggnmstr.tanks.model.Direction;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
@@ -46,19 +47,18 @@ public class Presenter {
     public void responseToKey(String actionCommand) {
         switch (actionCommand){
             case "move up" -> {
-                // CR: call field methods
-                battleField.moveMainPlayer(0,-15);
+                battleField.moveMainPlayer(Direction.UP);
             }
             case "move down"-> {
-                battleField.moveMainPlayer(0,15);
+                battleField.moveMainPlayer(Direction.DOWN);
 
             }
             case "move right" -> {
-                battleField.moveMainPlayer(15,0);
+                battleField.moveMainPlayer(Direction.RIGHT);
 
             }
             case "move left" -> {
-                battleField.moveMainPlayer(-15,0);
+                battleField.moveMainPlayer(Direction.LEFT);
             }
             case "shoot" -> {
                 battleField.shootTank();
