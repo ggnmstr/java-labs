@@ -195,12 +195,12 @@ public class BattleField {
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext(); ) {
             Block block = iterator.next();
             if (isCollision(bullet, block)) {
-                if (!block.isInvincible) {
-                    iterator.remove();
-                    return true;
-                }
                 if (block instanceof Base){
                     presenter.gameLost(score);
+                    return true;
+                }
+                if (!block.isInvincible) {
+                    iterator.remove();
                     return true;
                 }
             }
