@@ -131,6 +131,7 @@ public class BattleField {
     public void initField(){
         clearMap();
         buildMap();
+        score = 0;
         mainPlayer = new Tank(playerSpawnX,playerSpawnY);
         gvData = new GVData(mainPlayer,base,blocks,enemies,bullets);
         generateBorders();
