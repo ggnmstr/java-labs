@@ -140,6 +140,8 @@ public class BattleField {
     }
 
     private void clearMap() {
+        enemiesKilled = 0;
+        enemiesSpawned = 0;
         blocks.clear();
         enemies.clear();
         bullets.clear();
