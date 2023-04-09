@@ -5,6 +5,7 @@ import com.github.ggnmstr.tanks.model.Direction;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 public class Presenter {
 
@@ -13,6 +14,7 @@ public class Presenter {
 
     private final Timer gameCycle = new Timer(1000/60, e -> updateGame());
     private final Timer enemySpawner = new Timer(5000, e -> battleField.spawnEnemy());
+    private boolean gameStarted = false;
 
     public void setView(MainMenu mainView){
         this.mainMenu = mainView;
@@ -31,6 +33,7 @@ public class Presenter {
         mainMenu.update(battleField.getGvData());
         gameCycle.start();
         enemySpawner.start();
+        gameStarted = true;
     }
 
     private void updateGame() {
@@ -39,6 +42,30 @@ public class Presenter {
 
     }
 
+    public void responseToKey(int keyCode) {
+        if (!gameStarted) return;
+        switch (keyCode){
+            case KeyEvent.VK_W -> {
+                battleField.moveMainPlayer(Direction.UP);
+            }
+            case KeyEvent.VK_S -> {
+                battleField.moveMainPlayer(Direction.DOWN);
+
+            }
+            case KeyEvent.VK_D -> {
+                battleField.moveMainPlayer(Direction.RIGHT);
+
+            }
+            case KeyEvent.VK_A -> {
+                battleField.moveMainPlayer(Direction.LEFT);
+            }
+            case KeyEvent.VK_SPACE -> {
+                battleField.shootTank();
+            }
+        }
+    }
+
+    /*
     public void responseToKey(String actionCommand) {
         switch (actionCommand){
             case "move up" -> {
@@ -60,8 +87,9 @@ public class Presenter {
             }
         }
     }
-
+    */
     public void gameLost(int score) {
+        gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
         mainMenu.launchEndgameMenu("You lost!",score);
@@ -76,6 +104,7 @@ public class Presenter {
     }
 
     public void gameWon(int score) {
+        gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
         mainMenu.launchEndgameMenu("You won!",score);

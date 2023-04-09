@@ -5,8 +5,10 @@ import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class MainMenu extends JFrame {
+public class MainMenu extends JFrame implements KeyListener {
     //  Exit, About, New Game, High Scores.
     private  Presenter presenter;
 
@@ -22,7 +24,7 @@ public class MainMenu extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setupMenuBar();
-
+        this.addKeyListener(this);
         setLayout(new BorderLayout());
         this.pack();
         this.setVisible(true);
@@ -95,5 +97,20 @@ public class MainMenu extends JFrame {
 
     public void updateMenu(int hPleft) {
         statMenu.update(hPleft);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        presenter.responseToKey(e.getKeyCode());
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }

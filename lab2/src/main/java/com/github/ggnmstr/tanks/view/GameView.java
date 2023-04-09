@@ -20,7 +20,7 @@ public class GameView extends JPanel {
         super();
         setBackground(Color.darkGray);
         setFocusable(true);
-        setKeyBindings();
+        //setKeyBindings();
         setVisible(true);
     }
 
@@ -89,7 +89,7 @@ public class GameView extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent actionEvt) {
-            presenter.responseToKey(actionEvt.getActionCommand());
+            //presenter.responseToKey(actionEvt.getActionCommand());
         }
     }
 }
