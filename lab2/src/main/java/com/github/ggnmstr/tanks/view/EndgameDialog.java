@@ -7,9 +7,9 @@ import java.awt.*;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
-public class GameLostDialog {
+public class EndgameDialog {
 
-    public static JDialog getLostDialog(Frame owner, String title, int score){
+    public static JDialog getEndgameDialog(Frame owner, String title, int score){
         JDialog dialog = new JDialog(owner,title);
         dialog.setPreferredSize(new Dimension(420,300));
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

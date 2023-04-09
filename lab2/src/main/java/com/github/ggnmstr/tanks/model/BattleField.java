@@ -29,6 +29,7 @@ public class BattleField {
     private int playerSpawnY;
 
     private int enemiesSpawned = 0;
+    private int enemiesKilled = 0;
     private int enemyLimit = 10;
 
     private int playerHP = 2;
@@ -109,7 +110,11 @@ public class BattleField {
             Tank enemy = iterator.next();
             if (isCollision(bullet,enemy)){
                 score+=100;
+                enemiesKilled++;
                 presenter.updateStats(getEnemiesLeft(),score);
+                if (enemiesKilled == enemyLimit){
+                    presenter.gameWon(score);
+                }
                 iterator.remove();
                 return true;
             }

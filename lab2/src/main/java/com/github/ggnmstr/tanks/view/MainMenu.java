@@ -88,9 +88,9 @@ public class MainMenu extends JFrame {
         this.presenter = presenter;
     }
 
-    public void launchLostMenu(int score) {
-        JDialog lostMenu = GameLostDialog.getLostDialog(this,"You lost!",score);
-        lostMenu.setVisible(true);
+    public void launchEndgameMenu(String title, int score) {
+        JDialog endgameDialog = EndgameDialog.getEndgameDialog(this,title,score);
+        endgameDialog.setVisible(true);
     }
 
     public void updateMenu(int hPleft) {

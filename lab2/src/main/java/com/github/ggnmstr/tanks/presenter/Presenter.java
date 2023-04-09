@@ -64,7 +64,7 @@ public class Presenter {
     public void gameLost(int score) {
         gameCycle.stop();
         enemySpawner.stop();
-        mainMenu.launchLostMenu(score);
+        mainMenu.launchEndgameMenu("You lost!",score);
     }
 
     public void updateStats(int enemiesLeft,int score) {
@@ -76,6 +76,8 @@ public class Presenter {
     }
 
     public void gameWon(int score) {
-
+        gameCycle.stop();
+        enemySpawner.stop();
+        mainMenu.launchEndgameMenu("You won!",score);
     }
 }
