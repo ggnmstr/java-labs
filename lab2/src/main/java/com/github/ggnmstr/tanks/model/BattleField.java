@@ -84,6 +84,7 @@ public class BattleField {
     }
 
     private boolean bulletHasCollision(Bullet bullet) {
+        boolean flag = false;
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext(); ) {
             Block block = iterator.next();
             if (isCollision(bullet, block)) {
@@ -93,7 +94,7 @@ public class BattleField {
                 }
                 if (!block.isInvincible) {
                     iterator.remove();
-                    return true;
+                    flag = true;
                 }
             }
         }
@@ -124,7 +125,7 @@ public class BattleField {
             presenter.updateStats(getHPleft());
             return true;
         }
-        return false;
+        return flag;
     }
 
     public void initField(){
