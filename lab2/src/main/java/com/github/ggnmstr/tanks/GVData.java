@@ -4,11 +4,11 @@ import com.github.ggnmstr.tanks.model.*;
 
 import java.util.List;
 
-public record GVData(GameObject mainPlayer, Block base, List<Block> blocks,
+public record GVData(Tank mainPlayer, Block base, List<Block> blocks,
                      List<Tank> enemies, List<Bullet> bullets) {
 
     @Override
-    public GameObject mainPlayer() {
+    public Tank mainPlayer() {
         return mainPlayer;
     }
 

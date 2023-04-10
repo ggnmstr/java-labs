@@ -6,24 +6,24 @@ import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public class GameView extends JPanel {
 
-    BufferedImage playerTankImage;
+    private BufferedImage playerImage;
+    private BufferedImage brickImage;
+    private BufferedImage baseImage;
+    private BufferedImage enemyImage;
+    private BufferedImage metalImage;
 
     private GVData gvData;
-    private Presenter presenter;
+    //private Presenter presenter;
 
     public GameView() {
         super();
@@ -60,26 +60,48 @@ public class GameView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.RED);
-        for (GameObject x : gvData.enemies()){
-            drawObject(g2d,x);
+        for (Tank x : gvData.enemies()){
+            //drawImage(g,enemyImage,x);
+            drawTank(g2d,enemyImage,x);
         }
-        g2d.setColor(Color.ORANGE);
-        for (GameObject x : gvData.blocks()){
-            g2d.setColor(Color.ORANGE);
-            if (x == gvData.base()) g2d.setColor(Color.CYAN);
-            drawObject(g2d,x);
+        for (Block x : gvData.blocks()){
+            if (x == gvData.base()){
+                drawImage(g,baseImage,x);
+                continue;
+            }
+            if (x.isInvincible()){
+                drawImage(g,metalImage,x);
+            } else {
+                drawImage(g,brickImage,x);
+            }
+
         }
-        g2d.setColor(Color.LIGHT_GRAY);
         for (GameObject x : gvData.bullets()){
             drawObject(g2d,x);
         }
-        g2d.setColor(Color.GREEN);
-        drawMainPlayer(g, gvData.mainPlayer());
+        drawTank(g2d,playerImage,gvData.mainPlayer());
+        //drawImage(g, playerImage,gvData.mainPlayer());
     }
 
-    private void drawMainPlayer(Graphics g, GameObject x) {
-        g.drawImage(playerTankImage,x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight(),null);
+    private void drawTank(Graphics2D g2d, BufferedImage image, Tank tank){
+        double rotation = 0;
+        switch (tank.getLastMove()){
+            case DOWN -> rotation = Math.toRadians(180);
+            case LEFT -> rotation = Math.toRadians(270);
+            case RIGHT -> rotation = Math.toRadians(90);
+        }
+        double locationX = image.getWidth() / 2;
+        double locationY = image.getHeight() / 2;
+        AffineTransform tx = AffineTransform.getRotateInstance(rotation, locationX, locationY);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        g2d.drawImage(op.filter(image,null),tank.getxPos(),tank.getyPos(),
+                tank.getWidth(), tank.getHeight(), null);
+
+    }
+
+    private void drawImage(Graphics g, BufferedImage image, GameObject gameObject){
+        g.drawImage(image,gameObject.getxPos(),gameObject.getyPos(),
+                gameObject.getWidth(),gameObject.getHeight(),null);
     }
 
     private void drawObject(Graphics g, GameObject x) {
@@ -89,19 +111,27 @@ public class GameView extends JPanel {
     }
 
     private void loadResources(){
-        URL path;
-        path = Thread.currentThread().getContextClassLoader().getResource("textures/tanktexture.png");
+        URL tankpath = Thread.currentThread().getContextClassLoader().getResource("textures/tanktexture.png");
+        URL brickpath = Thread.currentThread().getContextClassLoader().getResource("textures/brick.png");
+        URL basepath = Thread.currentThread().getContextClassLoader().getResource("textures/base.png");
+        URL enemypath = Thread.currentThread().getContextClassLoader().getResource("textures/enemy1.png");
+        URL metalpath = Thread.currentThread().getContextClassLoader().getResource("textures/metal.png");
         try {
-            playerTankImage = ImageIO.read(path);
+            playerImage = ImageIO.read(tankpath);
+            brickImage = ImageIO.read(brickpath);
+            baseImage = ImageIO.read(basepath);
+            enemyImage = ImageIO.read(enemypath);
+            metalImage = ImageIO.read(metalpath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /*
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
-
+    */
     public void setGVData(GVData data) {
         this.gvData = data;
     }
