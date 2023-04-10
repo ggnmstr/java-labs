@@ -12,7 +12,7 @@ public class MapCreator {
         int rows = 52;
         int columns = 52;
         char[][] mapTemplate = new char[rows][columns];
-        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level1.txt");
+        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level2.txt");
         File file = null;
         try {
             file = new File(path.toURI());

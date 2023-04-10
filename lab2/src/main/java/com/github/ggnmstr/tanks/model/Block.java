@@ -3,8 +3,10 @@ package com.github.ggnmstr.tanks.model;
 public class Block extends GameObject {
 
     private boolean isInvincible;
-    public Block(int x, int y,boolean isInvincible){
+    private boolean isTransparent;
+    public Block(int x, int y,boolean isInvincible, boolean isTransparent){
         this.isInvincible = isInvincible;
+        this.isTransparent = isTransparent;
         this.xPos = x;
         this.yPos = y;
         this.height = GameParameters.BLOCKHEIGHT;
@@ -21,6 +23,10 @@ public class Block extends GameObject {
 
     public boolean isInvincible() {
         return isInvincible;
+    }
+
+    public boolean isTransparent() {
+        return isTransparent;
     }
 
 }

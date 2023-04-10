@@ -13,9 +13,13 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameView extends JPanel {
+    private List<BufferedImage> playerImages;
 
+    private BufferedImage treesImage;
     private BufferedImage playerImage;
     private BufferedImage brickImage;
     private BufferedImage baseImage;
@@ -71,6 +75,8 @@ public class GameView extends JPanel {
             }
             if (x.isInvincible()){
                 drawImage(g,metalImage,x);
+            } else if (x.isTransparent()) {
+                drawImage(g,treesImage,x);
             } else {
                 drawImage(g,brickImage,x);
             }
@@ -79,7 +85,8 @@ public class GameView extends JPanel {
         for (GameObject x : gvData.bullets()){
             drawObject(g2d,x);
         }
-        drawTank(g2d,playerImage,gvData.mainPlayer());
+        drawPlayerTank(g2d,gvData.mainPlayer());
+        //drawTank(g2d,playerImage,gvData.mainPlayer());
         //drawImage(g, playerImage,gvData.mainPlayer());
     }
 
@@ -99,6 +106,12 @@ public class GameView extends JPanel {
 
     }
 
+    private void drawPlayerTank(Graphics2D g2d, Tank tank){
+        int direction = tank.getLastMove().ordinal();
+        g2d.drawImage(playerImages.get(direction*2),tank.getxPos(),tank.getyPos(),
+                tank.getWidth(),tank.getHeight(),null);
+    }
+
     private void drawImage(Graphics g, BufferedImage image, GameObject gameObject){
         g.drawImage(image,gameObject.getxPos(),gameObject.getyPos(),
                 gameObject.getWidth(),gameObject.getHeight(),null);
@@ -111,20 +124,48 @@ public class GameView extends JPanel {
     }
 
     private void loadResources(){
-        URL tankpath = Thread.currentThread().getContextClassLoader().getResource("textures/tanktexture.png");
+        loadPlayerImages();
+        URL tankpath = Thread.currentThread().getContextClassLoader().getResource("textures/tank1.png");
         URL brickpath = Thread.currentThread().getContextClassLoader().getResource("textures/brick.png");
         URL basepath = Thread.currentThread().getContextClassLoader().getResource("textures/base.png");
         URL enemypath = Thread.currentThread().getContextClassLoader().getResource("textures/enemy1.png");
         URL metalpath = Thread.currentThread().getContextClassLoader().getResource("textures/metal.png");
+        URL treespath = Thread.currentThread().getContextClassLoader().getResource("textures/trees.png");
         try {
             playerImage = ImageIO.read(tankpath);
             brickImage = ImageIO.read(brickpath);
             baseImage = ImageIO.read(basepath);
             enemyImage = ImageIO.read(enemypath);
             metalImage = ImageIO.read(metalpath);
+            treesImage = ImageIO.read(treespath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void loadPlayerImages(){
+        playerImages = new ArrayList<>();
+        URL pd1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pd1.png");
+        URL pd2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pd2.png");
+        URL pl1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pl1.png");
+        URL pl2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pl2.png");
+        URL pr1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pr1.png");
+        URL pr2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pr2.png");
+        URL pu1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pu1.png");
+        URL pu2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pu2.png");
+        try {
+            playerImages.add(ImageIO.read(pd1));
+            playerImages.add(ImageIO.read(pd2));
+            playerImages.add(ImageIO.read(pl1));
+            playerImages.add(ImageIO.read(pl2));
+            playerImages.add(ImageIO.read(pr1));
+            playerImages.add(ImageIO.read(pr2));
+            playerImages.add(ImageIO.read(pu1));
+            playerImages.add(ImageIO.read(pu2));
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
     }
 
     /*

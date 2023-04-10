@@ -87,6 +87,7 @@ public class BattleField {
         boolean flag = false;
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext(); ) {
             Block block = iterator.next();
+            if (block.isTransparent()) continue;
             if (isCollision(bullet, block)) {
                 if (block == base){
                     presenter.gameLost(score);
@@ -183,12 +184,16 @@ public class BattleField {
         for (int i = 0; i < mapTemplate.length; i++){
             for (int j = 0; j < mapTemplate[i].length; j++){
                 if (mapTemplate[i][j] == '0') continue;
+                if (mapTemplate[i][j] == 't'){
+                    Block trees = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,true);
+                    blocks.add(trees);
+                }
                 if (mapTemplate[i][j] == '7'){
-                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true);
+                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true,false);
                     blocks.add(block);
                 }
                 if (mapTemplate[i][j] == '1'){
-                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false);
+                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,false);
                     blocks.add(block);
                 }
                 if (mapTemplate[i][j] == '2'){
@@ -236,6 +241,7 @@ public class BattleField {
         tank.move(direction,true);
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext();){
             Block block = iterator.next();
+            if (block.isTransparent()) continue;
             if (isCollision(tank,block)){
                 tank.move(Direction.getOpposite(direction),false);
                 return;

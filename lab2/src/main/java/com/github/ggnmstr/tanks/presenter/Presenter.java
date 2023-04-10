@@ -13,7 +13,7 @@ public class Presenter {
     private MainMenu mainMenu;
 
     private final Timer gameCycle = new Timer(1000/60, e -> updateGame());
-    private final Timer enemySpawner = new Timer(5000, e -> battleField.spawnEnemy());
+    private final Timer enemySpawner = new Timer(4000, e -> battleField.spawnEnemy());
     private boolean gameStarted = false;
 
     public void setView(MainMenu mainView){
