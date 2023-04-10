@@ -3,6 +3,8 @@ package com.github.ggnmstr.tanks.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Scanner;
 
 public class MapCreator {
@@ -10,7 +12,13 @@ public class MapCreator {
         int rows = 52;
         int columns = 52;
         char[][] mapTemplate = new char[rows][columns];
-        File file = new File("tank.txt");
+        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level1.txt");
+        File file = null;
+        try {
+            file = new File(path.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
@@ -27,7 +35,7 @@ public class MapCreator {
     }
 
     private static void generateDefaultMap() {
-        File file = new File("tank.txt");
+        File file = new File("resources/maps/level1.txt");
         try {
             file.createNewFile();
         } catch (IOException e) {

@@ -4,14 +4,23 @@ import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.model.*;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class GameView extends JPanel {
+
+    BufferedImage playerTankImage;
 
     private GVData gvData;
     private Presenter presenter;
@@ -20,6 +29,7 @@ public class GameView extends JPanel {
         super();
         setBackground(Color.darkGray);
         setFocusable(true);
+        loadResources();
         //setKeyBindings();
         setVisible(true);
     }
@@ -65,13 +75,27 @@ public class GameView extends JPanel {
             drawObject(g2d,x);
         }
         g2d.setColor(Color.GREEN);
-        drawObject(g2d, gvData.mainPlayer());
+        drawMainPlayer(g, gvData.mainPlayer());
+    }
+
+    private void drawMainPlayer(Graphics g, GameObject x) {
+        g.drawImage(playerTankImage,x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight(),null);
     }
 
     private void drawObject(Graphics g, GameObject x) {
         g.drawRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
         g.fillRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
 
+    }
+
+    private void loadResources(){
+        URL path;
+        path = Thread.currentThread().getContextClassLoader().getResource("textures/tanktexture.png");
+        try {
+            playerTankImage = ImageIO.read(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setPresenter(Presenter presenter) {
