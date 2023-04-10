@@ -92,10 +92,10 @@ public class BattleField {
                     presenter.gameLost(score);
                     return true;
                 }
-                if (!block.isInvincible) {
+                if (!block.isInvincible()) {
                     iterator.remove();
-                    flag = true;
                 }
+                flag = true;
             }
         }
         // TODO: How to add ability to destroy bullet using other bullet?
@@ -183,6 +183,10 @@ public class BattleField {
         for (int i = 0; i < mapTemplate.length; i++){
             for (int j = 0; j < mapTemplate[i].length; j++){
                 if (mapTemplate[i][j] == '0') continue;
+                if (mapTemplate[i][j] == '7'){
+                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true);
+                    blocks.add(block);
+                }
                 if (mapTemplate[i][j] == '1'){
                     Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false);
                     blocks.add(block);
