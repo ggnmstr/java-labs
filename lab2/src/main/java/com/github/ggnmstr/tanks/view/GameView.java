@@ -39,6 +39,9 @@ public class GameView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
+        drawPlayerTank(g2d,gvData.mainPlayer());
+        //drawTank(g2d,playerImage,gvData.mainPlayer());
+        //drawImage(g, playerImage,gvData.mainPlayer());
         for (Tank x : gvData.enemies()){
             //drawImage(g,enemyImage,x);
             drawTank(g2d,enemyImage,x);
@@ -60,9 +63,6 @@ public class GameView extends JPanel {
         for (GameObject x : gvData.bullets()){
             drawObject(g2d,x);
         }
-        drawPlayerTank(g2d,gvData.mainPlayer());
-        //drawTank(g2d,playerImage,gvData.mainPlayer());
-        //drawImage(g, playerImage,gvData.mainPlayer());
     }
 
     private void drawTank(Graphics2D g2d, BufferedImage image, Tank tank){
