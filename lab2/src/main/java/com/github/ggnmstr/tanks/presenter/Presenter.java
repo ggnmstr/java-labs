@@ -14,6 +14,9 @@ public class Presenter {
 
     private final Timer gameCycle = new Timer(1000/60, e -> updateGame());
     private final Timer enemySpawner = new Timer(4000, e -> battleField.spawnEnemy());
+    private final Timer playerMover = new Timer(1000/30, e -> doMovement());
+
+    private Direction lastDir;
     private boolean gameStarted = false;
 
     public void setView(MainMenu mainView){
@@ -33,6 +36,7 @@ public class Presenter {
         mainMenu.update(battleField.getGvData());
         gameCycle.start();
         enemySpawner.start();
+        playerMover.start();
         gameStarted = true;
     }
 
@@ -42,22 +46,31 @@ public class Presenter {
 
     }
 
+    private void doMovement() {
+        if (lastDir == null) return;
+        battleField.moveMainPlayer(lastDir);
+    }
+
     public void responseToKey(int keyCode) {
         if (!gameStarted) return;
         switch (keyCode){
             case KeyEvent.VK_W -> {
-                battleField.moveMainPlayer(Direction.UP);
+                lastDir = Direction.UP;
+                //battleField.moveMainPlayer(Direction.UP);
             }
             case KeyEvent.VK_S -> {
-                battleField.moveMainPlayer(Direction.DOWN);
+                lastDir = Direction.DOWN;
+                //battleField.moveMainPlayer(Direction.DOWN);
 
             }
             case KeyEvent.VK_D -> {
-                battleField.moveMainPlayer(Direction.RIGHT);
+                lastDir = Direction.RIGHT;
+                //battleField.moveMainPlayer(Direction.RIGHT);
 
             }
             case KeyEvent.VK_A -> {
-                battleField.moveMainPlayer(Direction.LEFT);
+                lastDir = Direction.LEFT;
+                //battleField.moveMainPlayer(Direction.LEFT);
             }
             case KeyEvent.VK_SPACE -> {
                 battleField.shootTank();
@@ -65,33 +78,11 @@ public class Presenter {
         }
     }
 
-    /*
-    public void responseToKey(String actionCommand) {
-        switch (actionCommand){
-            case "move up" -> {
-                battleField.moveMainPlayer(Direction.UP);
-            }
-            case "move down"-> {
-                battleField.moveMainPlayer(Direction.DOWN);
-
-            }
-            case "move right" -> {
-                battleField.moveMainPlayer(Direction.RIGHT);
-
-            }
-            case "move left" -> {
-                battleField.moveMainPlayer(Direction.LEFT);
-            }
-            case "shoot" -> {
-                battleField.shootTank();
-            }
-        }
-    }
-    */
     public void gameLost(int score) {
         gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
+        playerMover.stop();
         mainMenu.launchEndgameMenu("You lost!",score);
     }
 
@@ -107,6 +98,30 @@ public class Presenter {
         gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
+        playerMover.stop();
         mainMenu.launchEndgameMenu("You won!",score);
+    }
+
+    public void stopMovementKey(int keyCode) {
+        Direction dir = keyToDirection(keyCode);
+        if (dir == lastDir) lastDir = null;
+    }
+
+    private Direction keyToDirection(int keycode){
+        switch (keycode){
+            case KeyEvent.VK_W -> {
+                return Direction.UP;
+            }
+            case KeyEvent.VK_A -> {
+                return Direction.LEFT;
+            }
+            case KeyEvent.VK_S -> {
+                return Direction.DOWN;
+            }
+            case KeyEvent.VK_D -> {
+                return Direction.RIGHT;
+            }
+        }
+        return Direction.DOWN;
     }
 }

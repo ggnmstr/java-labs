@@ -2,7 +2,6 @@ package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.model.*;
-import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,37 +26,13 @@ public class GameView extends JPanel {
     private BufferedImage metalImage;
 
     private GVData gvData;
-    //private Presenter presenter;
 
     public GameView() {
         super();
         setBackground(Color.darkGray);
         setFocusable(true);
         loadResources();
-        //setKeyBindings();
         setVisible(true);
-    }
-
-    private void setKeyBindings() {
-        // CR: add GameActionListener interface { move(Direction); shoot() }
-        // CR: call presenter as listener
-        ActionMap actionMap = getActionMap();
-        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-        inputMap.put(KeyStroke.getKeyStroke("W"),"up");
-        actionMap.put("up",new KeyAction("move up"));
-
-        inputMap.put(KeyStroke.getKeyStroke("A"),"left");
-        actionMap.put("left",new KeyAction("move left"));
-
-        inputMap.put(KeyStroke.getKeyStroke("S"),"down");
-        actionMap.put("down",new KeyAction("move down"));
-
-        inputMap.put(KeyStroke.getKeyStroke("D"),"right");
-        actionMap.put("right",new KeyAction("move right"));
-
-        inputMap.put(KeyStroke.getKeyStroke("SPACE"),"shoot");
-        actionMap.put("shoot",new KeyAction("shoot"));
     }
 
     @Override
@@ -168,23 +143,7 @@ public class GameView extends JPanel {
 
     }
 
-    /*
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
-    */
     public void setGVData(GVData data) {
         this.gvData = data;
-    }
-
-    private class KeyAction extends AbstractAction {
-        public KeyAction(String actionCommand) {
-            putValue(ACTION_COMMAND_KEY, actionCommand);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent actionEvt) {
-            //presenter.responseToKey(actionEvt.getActionCommand());
-        }
     }
 }

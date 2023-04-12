@@ -63,7 +63,6 @@ public class MainMenu extends JFrame implements KeyListener {
         if (gameView == null){
             gameView = new GameView();
             statMenu = new GameStatMenu();
-            //gameView.setPresenter(presenter);
             add(gameView);
             add(statMenu,BorderLayout.LINE_END);
             pack();
@@ -111,6 +110,6 @@ public class MainMenu extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        presenter.stopMovementKey(e.getKeyCode());
     }
 }
