@@ -10,11 +10,14 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 
+// CR: pass game data and write a test
 public class BattleField {
 
     private Block base;
 
+    // CR: field listener interface
     private Presenter presenter;
+
     private Tank mainPlayer;
     private final List<Tank> enemies = new ArrayList<>();
 
@@ -25,17 +28,22 @@ public class BattleField {
 
     private final List<Bullet> bulletsToRemove = new ArrayList<>();
 
+    // CR: Spawn
     private int playerSpawnX;
     private int playerSpawnY;
 
     private int enemiesSpawned = 0;
     private int enemiesKilled = 0;
+    // CR: merge with enemiesSpawned and enemiesKilled
     private int enemyLimit = 10;
 
+    // CR: move to tank
+    // CR: add to config
     private int playerHP = 2;
 
     private int score = 0;
 
+    // CR: generate based on model, do not store
     private GVData gvData;
 
 
@@ -47,22 +55,15 @@ public class BattleField {
 
     }
 
+    // CR: make them smarter
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
             int decision = ThreadLocalRandom.current().nextInt(1, 100 + 1);
             switch (decision){
-                case 2 -> {
-                    moveTank(enemyTank,Direction.UP);
-                }
-                case 3 -> {
-                    moveTank(enemyTank,Direction.DOWN);
-                }
-                case 4 -> {
-                    moveTank(enemyTank,Direction.LEFT);
-                }
-                case 5 -> {
-                    moveTank(enemyTank,Direction.RIGHT);
-                }
+                case 2 -> moveTank(enemyTank,Direction.UP);
+                case 3 -> moveTank(enemyTank,Direction.DOWN);
+                case 4 -> moveTank(enemyTank,Direction.LEFT);
+                case 5 -> moveTank(enemyTank,Direction.RIGHT);
                 case 6 -> {
                     Bullet bullet = enemyTank.shoot();
                     if (bullet == null) return;
@@ -103,7 +104,7 @@ public class BattleField {
         // version without bulletsToRemove is broken (ConcurentModificationException)
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();){
             Bullet otherbullet = iterator.next();
-            if (otherbullet != bullet && isCollision(bullet,otherbullet)){
+            if (otherbullet != bullet && isCollision(bullet, otherbullet)){
                 bulletsToRemove.add(otherbullet);
                 return true;
             }
@@ -156,16 +157,17 @@ public class BattleField {
         this.presenter = presenter;
     }
 
-    public int getEnemiesLeft(){
+    private int getEnemiesLeft(){
         return enemyLimit - enemiesSpawned;
     }
 
     public void spawnEnemy(){
         if (enemiesSpawned >= enemyLimit) return;
+        // CR: randomize point
         Tank newEnemy = enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
         if (newEnemy == null) return;
         enemiesSpawned++;
-        presenter.updateStats(getEnemiesLeft(),score);
+        presenter.updateStats(getEnemiesLeft(), score);
         enemies.add(newEnemy);
     }
 
@@ -180,6 +182,7 @@ public class BattleField {
         blocks.add(bottom);
     }
 
+    // CR: move from model
     void buildMap(){
         for (int i = 0; i < mapTemplate.length; i++){
             for (int j = 0; j < mapTemplate[i].length; j++){
@@ -218,7 +221,6 @@ public class BattleField {
         if (playerHP <= 0) presenter.gameLost(score);
         playerHP--;
         respawnPlayer();
-
     }
 
     private void respawnPlayer() {

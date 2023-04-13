@@ -4,6 +4,36 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//record Score(String name, int score) {}
+//
+//class RecordManager {
+//
+//    private final List<Score> highScores;
+//
+//    private RecordManager(List<Score> highScores) {
+//        this.highScores = highScores;
+//    }
+//
+//    static RecordManager getInstance() {
+//        // TODO: intialize with high scores from file
+//    }
+//
+//    void addScore(String name, int score) {}
+//
+//    List<Score> getHighScores() {
+//
+//    }
+//
+//    void saveToFile() {
+//
+//    }
+//
+//    private List<Score> loadFromFile() {
+//
+//    }
+//}
+
 public class HighScoresWorker {
     public static void writeScore(String name, int newScore){
         // very bad function!!! xd

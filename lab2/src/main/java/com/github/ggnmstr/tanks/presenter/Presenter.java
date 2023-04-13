@@ -12,9 +12,9 @@ public class Presenter {
     private BattleField battleField;
     private MainMenu mainMenu;
 
-    private final Timer gameCycle = new Timer(1000/60, e -> updateGame());
+    private final Timer gameCycle = new Timer(1000/30, e -> updateGame());
     private final Timer enemySpawner = new Timer(4000, e -> battleField.spawnEnemy());
-    private final Timer playerMover = new Timer(1000/30, e -> doMovement());
+//    private final Timer playerMover = new Timer(1000/30, e -> doMovement());
 
     private Direction lastDir;
     private boolean gameStarted = false;
@@ -36,12 +36,13 @@ public class Presenter {
         mainMenu.update(battleField.getGvData());
         gameCycle.start();
         enemySpawner.start();
-        playerMover.start();
+//        playerMover.start();
         gameStarted = true;
     }
 
     private void updateGame() {
         battleField.updateField();
+        doMovement();
         mainMenu.update(battleField.getGvData());
 
     }
@@ -82,7 +83,7 @@ public class Presenter {
         gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
-        playerMover.stop();
+//        playerMover.stop();
         mainMenu.launchEndgameMenu("You lost!",score);
     }
 
@@ -98,7 +99,7 @@ public class Presenter {
         gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
-        playerMover.stop();
+//        playerMover.stop();
         mainMenu.launchEndgameMenu("You won!",score);
     }
 

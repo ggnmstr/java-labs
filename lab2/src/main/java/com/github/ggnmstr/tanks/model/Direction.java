@@ -1,25 +1,19 @@
 package com.github.ggnmstr.tanks.model;
 
+// CR: move to utils package
 public enum Direction {
     DOWN,
     LEFT,
     RIGHT,
     UP;
+
+    // CR: Direction.NONE
     public static Direction getOpposite(Direction direction){
-        switch (direction){
-            case UP -> {
-                return DOWN;
-            }
-            case DOWN -> {
-                return UP;
-            }
-            case LEFT -> {
-                return RIGHT;
-            }
-            case RIGHT -> {
-                return LEFT;
-            }
-        }
-        return DOWN;
+        return switch (direction){
+            case UP -> DOWN;
+            case DOWN -> UP;
+            case LEFT -> RIGHT;
+            case RIGHT -> LEFT;
+        };
     }
 }

@@ -9,11 +9,12 @@ import java.util.Scanner;
 
 public class MapCreator {
     public static char[][] create(){
+        // CR: do not continue with partial map
         int rows = 52;
         int columns = 52;
         char[][] mapTemplate = new char[rows][columns];
         URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level2.txt");
-        File file = null;
+        File file;
         try {
             file = new File(path.toURI());
         } catch (URISyntaxException e) {

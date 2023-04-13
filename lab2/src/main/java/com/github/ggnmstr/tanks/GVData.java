@@ -4,6 +4,7 @@ import com.github.ggnmstr.tanks.model.*;
 
 import java.util.List;
 
+// CR: naming
 public record GVData(Tank mainPlayer, Block base, List<Block> blocks,
                      List<Tank> enemies, List<Bullet> bullets) {
 

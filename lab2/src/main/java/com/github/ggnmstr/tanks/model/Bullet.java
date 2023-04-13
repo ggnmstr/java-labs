@@ -1,5 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
+// CR: better blocks destruction
 public class Bullet extends GameObject {
     private Direction direction;
 

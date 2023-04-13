@@ -1,8 +1,12 @@
 package com.github.ggnmstr.tanks.model;
 
 public abstract class GameObject {
-    protected int xPos, yPos;
-    protected int width, height;
+
+    protected int xPos;
+    protected int yPos;
+
+    protected int width;
+    protected int height;
 
     public int getxPos() {
         return xPos;
