@@ -7,7 +7,7 @@ public final class GameParameters {
     public static int BASEHEIGHT = 60;
     public static int BASEWIDTH = 60;
     public static int TANKSIZE = 60;
-    public static double TANKSPEED = 5;
+    public static int TANKSPEED = 5;
 
     public static int BULLETLONG = 15;
     public static int BULLETSHORT = 10;
