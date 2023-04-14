@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
-import static com.github.ggnmstr.tanks.model.BattleField.isCollision;
+import com.github.ggnmstr.tanks.util.Direction;
 
 public class Tank extends GameObject {
 

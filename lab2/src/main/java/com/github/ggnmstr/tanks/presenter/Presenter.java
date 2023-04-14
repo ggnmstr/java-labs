@@ -1,7 +1,7 @@
 package com.github.ggnmstr.tanks.presenter;
 
 import com.github.ggnmstr.tanks.model.BattleField;
-import com.github.ggnmstr.tanks.model.Direction;
+import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
@@ -14,9 +14,8 @@ public class Presenter {
 
     private final Timer gameCycle = new Timer(1000/30, e -> updateGame());
     private final Timer enemySpawner = new Timer(4000, e -> battleField.spawnEnemy());
-//    private final Timer playerMover = new Timer(1000/30, e -> doMovement());
 
-    private Direction lastDir;
+    private Direction lastDir = Direction.NONE;
     private boolean gameStarted = false;
 
     public void setView(MainMenu mainView){
@@ -36,7 +35,6 @@ public class Presenter {
         mainMenu.update(battleField.getGvData());
         gameCycle.start();
         enemySpawner.start();
-//        playerMover.start();
         gameStarted = true;
     }
 
@@ -48,7 +46,7 @@ public class Presenter {
     }
 
     private void doMovement() {
-        if (lastDir == null) return;
+        if (lastDir == Direction.NONE) return;
         battleField.moveMainPlayer(lastDir);
     }
 
@@ -57,21 +55,17 @@ public class Presenter {
         switch (keyCode){
             case KeyEvent.VK_W -> {
                 lastDir = Direction.UP;
-                //battleField.moveMainPlayer(Direction.UP);
             }
             case KeyEvent.VK_S -> {
                 lastDir = Direction.DOWN;
-                //battleField.moveMainPlayer(Direction.DOWN);
 
             }
             case KeyEvent.VK_D -> {
                 lastDir = Direction.RIGHT;
-                //battleField.moveMainPlayer(Direction.RIGHT);
 
             }
             case KeyEvent.VK_A -> {
                 lastDir = Direction.LEFT;
-                //battleField.moveMainPlayer(Direction.LEFT);
             }
             case KeyEvent.VK_SPACE -> {
                 battleField.shootTank();
@@ -83,7 +77,6 @@ public class Presenter {
         gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
-//        playerMover.stop();
         mainMenu.launchEndgameMenu("You lost!",score);
     }
 
@@ -99,13 +92,12 @@ public class Presenter {
         gameStarted = false;
         gameCycle.stop();
         enemySpawner.stop();
-//        playerMover.stop();
         mainMenu.launchEndgameMenu("You won!",score);
     }
 
     public void stopMovementKey(int keyCode) {
         Direction dir = keyToDirection(keyCode);
-        if (dir == lastDir) lastDir = null;
+        if (dir == lastDir) lastDir = Direction.NONE;
     }
 
     private Direction keyToDirection(int keycode){
@@ -123,6 +115,6 @@ public class Presenter {
                 return Direction.RIGHT;
             }
         }
-        return Direction.DOWN;
+        return Direction.NONE;
     }
 }

@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.GVData;
 import com.github.ggnmstr.tanks.presenter.Presenter;
+import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.util.MapCreator;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class BattleField {
         for (Tank enemyTank : enemies){
             int decision = ThreadLocalRandom.current().nextInt(1, 100 + 1);
             switch (decision){
-                case 2 -> moveTank(enemyTank,Direction.UP);
+                case 2 -> moveTank(enemyTank, Direction.UP);
                 case 3 -> moveTank(enemyTank,Direction.DOWN);
                 case 4 -> moveTank(enemyTank,Direction.LEFT);
                 case 5 -> moveTank(enemyTank,Direction.RIGHT);
