@@ -1,13 +1,14 @@
 package com.github.ggnmstr.tanks.presenter;
 
 import com.github.ggnmstr.tanks.model.BattleField;
+import com.github.ggnmstr.tanks.model.FieldListener;
 import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-public class Presenter {
+public class Presenter implements FieldListener {
 
     private BattleField battleField;
     private MainMenu mainMenu;
@@ -73,6 +74,7 @@ public class Presenter {
         }
     }
 
+    @Override
     public void gameLost(int score) {
         gameStarted = false;
         gameCycle.stop();
@@ -80,14 +82,12 @@ public class Presenter {
         mainMenu.launchEndgameMenu("You lost!",score);
     }
 
-    public void updateStats(int enemiesLeft,int score) {
-        mainMenu.updateMenu(enemiesLeft,score);
+    @Override
+    public void updateStats(int hp, int enemiesLeft,int score) {
+        mainMenu.updateMenu(hp, enemiesLeft,score);
     }
 
-    public void updateStats(int hPleft) {
-        mainMenu.updateMenu(hPleft);
-    }
-
+    @Override
     public void gameWon(int score) {
         gameStarted = false;
         gameCycle.stop();

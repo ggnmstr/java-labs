@@ -71,8 +71,8 @@ public class MainMenu extends JFrame implements KeyListener {
     }
 
 
-    public void updateMenu(int enemiesLeft, int score){
-        statMenu.update(enemiesLeft,score);
+    public void updateMenu(int hp, int enemiesLeft, int score){
+        statMenu.update(hp, enemiesLeft,score);
     }
 
     public void update(GVData data) {
@@ -92,10 +92,6 @@ public class MainMenu extends JFrame implements KeyListener {
     public void launchEndgameMenu(String title, int score) {
         JDialog endgameDialog = EndgameDialog.getEndgameDialog(this,title,score);
         endgameDialog.setVisible(true);
-    }
-
-    public void updateMenu(int hPleft) {
-        statMenu.update(hPleft);
     }
 
     @Override

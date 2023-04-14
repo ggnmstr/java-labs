@@ -16,8 +16,7 @@ public class BattleField {
 
     private Block base;
 
-    // CR: field listener interface
-    private Presenter presenter;
+    private FieldListener fieldListener;
 
     private Tank mainPlayer;
     private final List<Tank> enemies = new ArrayList<>();
@@ -92,7 +91,7 @@ public class BattleField {
             if (block.isTransparent()) continue;
             if (isCollision(bullet, block)) {
                 if (block == base){
-                    presenter.gameLost(score);
+                    fieldListener.gameLost(score);
                     return true;
                 }
                 if (!block.isInvincible()) {
@@ -115,9 +114,9 @@ public class BattleField {
             if (isCollision(bullet,enemy)){
                 score+=100;
                 enemiesKilled++;
-                presenter.updateStats(getEnemiesLeft(),score);
+                fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
                 if (enemiesKilled == enemyLimit){
-                    presenter.gameWon(score);
+                    fieldListener.gameWon(score);
                 }
                 iterator.remove();
                 return true;
@@ -125,7 +124,7 @@ public class BattleField {
         }
         if (isCollision(bullet,mainPlayer)){
             damageMainPlayer();
-            presenter.updateStats(getHPleft());
+            fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
             return true;
         }
         return flag;
@@ -139,9 +138,7 @@ public class BattleField {
         gvData = new GVData(mainPlayer,base,blocks,enemies,bullets);
         generateBorders();
         spawnEnemy();
-        presenter.updateStats(getHPleft());
-        presenter.updateStats(getEnemiesLeft(),score);
-
+        fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
     }
 
     private void clearMap() {
@@ -154,8 +151,8 @@ public class BattleField {
         bulletsToRemove.clear();
     }
 
-    public void setPresenter(Presenter presenter){
-        this.presenter = presenter;
+    public void setFieldListener(FieldListener fieldListener){
+        this.fieldListener = fieldListener;
     }
 
     private int getEnemiesLeft(){
@@ -168,7 +165,7 @@ public class BattleField {
         Tank newEnemy = enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
         if (newEnemy == null) return;
         enemiesSpawned++;
-        presenter.updateStats(getEnemiesLeft(), score);
+        fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
         enemies.add(newEnemy);
     }
 
@@ -219,7 +216,7 @@ public class BattleField {
     }
 
     public void damageMainPlayer() {
-        if (playerHP <= 0) presenter.gameLost(score);
+        if (playerHP <= 0) fieldListener.gameLost(score);
         playerHP--;
         respawnPlayer();
     }

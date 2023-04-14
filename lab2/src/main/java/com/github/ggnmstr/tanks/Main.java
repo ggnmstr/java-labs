@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         BattleField field = new BattleField();
         Presenter presenter = new Presenter(field);
-        field.setPresenter(presenter);
+        field.setFieldListener(presenter);
         MainMenu mainMenu = new MainMenu();
         presenter.setView(mainMenu);
         mainMenu.setPresenter(presenter);

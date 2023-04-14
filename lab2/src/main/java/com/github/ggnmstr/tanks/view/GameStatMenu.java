@@ -44,14 +44,9 @@ public class GameStatMenu extends JPanel {
         setVisible(true);
     }
 
-    public void update(int left, int score) {
+    public void update(int hp, int left, int score) {
+        hpLabel.setText("HP Left: " + hp);
         enemiesLabel.setText("Enemies left: " + left);
         scoreLabel.setText("Score: " + score);
     }
-
-    public void update(int hp){
-        hpLabel.setText("HP Left: " + hp);
-    }
-
-
 }

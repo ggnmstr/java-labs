@@ -1,6 +1,5 @@
 package com.github.ggnmstr.tanks.util;
 
-// CR: move to utils package
 public enum Direction {
     DOWN,
     LEFT,
