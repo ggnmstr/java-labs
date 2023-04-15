@@ -6,9 +6,6 @@ import com.github.ggnmstr.tanks.model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -17,12 +14,10 @@ import java.util.List;
 
 public class GameView extends JPanel {
     private List<BufferedImage> playerImages;
-
+    private List<BufferedImage> enemiesImages;
     private BufferedImage treesImage;
-    private BufferedImage playerImage;
     private BufferedImage brickImage;
     private BufferedImage baseImage;
-    private BufferedImage enemyImage;
     private BufferedImage metalImage;
 
     private GVData gvData;
@@ -39,12 +34,12 @@ public class GameView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        drawPlayerTank(g2d,gvData.mainPlayer());
+        drawTank(g2d,playerImages,gvData.mainPlayer());
         //drawTank(g2d,playerImage,gvData.mainPlayer());
         //drawImage(g, playerImage,gvData.mainPlayer());
         for (Tank x : gvData.enemies()){
             //drawImage(g,enemyImage,x);
-            drawTank(g2d,enemyImage,x);
+            drawTank(g2d,enemiesImages,x);
         }
         for (Block x : gvData.blocks()){
             if (x == gvData.base()){
@@ -65,25 +60,9 @@ public class GameView extends JPanel {
         }
     }
 
-    private void drawTank(Graphics2D g2d, BufferedImage image, Tank tank){
-        double rotation = 0;
-        switch (tank.getLastMove()){
-            case DOWN -> rotation = Math.toRadians(180);
-            case LEFT -> rotation = Math.toRadians(270);
-            case RIGHT -> rotation = Math.toRadians(90);
-        }
-        double locationX = image.getWidth() / 2;
-        double locationY = image.getHeight() / 2;
-        AffineTransform tx = AffineTransform.getRotateInstance(rotation, locationX, locationY);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-        g2d.drawImage(op.filter(image,null),tank.getxPos(),tank.getyPos(),
-                tank.getWidth(), tank.getHeight(), null);
-
-    }
-
-    private void drawPlayerTank(Graphics2D g2d, Tank tank){
+    private void drawTank(Graphics2D g2d, List<BufferedImage> textures, Tank tank){
         int direction = tank.getLastMove().ordinal();
-        g2d.drawImage(playerImages.get(direction*2),tank.getxPos(),tank.getyPos(),
+        g2d.drawImage(textures.get(direction),tank.getxPos(),tank.getyPos(),
                 tank.getWidth(),tank.getHeight(),null);
     }
 
@@ -99,18 +78,14 @@ public class GameView extends JPanel {
     }
 
     private void loadResources(){
-        loadPlayerImages();
-        URL tankpath = Thread.currentThread().getContextClassLoader().getResource("textures/tank1.png");
+        loadTankImages();
         URL brickpath = Thread.currentThread().getContextClassLoader().getResource("textures/brick.png");
         URL basepath = Thread.currentThread().getContextClassLoader().getResource("textures/base.png");
-        URL enemypath = Thread.currentThread().getContextClassLoader().getResource("textures/enemy1.png");
         URL metalpath = Thread.currentThread().getContextClassLoader().getResource("textures/metal.png");
         URL treespath = Thread.currentThread().getContextClassLoader().getResource("textures/trees.png");
         try {
-            playerImage = ImageIO.read(tankpath);
             brickImage = ImageIO.read(brickpath);
             baseImage = ImageIO.read(basepath);
-            enemyImage = ImageIO.read(enemypath);
             metalImage = ImageIO.read(metalpath);
             treesImage = ImageIO.read(treespath);
         } catch (IOException e) {
@@ -118,25 +93,36 @@ public class GameView extends JPanel {
         }
     }
 
-    private void loadPlayerImages(){
+    private void loadTankImages(){
         playerImages = new ArrayList<>();
+        enemiesImages = new ArrayList<>();
         URL pd1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pd1.png");
-        URL pd2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pd2.png");
+        //URL pd2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pd2.png");
         URL pl1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pl1.png");
-        URL pl2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pl2.png");
+        //URL pl2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pl2.png");
         URL pr1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pr1.png");
-        URL pr2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pr2.png");
+        //URL pr2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pr2.png");
         URL pu1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pu1.png");
-        URL pu2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pu2.png");
+        //URL pu2 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pu2.png");
+
+        URL ed1 = Thread.currentThread().getContextClassLoader().getResource("textures/enemy/ed1.png");
+        URL el1 = Thread.currentThread().getContextClassLoader().getResource("textures/enemy/el1.png");
+        URL er1 = Thread.currentThread().getContextClassLoader().getResource("textures/enemy/er1.png");
+        URL eu1 = Thread.currentThread().getContextClassLoader().getResource("textures/enemy/eu1.png");
         try {
             playerImages.add(ImageIO.read(pd1));
-            playerImages.add(ImageIO.read(pd2));
+            //playerImages.add(ImageIO.read(pd2));
             playerImages.add(ImageIO.read(pl1));
-            playerImages.add(ImageIO.read(pl2));
+            //playerImages.add(ImageIO.read(pl2));
             playerImages.add(ImageIO.read(pr1));
-            playerImages.add(ImageIO.read(pr2));
+            //playerImages.add(ImageIO.read(pr2));
             playerImages.add(ImageIO.read(pu1));
-            playerImages.add(ImageIO.read(pu2));
+            //playerImages.add(ImageIO.read(pu2));
+
+            enemiesImages.add(ImageIO.read(ed1));
+            enemiesImages.add(ImageIO.read(el1));
+            enemiesImages.add(ImageIO.read(er1));
+            enemiesImages.add(ImageIO.read(eu1));
         } catch (IOException e){
             throw new RuntimeException(e);
         }

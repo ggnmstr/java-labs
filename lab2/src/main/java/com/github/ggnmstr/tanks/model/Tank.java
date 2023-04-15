@@ -7,13 +7,16 @@ public class Tank extends GameObject {
     private int bullets;
     private Direction lastMove;
 
-    public Tank(int xPos, int yPos) {
+    private int hp;
+
+    public Tank(int xPos, int yPos, int hp) {
         this.width = GameParameters.TANKSIZE;
         this.height = GameParameters.TANKSIZE;
         this.bullets = 10;
         this.xPos = xPos;
         this.yPos = yPos;
         this.lastMove = Direction.DOWN;
+        this.hp = hp;
     }
 
     public Direction getLastMove() {
@@ -31,7 +34,16 @@ public class Tank extends GameObject {
 
     }
 
-    Bullet shoot() {
+    public boolean takeDamage(){
+        this.hp--;
+        return hp > 0;
+    }
+
+    public int getHP(){
+        return hp;
+    }
+
+    public Bullet shoot() {
         if (bullets == 0) return null;
         int startX = 0, startY = 0;
         switch (lastMove) {

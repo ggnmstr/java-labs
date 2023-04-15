@@ -37,10 +37,6 @@ public class BattleField {
     // CR: merge with enemiesSpawned and enemiesKilled
     private int enemyLimit = 10;
 
-    // CR: move to tank
-    // CR: add to config
-    private int playerHP = 2;
-
     private int score = 0;
 
     // CR: generate based on model, do not store
@@ -114,7 +110,7 @@ public class BattleField {
             if (isCollision(bullet,enemy)){
                 score+=100;
                 enemiesKilled++;
-                fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
+                fieldListener.updateStats(mainPlayer.getHP(), getEnemiesLeft(),score);
                 if (enemiesKilled == enemyLimit){
                     fieldListener.gameWon(score);
                 }
@@ -123,8 +119,9 @@ public class BattleField {
             }
         }
         if (isCollision(bullet,mainPlayer)){
-            damageMainPlayer();
-            fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
+            if (!mainPlayer.takeDamage()) fieldListener.gameLost(score);
+            fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
+            respawnPlayer();
             return true;
         }
         return flag;
@@ -134,11 +131,11 @@ public class BattleField {
         clearMap();
         buildMap();
         score = 0;
-        mainPlayer = new Tank(playerSpawnX,playerSpawnY);
+        mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
         gvData = new GVData(mainPlayer,base,blocks,enemies,bullets);
         generateBorders();
         spawnEnemy();
-        fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
+        fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
     }
 
     private void clearMap() {
@@ -165,7 +162,7 @@ public class BattleField {
         Tank newEnemy = enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
         if (newEnemy == null) return;
         enemiesSpawned++;
-        fieldListener.updateStats(getHPleft(),getEnemiesLeft(),score);
+        fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
         enemies.add(newEnemy);
     }
 
@@ -215,19 +212,10 @@ public class BattleField {
         }
     }
 
-    public void damageMainPlayer() {
-        if (playerHP <= 0) fieldListener.gameLost(score);
-        playerHP--;
-        respawnPlayer();
-    }
 
     private void respawnPlayer() {
         mainPlayer.xPos = playerSpawnX;
         mainPlayer.yPos = playerSpawnY;
-    }
-
-    public int getHPleft() {
-        return playerHP;
     }
 
     public static boolean isCollision(GameObject o1, GameObject o2){

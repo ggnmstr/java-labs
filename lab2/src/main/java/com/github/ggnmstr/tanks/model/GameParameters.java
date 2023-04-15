@@ -16,4 +16,7 @@ public final class GameParameters {
 
     public static int BLOCKWIDTH = 15;
     public static int BLOCKHEIGHT = 15;
+
+    public static int ENEMYHP = 1;
+    public static int PLAYERHP = 3;
 }

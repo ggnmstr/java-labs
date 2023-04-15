@@ -9,7 +9,7 @@ public class EnemySpawnPoint extends GameObject {
     }
 
     public Tank spawnEnemyTank(){
-        Tank newEnemyTank = new Tank(this.xPos,this.yPos);
+        Tank newEnemyTank = new Tank(this.xPos,this.yPos,GameParameters.ENEMYHP);
         return newEnemyTank;
     }
 }
