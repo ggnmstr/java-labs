@@ -4,8 +4,8 @@ public class EnemySpawnPoint extends GameObject {
     public EnemySpawnPoint(int x, int y){
         this.xPos = x;
         this.yPos = y;
-        this.height = 0;
-        this.width = 0;
+        this.height = GameParameters.TANKSIZE;
+        this.width = GameParameters.TANKSIZE;
     }
 
     public Tank spawnEnemyTank(){

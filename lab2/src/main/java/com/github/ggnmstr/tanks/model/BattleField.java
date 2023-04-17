@@ -35,7 +35,7 @@ public class BattleField {
     private int enemiesSpawned = 0;
     private int enemiesKilled = 0;
     // CR: merge with enemiesSpawned and enemiesKilled
-    private int enemyLimit = 10;
+    private final int enemyLimit = 10;
 
     private int score = 0;
 
@@ -158,12 +158,22 @@ public class BattleField {
 
     public void spawnEnemy(){
         if (enemiesSpawned >= enemyLimit) return;
-        // CR: randomize point
-        Tank newEnemy = enemySpawnPoints.get(enemiesSpawned % enemySpawnPoints.size()).spawnEnemyTank();
+        int n = enemySpawnPoints.size();
+        EnemySpawnPoint point = enemySpawnPoints.get(ThreadLocalRandom.current().nextInt(0,n));
+        Tank newEnemy = null;
+        if (!pointOccupied(point)) newEnemy = point.spawnEnemyTank();
         if (newEnemy == null) return;
         enemiesSpawned++;
         fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
         enemies.add(newEnemy);
+    }
+
+    private boolean pointOccupied(EnemySpawnPoint point){
+        if (isCollision(mainPlayer,point)) return true;
+        for (Tank enemy : enemies){
+            if (isCollision(enemy,point)) return true;
+        }
+        return false;
     }
 
     void generateBorders(){
