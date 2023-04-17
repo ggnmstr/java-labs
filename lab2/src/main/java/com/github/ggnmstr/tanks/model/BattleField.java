@@ -54,18 +54,15 @@ public class BattleField {
     // CR: make them smarter
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
-            int decision = ThreadLocalRandom.current().nextInt(1, 100 + 1);
-            switch (decision){
-                case 2 -> moveTank(enemyTank, Direction.UP);
-                case 3 -> moveTank(enemyTank,Direction.DOWN);
-                case 4 -> moveTank(enemyTank,Direction.LEFT);
-                case 5 -> moveTank(enemyTank,Direction.RIGHT);
-                case 6 -> {
-                    Bullet bullet = enemyTank.shoot();
-                    if (bullet == null) return;
-                    bullets.add(bullet);
-                }
+            Direction dir = enemyTank.getLastMove();
+            int shoot = ThreadLocalRandom.current().nextInt(0,100);
+            if (shoot == 5) {
+                Bullet bullet = enemyTank.shoot();
+                bullets.add(bullet);
             }
+            if (moveTank(enemyTank,dir)) continue;
+            else dir = Direction.values()[ThreadLocalRandom.current().nextInt(0,4)];
+            moveTank(enemyTank,dir);
         }
     }
 
@@ -235,26 +232,28 @@ public class BattleField {
                 o1.height + o1.yPos > o2.yPos;
     }
 
-    private void moveTank(Tank tank, Direction direction){
+    private boolean moveTank(Tank tank, Direction direction){
         tank.move(direction,true);
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext();){
             Block block = iterator.next();
             if (block.isTransparent()) continue;
             if (isCollision(tank,block)){
                 tank.move(Direction.getOpposite(direction),false);
-                return;
+                return false;
             }
         }
         for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
             Tank enemytank = iterator.next();
             if (tank != enemytank && isCollision(tank,enemytank)){
                 tank.move(Direction.getOpposite(direction),false);
-                return;
+                return false;
             }
         }
         if (tank != mainPlayer && isCollision(tank,mainPlayer)){
             tank.move(Direction.getOpposite(direction),false);
+            return false;
         }
+        return true;
     }
 
     public void moveMainPlayer(Direction direction){
