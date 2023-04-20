@@ -1,7 +1,8 @@
 package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.dto.GameObjects;
-import com.github.ggnmstr.tanks.model.*;
+import com.github.ggnmstr.tanks.dto.Position;
+import com.github.ggnmstr.tanks.dto.TankModel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -35,45 +36,39 @@ public class GameView extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         drawTank(g2d,playerImages, gameObjects.mainPlayer());
-        //drawTank(g2d,playerImage,gvData.mainPlayer());
-        //drawImage(g, playerImage,gvData.mainPlayer());
-        for (Tank x : gameObjects.enemies()){
-            //drawImage(g,enemyImage,x);
+        for (TankModel x : gameObjects.enemies()){
             drawTank(g2d,enemiesImages,x);
         }
-        for (Block x : gameObjects.blocks()){
-            if (x == gameObjects.base()){
-                drawImage(g,baseImage,x);
-                continue;
-            }
-            if (x.isInvincible()){
+        drawImage(g,baseImage,gameObjects.base());
+        for (Position x : gameObjects.blocks()){
+            if (x.type() == 2){
                 drawImage(g,metalImage,x);
-            } else if (x.isTransparent()) {
+            } else if (x.type() == 3) {
                 drawImage(g,treesImage,x);
             } else {
                 drawImage(g,brickImage,x);
             }
 
         }
-        for (GamePrimitive x : gameObjects.bullets()){
+        for (Position x : gameObjects.bullets()){
             drawObject(g2d,x);
         }
     }
 
-    private void drawTank(Graphics2D g2d, List<BufferedImage> textures, Tank tank){
-        int direction = tank.getLastMove().ordinal();
-        g2d.drawImage(textures.get(direction),tank.getxPos(),tank.getyPos(),
-                tank.getWidth(),tank.getHeight(),null);
+    private void drawTank(Graphics2D g2d, List<BufferedImage> textures, TankModel tank){
+        int direction = tank.rotation().ordinal();
+        g2d.drawImage(textures.get(direction),tank.x(),tank.y(),
+                tank.width(),tank.height(),null);
     }
 
-    private void drawImage(Graphics g, BufferedImage image, GamePrimitive gamePrimitive){
-        g.drawImage(image, gamePrimitive.getxPos(), gamePrimitive.getyPos(),
-                gamePrimitive.getWidth(), gamePrimitive.getHeight(),null);
+    private void drawImage(Graphics g, BufferedImage image, Position position){
+        g.drawImage(image, position.x(), position.y(),
+                position.width(), position.height(),null);
     }
 
-    private void drawObject(Graphics g, GamePrimitive x) {
-        g.drawRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
-        g.fillRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
+    private void drawObject(Graphics g, Position x) {
+        g.drawRect(x.x(),x.y(),x.width(),x.height());
+        g.fillRect(x.x(),x.y(),x.width(),x.height());
 
     }
 
@@ -129,7 +124,7 @@ public class GameView extends JPanel {
 
     }
 
-    public void setGVData(GameObjects data) {
+    public void update(GameObjects data) {
         this.gameObjects = data;
     }
 }

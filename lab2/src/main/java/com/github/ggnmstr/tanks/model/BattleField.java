@@ -1,6 +1,8 @@
 package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.dto.GameObjects;
+import com.github.ggnmstr.tanks.dto.Position;
+import com.github.ggnmstr.tanks.dto.TankModel;
 import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.util.MapCreator;
 
@@ -37,9 +39,6 @@ public class BattleField {
     private final int enemyLimit = 10;
 
     private int score = 0;
-
-    // CR: generate based on model, do not store
-    private GameObjects gameObjects;
 
 
     private final char[][] mapTemplate = MapCreator.create();
@@ -128,7 +127,6 @@ public class BattleField {
         buildMap();
         score = 0;
         mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
-        gameObjects = new GameObjects(mainPlayer,base,blocks,enemies,bullets);
         generateBorders();
         spawnEnemy();
         fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
@@ -193,12 +191,12 @@ public class BattleField {
                     blocks.add(trees);
                 }
                 if (mapTemplate[i][j] == '7'){
-                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true,false);
-                    blocks.add(block);
+                    Block metal = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true,false);
+                    blocks.add(metal);
                 }
                 if (mapTemplate[i][j] == '1'){
-                    Block block = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,false);
-                    blocks.add(block);
+                    Block brick = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,false);
+                    blocks.add(brick);
                 }
                 if (mapTemplate[i][j] == '2'){
                     EnemySpawnPoint spawnPoint = new EnemySpawnPoint(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
@@ -264,7 +262,37 @@ public class BattleField {
         if (bullet != null) bullets.add(bullet);
     }
 
-    public GameObjects getGvData() {
-        return gameObjects;
+    public GameObjects toGameObjects() {
+        TankModel player = new TankModel(mainPlayer.getxPos(), mainPlayer.getyPos(), mainPlayer.getWidth(),
+                mainPlayer.getHeight(),mainPlayer.getLastMove());
+        Position bp = new Position(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight(),0);
+        List<Position> bl = new ArrayList<>();
+        for (Block block : blocks){
+            if (block == base) continue;
+            bl.add(blockIntoPosition(block));
+        }
+        List<TankModel> viewEnemies = new ArrayList<>();
+        for (Tank enemy : enemies){
+            viewEnemies.add(new TankModel(enemy.getxPos(),enemy.getyPos(),
+                    enemy.getWidth(),enemy.getHeight(),enemy.getLastMove()));
+        }
+        List<Position> viewBullets = new ArrayList<>();
+        for (Bullet bullet : bullets){
+            viewBullets.add(new Position(bullet.getxPos(), bullet.getyPos(),
+                    bullet.getWidth(),bullet.getHeight(),0));
+        }
+
+        return new GameObjects(player,bp,bl,viewEnemies,viewBullets);
+    }
+
+    private Position blockIntoPosition(Block block){
+        // 1 - brick
+        // 2 - metal
+        // 3 - trees
+        int type = 1;
+        if (block.isTransparent()) type = 3;
+        if (block.isInvincible()) type = 2;
+        return new Position(block.getxPos(),block.getyPos(),
+                block.getWidth(),block.getHeight(),type);
     }
 }

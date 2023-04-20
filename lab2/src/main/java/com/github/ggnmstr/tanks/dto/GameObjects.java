@@ -1,35 +1,32 @@
 package com.github.ggnmstr.tanks.dto;
 
-import com.github.ggnmstr.tanks.model.*;
-
 import java.util.List;
 
-// CR: naming
-public record GameObjects(Tank mainPlayer, Block base, List<Block> blocks,
-                          List<Tank> enemies, List<Bullet> bullets) {
+public record GameObjects(TankModel mainPlayer, Position base, List<Position> blocks,
+                          List<TankModel> enemies, List<Position> bullets) {
 
     @Override
-    public Tank mainPlayer() {
+    public TankModel mainPlayer() {
         return mainPlayer;
     }
 
     @Override
-    public List<Block> blocks() {
+    public List<Position> blocks() {
         return blocks;
     }
 
     @Override
-    public List<Tank> enemies() {
+    public List<TankModel> enemies() {
         return enemies;
     }
 
     @Override
-    public List<Bullet> bullets() {
+    public List<Position> bullets() {
         return bullets;
     }
 
     @Override
-    public Block base() {
+    public Position base() {
         return base;
     }
 }

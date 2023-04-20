@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class MainMenu extends JFrame implements KeyListener {
-    //  Exit, About, New Game, High Scores.
     private  Presenter presenter;
 
     private GameView gameView;
@@ -76,7 +75,7 @@ public class MainMenu extends JFrame implements KeyListener {
     }
 
     public void update(GameObjects data) {
-        gameView.setGVData(data);
+        gameView.update(data);
         gameView.repaint();
     }
 

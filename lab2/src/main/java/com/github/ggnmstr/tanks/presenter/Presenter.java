@@ -33,7 +33,7 @@ public class Presenter implements FieldListener {
     public void startNewGame(){
         mainMenu.prepareGame();
         battleField.initField();
-        mainMenu.update(battleField.getGvData());
+        mainMenu.update(battleField.toGameObjects());
         gameCycle.start();
         enemySpawner.start();
         gameStarted = true;
@@ -42,7 +42,7 @@ public class Presenter implements FieldListener {
     private void updateGame() {
         battleField.updateField();
         doMovement();
-        mainMenu.update(battleField.getGvData());
+        mainMenu.update(battleField.toGameObjects());
 
     }
 
