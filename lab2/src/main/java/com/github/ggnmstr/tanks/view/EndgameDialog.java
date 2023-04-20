@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
-import com.github.ggnmstr.tanks.util.HighScoresWorker;
+import com.github.ggnmstr.tanks.util.RecordManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +22,7 @@ public class EndgameDialog {
 
         JTextField nameField = new JTextField(30);
         nameField.addActionListener(e -> {
-            HighScoresWorker.writeScore(nameField.getText(), score);
+            RecordManager.getInstance().addScore(nameField.getText(),score);
             dialog.dispose();
         });
 

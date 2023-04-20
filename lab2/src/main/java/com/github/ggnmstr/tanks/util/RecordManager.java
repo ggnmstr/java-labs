@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.util;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class RecordManager {
@@ -16,12 +17,20 @@ public class RecordManager {
     }
 
 
-    void addScore(String name, int score) {
+    public void addScore(String name, int score) {
         Score newscore = new Score(name,score);
-        highScores.add(newscore);
+        int i = 0;
+        for (Score curscore : highScores) {
+            if (score > curscore.score()) {
+                break;
+            }
+            i++;
+        }
+        highScores.add(i,newscore);
+        saveToFile();
     }
 
-    List<Score> getHighScores() {
+    public List<Score> getHighScores() {
         return highScores;
     }
 

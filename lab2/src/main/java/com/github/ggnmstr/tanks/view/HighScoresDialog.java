@@ -1,6 +1,7 @@
 package com.github.ggnmstr.tanks.view;
 
-import com.github.ggnmstr.tanks.util.HighScoresWorker;
+import com.github.ggnmstr.tanks.util.RecordManager;
+import com.github.ggnmstr.tanks.util.Score;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -21,9 +22,9 @@ public class HighScoresDialog extends JDialog {
             }
         };
         JTable table = new JTable(model);
-        List<String> list = HighScoresWorker.getScores();
-        for (String rec : list){
-            Object[] toadd = rec.split(" : ");
+        List<Score> list = RecordManager.getInstance().getHighScores();
+        for (Score rec : list){
+            Object[] toadd = {rec.name(),rec.score()};
             model.addRow(toadd);
         }
         table.setFillsViewportHeight(true);
