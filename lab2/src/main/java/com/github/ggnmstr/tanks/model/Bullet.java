@@ -3,7 +3,7 @@ package com.github.ggnmstr.tanks.model;
 import com.github.ggnmstr.tanks.util.Direction;
 
 // CR: better blocks destruction
-public class Bullet extends GameObject {
+public class Bullet extends GamePrimitive {
     private Direction direction;
 
     public Bullet(int startX, int startY, Direction direction) {

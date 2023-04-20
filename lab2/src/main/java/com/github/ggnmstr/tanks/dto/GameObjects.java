@@ -1,12 +1,12 @@
-package com.github.ggnmstr.tanks;
+package com.github.ggnmstr.tanks.dto;
 
 import com.github.ggnmstr.tanks.model.*;
 
 import java.util.List;
 
 // CR: naming
-public record GVData(Tank mainPlayer, Block base, List<Block> blocks,
-                     List<Tank> enemies, List<Bullet> bullets) {
+public record GameObjects(Tank mainPlayer, Block base, List<Block> blocks,
+                          List<Tank> enemies, List<Bullet> bullets) {
 
     @Override
     public Tank mainPlayer() {

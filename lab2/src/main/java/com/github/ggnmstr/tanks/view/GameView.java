@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
-import com.github.ggnmstr.tanks.GVData;
+import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.model.*;
 
 import javax.imageio.ImageIO;
@@ -20,7 +20,7 @@ public class GameView extends JPanel {
     private BufferedImage baseImage;
     private BufferedImage metalImage;
 
-    private GVData gvData;
+    private GameObjects gameObjects;
 
     public GameView() {
         super();
@@ -34,15 +34,15 @@ public class GameView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        drawTank(g2d,playerImages,gvData.mainPlayer());
+        drawTank(g2d,playerImages, gameObjects.mainPlayer());
         //drawTank(g2d,playerImage,gvData.mainPlayer());
         //drawImage(g, playerImage,gvData.mainPlayer());
-        for (Tank x : gvData.enemies()){
+        for (Tank x : gameObjects.enemies()){
             //drawImage(g,enemyImage,x);
             drawTank(g2d,enemiesImages,x);
         }
-        for (Block x : gvData.blocks()){
-            if (x == gvData.base()){
+        for (Block x : gameObjects.blocks()){
+            if (x == gameObjects.base()){
                 drawImage(g,baseImage,x);
                 continue;
             }
@@ -55,7 +55,7 @@ public class GameView extends JPanel {
             }
 
         }
-        for (GameObject x : gvData.bullets()){
+        for (GamePrimitive x : gameObjects.bullets()){
             drawObject(g2d,x);
         }
     }
@@ -66,12 +66,12 @@ public class GameView extends JPanel {
                 tank.getWidth(),tank.getHeight(),null);
     }
 
-    private void drawImage(Graphics g, BufferedImage image, GameObject gameObject){
-        g.drawImage(image,gameObject.getxPos(),gameObject.getyPos(),
-                gameObject.getWidth(),gameObject.getHeight(),null);
+    private void drawImage(Graphics g, BufferedImage image, GamePrimitive gamePrimitive){
+        g.drawImage(image, gamePrimitive.getxPos(), gamePrimitive.getyPos(),
+                gamePrimitive.getWidth(), gamePrimitive.getHeight(),null);
     }
 
-    private void drawObject(Graphics g, GameObject x) {
+    private void drawObject(Graphics g, GamePrimitive x) {
         g.drawRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
         g.fillRect(x.getxPos(),x.getyPos(),x.getWidth(),x.getHeight());
 
@@ -129,7 +129,7 @@ public class GameView extends JPanel {
 
     }
 
-    public void setGVData(GVData data) {
-        this.gvData = data;
+    public void setGVData(GameObjects data) {
+        this.gameObjects = data;
     }
 }

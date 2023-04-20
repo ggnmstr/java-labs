@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
-public class EnemySpawnPoint extends GameObject {
+public class EnemySpawnPoint extends GamePrimitive {
     public EnemySpawnPoint(int x, int y){
         this.xPos = x;
         this.yPos = y;

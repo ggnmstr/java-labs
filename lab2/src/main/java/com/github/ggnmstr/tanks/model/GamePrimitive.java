@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
-public abstract class GameObject {
+public abstract class GamePrimitive {
 
     protected int xPos;
     protected int yPos;

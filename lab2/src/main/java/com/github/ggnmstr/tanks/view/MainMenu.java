@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
-import com.github.ggnmstr.tanks.GVData;
+import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 
 import javax.swing.*;
@@ -75,7 +75,7 @@ public class MainMenu extends JFrame implements KeyListener {
         statMenu.update(hp, enemiesLeft,score);
     }
 
-    public void update(GVData data) {
+    public void update(GameObjects data) {
         gameView.setGVData(data);
         gameView.repaint();
     }

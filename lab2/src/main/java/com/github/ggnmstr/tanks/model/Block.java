@@ -1,6 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
-public class Block extends GameObject {
+public class Block extends GamePrimitive {
 
     private boolean isInvincible;
     private boolean isTransparent;

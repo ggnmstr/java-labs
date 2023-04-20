@@ -2,7 +2,7 @@ package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.util.Direction;
 
-public class Tank extends GameObject {
+public class Tank extends GamePrimitive {
 
     private int bullets;
     private Direction lastMove;

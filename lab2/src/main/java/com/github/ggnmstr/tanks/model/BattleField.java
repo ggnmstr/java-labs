@@ -1,7 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
-import com.github.ggnmstr.tanks.GVData;
-import com.github.ggnmstr.tanks.presenter.Presenter;
+import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.util.MapCreator;
 
@@ -40,7 +39,7 @@ public class BattleField {
     private int score = 0;
 
     // CR: generate based on model, do not store
-    private GVData gvData;
+    private GameObjects gameObjects;
 
 
     private final char[][] mapTemplate = MapCreator.create();
@@ -55,11 +54,11 @@ public class BattleField {
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
             Direction dir = enemyTank.getLastMove();
-            int shoot = ThreadLocalRandom.current().nextInt(0,100);
-            if (shoot == 5) {
+            if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
                 bullets.add(bullet);
             }
+
             if (moveTank(enemyTank,dir)) continue;
             else dir = Direction.values()[ThreadLocalRandom.current().nextInt(0,4)];
             moveTank(enemyTank,dir);
@@ -129,7 +128,7 @@ public class BattleField {
         buildMap();
         score = 0;
         mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
-        gvData = new GVData(mainPlayer,base,blocks,enemies,bullets);
+        gameObjects = new GameObjects(mainPlayer,base,blocks,enemies,bullets);
         generateBorders();
         spawnEnemy();
         fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
@@ -225,7 +224,7 @@ public class BattleField {
         mainPlayer.yPos = playerSpawnY;
     }
 
-    public static boolean isCollision(GameObject o1, GameObject o2){
+    public static boolean isCollision(GamePrimitive o1, GamePrimitive o2){
         return o1.xPos < o2.xPos + o2.width &&
                 o1.xPos + o1.width > o2.xPos &&
                 o1.yPos < o2.yPos + o2.height &&
@@ -265,7 +264,7 @@ public class BattleField {
         if (bullet != null) bullets.add(bullet);
     }
 
-    public GVData getGvData() {
-        return gvData;
+    public GameObjects getGvData() {
+        return gameObjects;
     }
 }
