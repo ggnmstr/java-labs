@@ -49,7 +49,6 @@ public class BattleField {
 
     }
 
-    // CR: make them smarter
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
             Direction dir = enemyTank.getLastMove();
