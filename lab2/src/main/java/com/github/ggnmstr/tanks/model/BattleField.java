@@ -33,10 +33,7 @@ public class BattleField {
     private int playerSpawnX;
     private int playerSpawnY;
 
-    private int enemiesSpawned = 0;
-    private int enemiesKilled = 0;
-    // CR: merge with enemiesSpawned and enemiesKilled
-    private final int enemyLimit = 10;
+    private int enemiesLeft;
 
     private int score = 0;
 
@@ -52,6 +49,7 @@ public class BattleField {
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
             Direction dir = enemyTank.getLastMove();
+            //if (ThreadLocalRandom.current().nextInt(1,49) % 21 == 0){
             if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
                 bullets.add(bullet);
@@ -103,18 +101,17 @@ public class BattleField {
             Tank enemy = iterator.next();
             if (isCollision(bullet,enemy)){
                 score+=100;
-                enemiesKilled++;
-                fieldListener.updateStats(mainPlayer.getHP(), getEnemiesLeft(),score);
-                if (enemiesKilled == enemyLimit){
+                fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft,score);
+                iterator.remove();
+                if (enemiesLeft == 0 && enemies.isEmpty()){
                     fieldListener.gameWon(score);
                 }
-                iterator.remove();
                 return true;
             }
         }
         if (isCollision(bullet,mainPlayer)){
             if (!mainPlayer.takeDamage()) fieldListener.gameLost(score);
-            fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
+            fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
             respawnPlayer();
             return true;
         }
@@ -122,18 +119,17 @@ public class BattleField {
     }
 
     public void initField(){
+        enemiesLeft = 10;
         clearMap();
         buildMap();
         score = 0;
         mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
         generateBorders();
         spawnEnemy();
-        fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
+        fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
     }
 
     private void clearMap() {
-        enemiesKilled = 0;
-        enemiesSpawned = 0;
         blocks.clear();
         enemies.clear();
         bullets.clear();
@@ -145,19 +141,15 @@ public class BattleField {
         this.fieldListener = fieldListener;
     }
 
-    private int getEnemiesLeft(){
-        return enemyLimit - enemiesSpawned;
-    }
-
     public void spawnEnemy(){
-        if (enemiesSpawned >= enemyLimit) return;
+        if (enemiesLeft <= 0) return;
         int n = enemySpawnPoints.size();
         EnemySpawnPoint point = enemySpawnPoints.get(ThreadLocalRandom.current().nextInt(0,n));
         Tank newEnemy = null;
         if (!pointOccupied(point)) newEnemy = point.spawnEnemyTank();
         if (newEnemy == null) return;
-        enemiesSpawned++;
-        fieldListener.updateStats(mainPlayer.getHP(),getEnemiesLeft(),score);
+        enemiesLeft--;
+        fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
         enemies.add(newEnemy);
     }
 
