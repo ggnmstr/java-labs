@@ -52,7 +52,7 @@ public class BattleField {
             //if (ThreadLocalRandom.current().nextInt(1,49) % 21 == 0){
             if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
-                bullets.add(bullet);
+                if (bullet != null) bullets.add(bullet);
             }
 
             if (moveTank(enemyTank,dir)) continue;
@@ -66,6 +66,7 @@ public class BattleField {
             Bullet bullet = iterator.next();
             bullet.move();
             if (bulletHasCollision(bullet)){
+                bullet.getOwner().makeShootable();
                 iterator.remove();
             }
         }
@@ -93,6 +94,7 @@ public class BattleField {
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();){
             Bullet otherbullet = iterator.next();
             if (otherbullet != bullet && isCollision(bullet, otherbullet)){
+                otherbullet.getOwner().makeShootable();
                 bulletsToRemove.add(otherbullet);
                 return true;
             }

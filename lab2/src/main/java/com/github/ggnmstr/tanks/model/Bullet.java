@@ -5,8 +5,9 @@ import com.github.ggnmstr.tanks.util.Direction;
 // CR: better blocks destruction
 public class Bullet extends GamePrimitive {
     private Direction direction;
+    private Tank owner;
 
-    public Bullet(int startX, int startY, Direction direction) {
+    public Bullet(int startX, int startY, Direction direction, Tank tank) {
         if (direction == Direction.DOWN || direction == Direction.UP) {
             this.width = GameParameters.BULLETSHORT;
             this.height = GameParameters.BULLETLONG;
@@ -17,6 +18,7 @@ public class Bullet extends GamePrimitive {
         this.xPos = startX;
         this.yPos = startY;
         this.direction = direction;
+        this.owner = tank;
     }
 
     public void move() {
@@ -26,5 +28,9 @@ public class Bullet extends GamePrimitive {
             case LEFT -> xPos -= GameParameters.BULLETSPEED;
             case RIGHT -> xPos += GameParameters.BULLETSPEED;
         }
+    }
+
+    public Tank getOwner() {
+        return owner;
     }
 }

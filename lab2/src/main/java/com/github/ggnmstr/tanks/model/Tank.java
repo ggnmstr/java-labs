@@ -4,15 +4,15 @@ import com.github.ggnmstr.tanks.util.Direction;
 
 public class Tank extends GamePrimitive {
 
-    private int bullets;
     private Direction lastMove;
+
+    private boolean shootable = true;
 
     private int hp;
 
     public Tank(int xPos, int yPos, int hp) {
         this.width = GameParameters.TANKSIZE;
         this.height = GameParameters.TANKSIZE;
-        this.bullets = 10;
         this.xPos = xPos;
         this.yPos = yPos;
         this.lastMove = Direction.DOWN;
@@ -39,12 +39,16 @@ public class Tank extends GamePrimitive {
         return hp > 0;
     }
 
+    public void makeShootable(){
+        this.shootable = true;
+    }
+
     public int getHP(){
         return hp;
     }
 
     public Bullet shoot() {
-        if (bullets == 0) return null;
+        if (!shootable) return null;
         int startX = 0, startY = 0;
         switch (lastMove) {
             case UP -> {
@@ -64,9 +68,9 @@ public class Tank extends GamePrimitive {
                 startY = yPos + height / 2 - GameParameters.BULLETSHORT/2;
             }
         }
-        Bullet bullet = new Bullet(startX, startY, lastMove);
+        Bullet bullet = new Bullet(startX, startY, lastMove,this);
+        this.shootable = false;
         return bullet;
-        //bullets--;
     }
 }
 
