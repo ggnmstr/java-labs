@@ -49,8 +49,8 @@ public class BattleField {
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
             Direction dir = enemyTank.getLastMove();
-            //if (ThreadLocalRandom.current().nextInt(1,49) % 21 == 0){
-            if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
+            if (ThreadLocalRandom.current().nextInt(0,2) == 0){
+            //if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
                 if (bullet != null) bullets.add(bullet);
             }
@@ -99,18 +99,21 @@ public class BattleField {
                 return true;
             }
         }
-        for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
-            Tank enemy = iterator.next();
-            if (isCollision(bullet,enemy)){
-                score+=100;
-                fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft,score);
-                iterator.remove();
-                if (enemiesLeft == 0 && enemies.isEmpty()){
-                    fieldListener.gameWon(score);
+        if (bullet.getOwner() == mainPlayer){
+            for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
+                Tank enemy = iterator.next();
+                if (isCollision(bullet,enemy)){
+                    score+=100;
+                    fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft,score);
+                    iterator.remove();
+                    if (enemiesLeft == 0 && enemies.isEmpty()){
+                        fieldListener.gameWon(score);
+                    }
+                    return true;
                 }
-                return true;
             }
         }
+
         if (isCollision(bullet,mainPlayer)){
             if (!mainPlayer.takeDamage()) fieldListener.gameLost(score);
             fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
@@ -164,10 +167,10 @@ public class BattleField {
     }
 
     void generateBorders(){
-        Block left = new Block(0,0,0,GameParameters.FIELDWIDTH,true);
-        Block top = new Block(0,0,GameParameters.FIELDHEIGHT,0,true);
-        Block bottom = new Block(0,GameParameters.FIELDHEIGHT,GameParameters.FIELDWIDTH,0,true);
-        Block right = new Block(GameParameters.FIELDWIDTH,0,0,GameParameters.FIELDHEIGHT,true);
+        Block left = new Block(-15,0,15,GameParameters.FIELDWIDTH,true);
+        Block top = new Block(0,-15,GameParameters.FIELDHEIGHT,15,true);
+        Block bottom = new Block(0,GameParameters.FIELDHEIGHT-40,GameParameters.FIELDWIDTH,10,true);
+        Block right = new Block(GameParameters.FIELDWIDTH,0,10,GameParameters.FIELDHEIGHT,true);
         blocks.add(left);
         blocks.add(right);
         blocks.add(top);
