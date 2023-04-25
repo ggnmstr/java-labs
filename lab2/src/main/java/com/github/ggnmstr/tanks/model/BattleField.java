@@ -4,7 +4,8 @@ import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.dto.Position;
 import com.github.ggnmstr.tanks.dto.TankModel;
 import com.github.ggnmstr.tanks.util.Direction;
-import com.github.ggnmstr.tanks.util.MapCreator;
+import com.github.ggnmstr.tanks.util.FieldParameters;
+import com.github.ggnmstr.tanks.util.MapTemplateCreator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,7 +39,12 @@ public class BattleField {
     private int score = 0;
 
 
-    private final char[][] mapTemplate = MapCreator.create();
+    private final char[][] mapTemplate;
+
+    public BattleField(FieldParameters parameters){
+        this.enemiesLeft = parameters.enemiesLimit();
+        mapTemplate = MapTemplateCreator.create(parameters.mapNum());
+    }
 
     public void updateField(){
         moveBullets();
@@ -130,8 +136,8 @@ public class BattleField {
         score = 0;
         mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
         generateBorders();
-        spawnEnemy();
-        fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
+        //spawnEnemy();
+        //fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
     }
 
     private void clearMap() {

@@ -2,17 +2,16 @@ package com.github.ggnmstr.tanks.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class MapCreator {
-    public static char[][] create(){
+public class MapTemplateCreator {
+    public static char[][] create(int num){
         int rows = 52;
         int columns = 52;
         char[][] mapTemplate = new char[rows][columns];
-        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level1.txt");
+        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level"+num+".txt");
         File file;
         try {
             file = new File(path.toURI());
