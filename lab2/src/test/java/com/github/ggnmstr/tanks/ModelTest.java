@@ -32,6 +32,6 @@ public class ModelTest {
                 field.updateField();
             }
         },"abc");
-        assertTrue(exception.getMessage().contains("\"this.fieldListener\" is null"));
+        assertTrue(exception.getMessage().contains("gameLost(int)"));
     }
 }
