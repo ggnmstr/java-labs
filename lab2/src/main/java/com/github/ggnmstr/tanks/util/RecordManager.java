@@ -6,16 +6,20 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RecordManager {
-    private final List<Score> highScores;
+
+    // CR: restrict number of scores
+    private final List<Score> highScores = new ArrayList<>();
+
     private static final RecordManager manager = new RecordManager();
+
     private RecordManager(){
-        highScores = new ArrayList<>();
         loadFromFile();
     }
+
     public static final RecordManager getInstance(){
+        // CR: lazy init
         return manager;
     }
-
 
     public void addScore(String name, int score) {
         Score newscore = new Score(name,score);
@@ -50,7 +54,6 @@ public class RecordManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void loadFromFile() {

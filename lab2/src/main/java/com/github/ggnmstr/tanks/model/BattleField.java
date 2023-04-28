@@ -41,6 +41,7 @@ public class BattleField {
 
     private final char[][] mapTemplate;
 
+    // CR: accept all game objects, initialize itself
     public BattleField(FieldParameters parameters){
         this.enemiesLeft = parameters.enemiesLimit();
         mapTemplate = MapTemplateCreator.create(parameters.mapNum());
@@ -129,7 +130,9 @@ public class BattleField {
         return flag;
     }
 
+    // CR: initField -> reset
     public void initField(){
+        // CR: restore initial config
         enemiesLeft = 10;
         clearMap();
         buildMap();

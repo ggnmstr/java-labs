@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class MapTemplateCreator {
+    // CR: create game objects, pass to field
     public static char[][] create(int num){
         int rows = 52;
         int columns = 52;

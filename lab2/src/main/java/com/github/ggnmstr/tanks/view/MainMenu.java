@@ -42,7 +42,10 @@ public class MainMenu extends JFrame implements KeyListener {
         newGameMenu.addActionListener(e -> presenter.startNewGame());
         highScoresMenu.addActionListener(e -> showHighScores());
         aboutMenu.addActionListener(e -> launchAboutMenu());
-        exitMenu.addActionListener(e -> System.exit(0));
+        exitMenu.addActionListener(e -> {
+            System.exit(0);
+            // CR: call record manager
+        });
 
         menuBar.add(newGameMenu);
         menuBar.add(highScoresMenu);
