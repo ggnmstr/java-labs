@@ -130,8 +130,7 @@ public class BattleField {
         return flag;
     }
 
-    // CR: initField -> reset
-    public void initField(){
+    public void resetField(){
         // CR: restore initial config
         enemiesLeft = 10;
         clearMap();

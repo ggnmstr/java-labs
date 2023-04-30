@@ -2,7 +2,6 @@ package com.github.ggnmstr.tanks.util;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class RecordManager {
@@ -10,15 +9,17 @@ public class RecordManager {
     // CR: restrict number of scores
     private final List<Score> highScores = new ArrayList<>();
 
-    private static final RecordManager manager = new RecordManager();
+    private static RecordManager instance;
 
     private RecordManager(){
         loadFromFile();
     }
 
-    public static final RecordManager getInstance(){
-        // CR: lazy init
-        return manager;
+    public static RecordManager getInstance(){
+        if (instance == null){
+            instance = new RecordManager();
+        }
+        return instance;
     }
 
     public void addScore(String name, int score) {
@@ -31,14 +32,13 @@ public class RecordManager {
             i++;
         }
         highScores.add(i,newscore);
-        saveToFile();
     }
 
     public List<Score> getHighScores() {
         return highScores;
     }
 
-    void saveToFile() {
+    public void saveToFile() {
         File file = new File("scores.txt");
         if (!file.exists()) {
             try {

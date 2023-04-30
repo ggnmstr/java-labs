@@ -32,7 +32,7 @@ public class Presenter implements FieldListener {
     
     public void startNewGame(){
         mainMenu.prepareGame();
-        battleField.initField();
+        battleField.resetField();
         mainMenu.update(battleField.toGameObjects());
         gameCycle.start();
         enemySpawner.start();

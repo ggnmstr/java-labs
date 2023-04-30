@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.presenter.Presenter;
+import com.github.ggnmstr.tanks.util.RecordManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,7 @@ public class MainMenu extends JFrame implements KeyListener {
         aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> {
             System.exit(0);
-            // CR: call record manager
+            RecordManager.getInstance().saveToFile();
         });
 
         menuBar.add(newGameMenu);
