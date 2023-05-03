@@ -8,11 +8,11 @@ import java.util.Scanner;
 
 public class MapTemplateCreator {
     // CR: create game objects, pass to field
-    public static char[][] create(int num){
+    public static char[][] create(String level){
         int rows = 52;
         int columns = 52;
         char[][] mapTemplate = new char[rows][columns];
-        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/level"+num+".txt");
+        URL path = Thread.currentThread().getContextClassLoader().getResource("maps/"+level+".txt");
         Scanner scanner;
         try {
             scanner = new Scanner(new File(path.toURI()));

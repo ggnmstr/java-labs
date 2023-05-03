@@ -44,7 +44,7 @@ public class BattleField {
     // CR: accept all game objects, initialize itself
     public BattleField(FieldParameters parameters){
         this.enemiesLeft = parameters.enemiesLimit();
-        mapTemplate = MapTemplateCreator.create(parameters.mapNum());
+        mapTemplate = MapTemplateCreator.create(parameters.level());
     }
 
     public void updateField(){

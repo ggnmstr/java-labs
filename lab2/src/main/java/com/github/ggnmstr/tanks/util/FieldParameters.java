@@ -1,8 +1,8 @@
 package com.github.ggnmstr.tanks.util;
 
-public record FieldParameters(int mapNum, int enemiesLimit) {
+public record FieldParameters(String level, int enemiesLimit) {
     // CR: add game objects
     public static FieldParameters getDefaultParameters(){
-        return new FieldParameters(1,10);
+        return new FieldParameters("level1",10);
     }
 }
