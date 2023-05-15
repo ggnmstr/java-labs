@@ -23,6 +23,19 @@ public class ModelTest {
         assertEquals(1,listener.getInvokedGameLost());
     }
 
+    @Test
+    void baseNotDestroyedTest(){
+        BattleField field = new BattleField(new FieldParameters("test/test1",0));
+        GameLostFieldListener listener = new GameLostFieldListener();
+        field.setFieldListener(listener);
+        field.resetField();
+        field.shootTank();
+        field.updateField();
+
+        assertEquals(0,listener.getInvokedGameLost());
+    }
+
+
     private static class GameLostFieldListener implements FieldListener {
 
         private int invokedGameLost;

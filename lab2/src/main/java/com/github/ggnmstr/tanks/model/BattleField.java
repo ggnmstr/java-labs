@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 
-// CR: pass game data and write a test
 public class BattleField {
 
     private Block base;
@@ -30,7 +29,6 @@ public class BattleField {
 
     private final List<Bullet> bulletsToRemove = new ArrayList<>();
 
-    // CR: Spawn
     private int playerSpawnX;
     private int playerSpawnY;
 
