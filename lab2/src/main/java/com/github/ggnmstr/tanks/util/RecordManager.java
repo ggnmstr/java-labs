@@ -6,7 +6,6 @@ import java.util.List;
 
 public class RecordManager {
 
-    // CR: restrict number of scores
     private final List<Score> highScores = new ArrayList<>();
 
     private static RecordManager instance;
@@ -31,7 +30,8 @@ public class RecordManager {
             }
             i++;
         }
-        highScores.add(i,newscore);
+        if (i <= 9) highScores.add(i,newscore);
+        highScores.subList(10,highScores.size()).clear();
     }
 
     public List<Score> getHighScores() {
