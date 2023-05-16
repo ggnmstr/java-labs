@@ -3,6 +3,7 @@ package com.github.ggnmstr.tanks.presenter;
 import com.github.ggnmstr.tanks.model.BattleField;
 import com.github.ggnmstr.tanks.model.FieldListener;
 import com.github.ggnmstr.tanks.util.Direction;
+import com.github.ggnmstr.tanks.util.FieldParameters;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
@@ -37,6 +38,12 @@ public class Presenter implements FieldListener {
         gameCycle.start();
         enemySpawner.start();
         gameStarted = true;
+    }
+
+    public void startNewGame(String levelString){
+        battleField = new BattleField(new FieldParameters(levelString,10));
+        battleField.setFieldListener(this);
+        startNewGame();
     }
 
     private void updateGame() {

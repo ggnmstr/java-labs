@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 
 public class MainMenu extends JFrame implements KeyListener {
     private  Presenter presenter;
@@ -34,13 +35,25 @@ public class MainMenu extends JFrame implements KeyListener {
     private void setupMenuBar(){
         menuBar = new JMenuBar();
 
-        newGameMenu = new JMenuItem("New Game");
+        newGameMenu = new JMenu("New Game");
+
+        int lvlNum = 1;
+        while (true){
+            String viewString = "Level " + lvlNum;
+            String lvlString = "game/level"+lvlNum;
+            URL lvlURL = Thread.currentThread().getContextClassLoader().getResource("maps/"+lvlString+".txt");
+            if (lvlURL == null) break;
+            JMenuItem item = new JMenuItem(viewString);
+            item.addActionListener(e -> presenter.startNewGame(lvlString));
+            newGameMenu.add(item);
+            lvlNum++;
+        }
+
         highScoresMenu = new JMenuItem("High Scores");
         aboutMenu = new JMenuItem("About");
         exitMenu = new JMenuItem("Exit");
 
 
-        newGameMenu.addActionListener(e -> presenter.startNewGame());
         highScoresMenu.addActionListener(e -> showHighScores());
         aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> {
