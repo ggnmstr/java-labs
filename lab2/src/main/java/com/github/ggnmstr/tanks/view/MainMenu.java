@@ -2,12 +2,15 @@ package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.presenter.Presenter;
+import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.util.RecordManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 
 public class MainMenu extends JFrame implements KeyListener {
@@ -22,6 +25,13 @@ public class MainMenu extends JFrame implements KeyListener {
     public MainMenu(){
         super("Tanks");
         this.setPreferredSize(new Dimension(1000,900));
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                RecordManager.getInstance().saveToFile();
+                System.exit(0);
+            }
+        });
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setupMenuBar();
@@ -57,7 +67,6 @@ public class MainMenu extends JFrame implements KeyListener {
         highScoresMenu.addActionListener(e -> showHighScores());
         aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> {
-            // CR: also save on window close
             RecordManager.getInstance().saveToFile();
             System.exit(0);
         });
@@ -118,11 +127,34 @@ public class MainMenu extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        presenter.responseToKey(e.getKeyCode());
+        if (e.getKeyCode() == KeyEvent.VK_SPACE){
+            presenter.shoot();
+        } else {
+            presenter.setDirection(keyToDirection(e.getKeyCode()));
+        }
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {
-        presenter.stopMovementKey(e.getKeyCode());
+        presenter.stopMovementDirection(keyToDirection(e.getKeyCode()));
+    }
+
+    private Direction keyToDirection(int keycode){
+        switch (keycode){
+            case KeyEvent.VK_W -> {
+                return Direction.UP;
+            }
+            case KeyEvent.VK_A -> {
+                return Direction.LEFT;
+            }
+            case KeyEvent.VK_S -> {
+                return Direction.DOWN;
+            }
+            case KeyEvent.VK_D -> {
+                return Direction.RIGHT;
+            }
+        }
+        return Direction.NONE;
     }
 }

@@ -7,7 +7,6 @@ import com.github.ggnmstr.tanks.util.FieldParameters;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 public class Presenter implements FieldListener {
 
@@ -58,37 +57,15 @@ public class Presenter implements FieldListener {
         battleField.moveMainPlayer(lastDir);
     }
 
-    public void responseToKey(int keyCode) {
+
+    public void setDirection(Direction newDirection) {
         if (!gameStarted) return;
-        switch (keyCode){
-            case KeyEvent.VK_W -> {
-                lastDir = Direction.UP;
-            }
-            case KeyEvent.VK_S -> {
-                lastDir = Direction.DOWN;
-
-            }
-            case KeyEvent.VK_D -> {
-                lastDir = Direction.RIGHT;
-
-            }
-            case KeyEvent.VK_A -> {
-                lastDir = Direction.LEFT;
-            }
-            case KeyEvent.VK_SPACE -> {
-                battleField.shootTank();
-            }
-        }
+        lastDir = newDirection;
     }
 
-    // CR: call from view
-//    public void setDirection(Direction newDirection) {
-//        lastDir = newDirection;
-//    }
-//
-//    public void shoot() {
-//        battleField.shootTank();
-//    }
+    public void shoot() {
+        battleField.shootTank();
+    }
 
     @Override
     public void gameLost(int score) {
@@ -111,27 +88,7 @@ public class Presenter implements FieldListener {
         mainMenu.launchEndgameMenu("You won!",score);
     }
 
-    public void stopMovementKey(int keyCode) {
-        Direction dir = keyToDirection(keyCode);
+    public void stopMovementDirection(Direction dir) {
         if (dir == lastDir) lastDir = Direction.NONE;
-    }
-
-    // CR: copy-paste
-    private Direction keyToDirection(int keycode){
-        switch (keycode){
-            case KeyEvent.VK_W -> {
-                return Direction.UP;
-            }
-            case KeyEvent.VK_A -> {
-                return Direction.LEFT;
-            }
-            case KeyEvent.VK_S -> {
-                return Direction.DOWN;
-            }
-            case KeyEvent.VK_D -> {
-                return Direction.RIGHT;
-            }
-        }
-        return Direction.NONE;
     }
 }

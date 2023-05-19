@@ -32,9 +32,8 @@ public class RecordManager {
         if (i <= 9) {
             Score newscore = new Score(name,score);
             highScores.add(i,newscore);
+            highScores.remove(10);
         }
-        // CR: simplify
-        highScores.subList(10,highScores.size()).clear();
     }
 
     public List<Score> getHighScores() {
