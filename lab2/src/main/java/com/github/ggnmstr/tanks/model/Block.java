@@ -2,8 +2,10 @@ package com.github.ggnmstr.tanks.model;
 
 public class Block extends GamePrimitive {
 
-    private boolean isInvincible;
-    private boolean isTransparent;
+    private final boolean isInvincible;
+    // CR: move bushes to view
+    private final boolean isTransparent;
+
     public Block(int x, int y,boolean isInvincible, boolean isTransparent){
         this.isInvincible = isInvincible;
         this.isTransparent = isTransparent;
@@ -15,6 +17,7 @@ public class Block extends GamePrimitive {
 
     public Block(int x, int y, int width, int height, boolean isInvincible){
         this.isInvincible = isInvincible;
+        this.isTransparent = false;
         this.xPos = x;
         this.yPos = y;
         this.height = height;

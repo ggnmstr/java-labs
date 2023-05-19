@@ -4,8 +4,8 @@ import com.github.ggnmstr.tanks.util.Direction;
 
 // CR: better blocks destruction
 public class Bullet extends GamePrimitive {
-    private Direction direction;
-    private Tank owner;
+    private final Direction direction;
+    private final Tank owner;
 
     public Bullet(int startX, int startY, Direction direction, Tank tank) {
         if (direction == Direction.DOWN || direction == Direction.UP) {

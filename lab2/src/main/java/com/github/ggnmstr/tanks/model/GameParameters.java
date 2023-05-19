@@ -17,6 +17,8 @@ public final class GameParameters {
     public static int BLOCKWIDTH = 15;
     public static int BLOCKHEIGHT = 15;
 
+    // CR: pass from config file
     public static int ENEMYHP = 1;
+    // CR: pass from config file
     public static int PLAYERHP = 3;
 }

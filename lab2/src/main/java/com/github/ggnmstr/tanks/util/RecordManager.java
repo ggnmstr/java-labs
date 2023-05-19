@@ -22,7 +22,6 @@ public class RecordManager {
     }
 
     public void addScore(String name, int score) {
-        Score newscore = new Score(name,score);
         int i = 0;
         for (Score curscore : highScores) {
             if (score > curscore.score()) {
@@ -30,7 +29,11 @@ public class RecordManager {
             }
             i++;
         }
-        if (i <= 9) highScores.add(i,newscore);
+        if (i <= 9) {
+            Score newscore = new Score(name,score);
+            highScores.add(i,newscore);
+        }
+        // CR: simplify
         highScores.subList(10,highScores.size()).clear();
     }
 
@@ -39,6 +42,7 @@ public class RecordManager {
     }
 
     public void saveToFile() {
+        // CR: nio
         File file = new File("scores.txt");
         if (!file.exists()) {
             try {
@@ -57,6 +61,7 @@ public class RecordManager {
     }
 
     private void loadFromFile() {
+        // CR: same
         File file = new File("scores.txt");
         if (!file.exists()){
             try {

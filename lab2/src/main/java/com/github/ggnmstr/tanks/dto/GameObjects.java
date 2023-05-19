@@ -2,6 +2,14 @@ package com.github.ggnmstr.tanks.dto;
 
 import java.util.List;
 
+//record Block(Position position, BlockType blockType) {
+//    enum BlockType {
+//        BUSH,
+//        WALL,
+//
+//    }
+//}
+
 public record GameObjects(TankModel mainPlayer, Position base, List<Position> blocks,
                           List<TankModel> enemies, List<Position> bullets) {
 

@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.util.Direction;
 
+
 public class Tank extends GamePrimitive {
 
     private Direction lastMove;

@@ -36,7 +36,6 @@ public class BattleField {
 
     private int score = 0;
 
-
     private final char[][] mapTemplate;
 
     // CR: accept all game objects, initialize itself
@@ -48,12 +47,12 @@ public class BattleField {
     public void updateField(){
         moveBullets();
         moveEnemyTanks();
-
     }
 
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies){
             Direction dir = enemyTank.getLastMove();
+            // CR: smart strategy for enemies
             if (ThreadLocalRandom.current().nextInt(0,2) == 0){
             //if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
@@ -61,6 +60,7 @@ public class BattleField {
             }
 
             if (moveTank(enemyTank,dir)) continue;
+            // CR: ???
             else dir = Direction.values()[ThreadLocalRandom.current().nextInt(0,4)];
             moveTank(enemyTank,dir);
         }
@@ -157,7 +157,7 @@ public class BattleField {
         int n = enemySpawnPoints.size();
         EnemySpawnPoint point = enemySpawnPoints.get(ThreadLocalRandom.current().nextInt(0,n));
         Tank newEnemy = null;
-        if (!pointOccupied(point)) newEnemy = point.spawnEnemyTank();
+        if (!pointOccupied(point)) newEnemy = point.spawnTank();
         if (newEnemy == null) return;
         enemiesLeft--;
         fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
@@ -218,7 +218,6 @@ public class BattleField {
         }
     }
 
-
     private void respawnPlayer() {
         mainPlayer.xPos = playerSpawnX;
         mainPlayer.yPos = playerSpawnY;
@@ -232,24 +231,25 @@ public class BattleField {
     }
 
     private boolean moveTank(Tank tank, Direction direction){
+        //  CR: Position position = tank.positionAfter(direction);
         tank.move(direction,true);
         for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext();){
             Block block = iterator.next();
             if (block.isTransparent()) continue;
             if (isCollision(tank,block)){
-                tank.move(Direction.getOpposite(direction),false);
+                tank.move(Direction.opposite(direction),false);
                 return false;
             }
         }
         for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
             Tank enemytank = iterator.next();
             if (tank != enemytank && isCollision(tank,enemytank)){
-                tank.move(Direction.getOpposite(direction),false);
+                tank.move(Direction.opposite(direction),false);
                 return false;
             }
         }
         if (tank != mainPlayer && isCollision(tank,mainPlayer)){
-            tank.move(Direction.getOpposite(direction),false);
+            tank.move(Direction.opposite(direction),false);
             return false;
         }
         return true;

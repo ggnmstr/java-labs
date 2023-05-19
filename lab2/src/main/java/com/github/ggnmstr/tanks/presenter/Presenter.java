@@ -81,6 +81,15 @@ public class Presenter implements FieldListener {
         }
     }
 
+    // CR: call from view
+//    public void setDirection(Direction newDirection) {
+//        lastDir = newDirection;
+//    }
+//
+//    public void shoot() {
+//        battleField.shootTank();
+//    }
+
     @Override
     public void gameLost(int score) {
         gameStarted = false;
@@ -107,6 +116,7 @@ public class Presenter implements FieldListener {
         if (dir == lastDir) lastDir = Direction.NONE;
     }
 
+    // CR: copy-paste
     private Direction keyToDirection(int keycode){
         switch (keycode){
             case KeyEvent.VK_W -> {

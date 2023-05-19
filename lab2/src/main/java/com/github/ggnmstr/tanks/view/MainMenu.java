@@ -57,6 +57,7 @@ public class MainMenu extends JFrame implements KeyListener {
         highScoresMenu.addActionListener(e -> showHighScores());
         aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> {
+            // CR: also save on window close
             RecordManager.getInstance().saveToFile();
             System.exit(0);
         });
