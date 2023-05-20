@@ -1,8 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
-import com.github.ggnmstr.tanks.dto.GameObjects;
-import com.github.ggnmstr.tanks.dto.Position;
-import com.github.ggnmstr.tanks.dto.TankModel;
+import com.github.ggnmstr.tanks.dto.*;
 import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.util.FieldParameters;
 import com.github.ggnmstr.tanks.util.MapTemplateCreator;
@@ -15,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleField {
 
-    private Block base;
+    private FieldBlock base;
 
     private FieldListener fieldListener;
 
@@ -25,7 +23,7 @@ public class BattleField {
     public final List<EnemySpawnPoint> enemySpawnPoints = new ArrayList<>();
 
     private final List<Bullet> bullets = new ArrayList<>();
-    private final List<Block> blocks = new ArrayList<>();
+    private final List<FieldBlock> fieldBlocks = new ArrayList<>();
 
     private final List<Bullet> bulletsToRemove = new ArrayList<>();
 
@@ -80,15 +78,15 @@ public class BattleField {
 
     private boolean bulletHasCollision(Bullet bullet) {
         boolean flag = false;
-        for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext(); ) {
-            Block block = iterator.next();
-            if (block.isTransparent()) continue;
-            if (isCollision(bullet, block)) {
-                if (block == base){
+        for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext(); ) {
+            FieldBlock fieldBlock = iterator.next();
+            if (fieldBlock.isTransparent()) continue;
+            if (isCollision(bullet, fieldBlock)) {
+                if (fieldBlock == base){
                     fieldListener.gameLost(score);
                     return true;
                 }
-                if (!block.isInvincible()) {
+                if (!fieldBlock.isInvincible()) {
                     iterator.remove();
                 }
                 flag = true;
@@ -141,7 +139,7 @@ public class BattleField {
     }
 
     private void clearMap() {
-        blocks.clear();
+        fieldBlocks.clear();
         enemies.clear();
         bullets.clear();
         enemySpawnPoints.clear();
@@ -173,14 +171,14 @@ public class BattleField {
     }
 
     void generateBorders(){
-        Block left = new Block(-15,0,15,GameParameters.FIELDWIDTH,true);
-        Block top = new Block(0,-15,GameParameters.FIELDHEIGHT,15,true);
-        Block bottom = new Block(0,GameParameters.FIELDHEIGHT-40,GameParameters.FIELDWIDTH,10,true);
-        Block right = new Block(GameParameters.FIELDWIDTH,0,10,GameParameters.FIELDHEIGHT,true);
-        blocks.add(left);
-        blocks.add(right);
-        blocks.add(top);
-        blocks.add(bottom);
+        FieldBlock left = new FieldBlock(-15,0,15,GameParameters.FIELDWIDTH,true);
+        FieldBlock top = new FieldBlock(0,-15,GameParameters.FIELDHEIGHT,15,true);
+        FieldBlock bottom = new FieldBlock(0,GameParameters.FIELDHEIGHT-40,GameParameters.FIELDWIDTH,10,true);
+        FieldBlock right = new FieldBlock(GameParameters.FIELDWIDTH,0,10,GameParameters.FIELDHEIGHT,true);
+        fieldBlocks.add(left);
+        fieldBlocks.add(right);
+        fieldBlocks.add(top);
+        fieldBlocks.add(bottom);
     }
 
     // CR: move from model
@@ -189,25 +187,25 @@ public class BattleField {
             for (int j = 0; j < mapTemplate[i].length; j++){
                 if (mapTemplate[i][j] == '0') continue;
                 if (mapTemplate[i][j] == 't'){
-                    Block trees = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,true);
-                    blocks.add(trees);
+                    FieldBlock trees = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,true);
+                    fieldBlocks.add(trees);
                 }
                 if (mapTemplate[i][j] == '7'){
-                    Block metal = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true,false);
-                    blocks.add(metal);
+                    FieldBlock metal = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true,false);
+                    fieldBlocks.add(metal);
                 }
                 if (mapTemplate[i][j] == '1'){
-                    Block brick = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,false);
-                    blocks.add(brick);
+                    FieldBlock brick = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,false);
+                    fieldBlocks.add(brick);
                 }
                 if (mapTemplate[i][j] == '2'){
                     EnemySpawnPoint spawnPoint = new EnemySpawnPoint(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
                     enemySpawnPoints.add(spawnPoint);
                 }
                 if (mapTemplate[i][j] == '3'){
-                    base = new Block(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
+                    base = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
                             GameParameters.BASEWIDTH,GameParameters.BASEHEIGHT,false);
-                    blocks.add(base);
+                    fieldBlocks.add(base);
                 }
                 if (mapTemplate[i][j] == '4'){
                     playerSpawnX = j * GameParameters.BLOCKWIDTH;
@@ -233,10 +231,10 @@ public class BattleField {
     private boolean moveTank(Tank tank, Direction direction){
         //  CR: Position position = tank.positionAfter(direction);
         tank.move(direction,true);
-        for (Iterator<Block> iterator = blocks.iterator(); iterator.hasNext();){
-            Block block = iterator.next();
-            if (block.isTransparent()) continue;
-            if (isCollision(tank,block)){
+        for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext();){
+            FieldBlock fieldBlock = iterator.next();
+            if (fieldBlock.isTransparent()) continue;
+            if (isCollision(tank, fieldBlock)){
                 tank.move(Direction.opposite(direction),false);
                 return false;
             }
@@ -267,11 +265,11 @@ public class BattleField {
     public GameObjects toGameObjects() {
         TankModel player = new TankModel(mainPlayer.getxPos(), mainPlayer.getyPos(), mainPlayer.getWidth(),
                 mainPlayer.getHeight(),mainPlayer.getLastMove());
-        Position bp = new Position(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight(),0);
-        List<Position> bl = new ArrayList<>();
-        for (Block block : blocks){
-            if (block == base) continue;
-            bl.add(blockIntoPosition(block));
+        Position bp = new Position(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight());
+        List<BlockTO> bl = new ArrayList<>();
+        for (FieldBlock fieldBlock : fieldBlocks){
+            if (fieldBlock == base) continue;
+            bl.add(blockIntoBlockTO(fieldBlock));
         }
         List<TankModel> viewEnemies = new ArrayList<>();
         for (Tank enemy : enemies){
@@ -281,20 +279,20 @@ public class BattleField {
         List<Position> viewBullets = new ArrayList<>();
         for (Bullet bullet : bullets){
             viewBullets.add(new Position(bullet.getxPos(), bullet.getyPos(),
-                    bullet.getWidth(),bullet.getHeight(),0));
+                    bullet.getWidth(),bullet.getHeight()));
         }
 
         return new GameObjects(player,bp,bl,viewEnemies,viewBullets);
     }
 
-    private Position blockIntoPosition(Block block){
-        // 1 - brick
-        // 2 - metal
-        // 3 - trees
-        int type = 1;
-        if (block.isTransparent()) type = 3;
-        if (block.isInvincible()) type = 2;
-        return new Position(block.getxPos(),block.getyPos(),
-                block.getWidth(),block.getHeight(),type);
+    private BlockTO blockIntoBlockTO(FieldBlock fieldBlock){
+        BlockType type = BlockType.BRICK;
+        Position position = new Position(
+                fieldBlock.getxPos(), fieldBlock.getyPos(),
+                fieldBlock.getWidth(),fieldBlock.getHeight()
+        );
+        if (fieldBlock.isTransparent()) type = BlockType.TREES;
+        if (fieldBlock.isInvincible()) type = BlockType.METAL;
+        return new BlockTO(position,type);
     }
 }

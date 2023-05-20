@@ -2,15 +2,9 @@ package com.github.ggnmstr.tanks.dto;
 
 import java.util.List;
 
-//record Block(Position position, BlockType blockType) {
-//    enum BlockType {
-//        BUSH,
-//        WALL,
-//
-//    }
-//}
 
-public record GameObjects(TankModel mainPlayer, Position base, List<Position> blocks,
+
+public record GameObjects(TankModel mainPlayer, Position base, List<BlockTO> blocks,
                           List<TankModel> enemies, List<Position> bullets) {
 
     @Override
@@ -19,7 +13,7 @@ public record GameObjects(TankModel mainPlayer, Position base, List<Position> bl
     }
 
     @Override
-    public List<Position> blocks() {
+    public List<BlockTO> blocks() {
         return blocks;
     }
 

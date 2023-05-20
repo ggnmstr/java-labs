@@ -1,5 +1,6 @@
 package com.github.ggnmstr.tanks.view;
 
+import com.github.ggnmstr.tanks.dto.BlockTO;
 import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.dto.Position;
 import com.github.ggnmstr.tanks.dto.TankModel;
@@ -40,15 +41,12 @@ public class GameView extends JPanel {
             drawTank(g2d,enemiesImages,x);
         }
         drawImage(g,baseImage,gameObjects.base());
-        for (Position x : gameObjects.blocks()){
-            if (x.type() == 2){
-                drawImage(g,metalImage,x);
-            } else if (x.type() == 3) {
-                drawImage(g,treesImage,x);
-            } else {
-                drawImage(g,brickImage,x);
+        for (BlockTO block : gameObjects.blocks()){
+            switch (block.blockType()){
+                case TREES -> drawImage(g,treesImage,block.position());
+                case BRICK -> drawImage(g,brickImage,block.position());
+                case METAL -> drawImage(g,metalImage,block.position());
             }
-
         }
         for (Position x : gameObjects.bullets()){
             drawObject(g2d,x);

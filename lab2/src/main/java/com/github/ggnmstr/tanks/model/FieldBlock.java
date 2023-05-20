@@ -1,12 +1,12 @@
 package com.github.ggnmstr.tanks.model;
 
-public class Block extends GamePrimitive {
+public class FieldBlock extends GamePrimitive {
 
     private final boolean isInvincible;
     // CR: move bushes to view
     private final boolean isTransparent;
 
-    public Block(int x, int y,boolean isInvincible, boolean isTransparent){
+    public FieldBlock(int x, int y, boolean isInvincible, boolean isTransparent){
         this.isInvincible = isInvincible;
         this.isTransparent = isTransparent;
         this.xPos = x;
@@ -15,7 +15,7 @@ public class Block extends GamePrimitive {
         this.width = GameParameters.BLOCKWIDTH;
     }
 
-    public Block(int x, int y, int width, int height, boolean isInvincible){
+    public FieldBlock(int x, int y, int width, int height, boolean isInvincible){
         this.isInvincible = isInvincible;
         this.isTransparent = false;
         this.xPos = x;

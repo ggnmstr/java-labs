@@ -1,4 +1,4 @@
 package com.github.ggnmstr.tanks.dto;
 
-public record Position(int x, int y, int width, int height, int type) {
+public record Position(int x, int y, int width, int height) {
 }
