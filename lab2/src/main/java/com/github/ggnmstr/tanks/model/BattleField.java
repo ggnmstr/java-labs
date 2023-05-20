@@ -137,7 +137,7 @@ public class BattleField {
         mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
         generateBorders();
         //spawnEnemy();
-        //fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
+        //fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,value);
     }
 
     private void clearMap() {

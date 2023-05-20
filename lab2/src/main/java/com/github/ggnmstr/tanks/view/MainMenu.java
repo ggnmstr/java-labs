@@ -3,7 +3,7 @@ package com.github.ggnmstr.tanks.view;
 import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.presenter.Presenter;
 import com.github.ggnmstr.tanks.util.Direction;
-import com.github.ggnmstr.tanks.util.RecordManager;
+import com.github.ggnmstr.tanks.util.ScoreManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +28,7 @@ public class MainMenu extends JFrame implements KeyListener {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                RecordManager.getInstance().saveToFile();
+                ScoreManager.getInstance().saveToFile();
                 System.exit(0);
             }
         });
@@ -67,7 +67,7 @@ public class MainMenu extends JFrame implements KeyListener {
         highScoresMenu.addActionListener(e -> showHighScores());
         aboutMenu.addActionListener(e -> launchAboutMenu());
         exitMenu.addActionListener(e -> {
-            RecordManager.getInstance().saveToFile();
+            ScoreManager.getInstance().saveToFile();
             System.exit(0);
         });
 

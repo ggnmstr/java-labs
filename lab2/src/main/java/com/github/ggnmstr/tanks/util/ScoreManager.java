@@ -4,19 +4,19 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordManager {
+public class ScoreManager {
 
     private final List<Score> highScores = new ArrayList<>();
 
-    private static RecordManager instance;
+    private static ScoreManager instance;
 
-    private RecordManager(){
+    private ScoreManager(){
         loadFromFile();
     }
 
-    public static RecordManager getInstance(){
+    public static ScoreManager getInstance(){
         if (instance == null){
-            instance = new RecordManager();
+            instance = new ScoreManager();
         }
         return instance;
     }
@@ -24,7 +24,7 @@ public class RecordManager {
     public void addScore(String name, int score) {
         int i = 0;
         for (Score curscore : highScores) {
-            if (score > curscore.score()) {
+            if (score > curscore.value()) {
                 break;
             }
             i++;
@@ -52,7 +52,7 @@ public class RecordManager {
         }
         try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
             for (Score entry : highScores) {
-                pw.println(entry.name() + " : " + entry.score());
+                pw.println(entry.playerName() + " : " + entry.value());
             }
         } catch (IOException e) {
             e.printStackTrace();
