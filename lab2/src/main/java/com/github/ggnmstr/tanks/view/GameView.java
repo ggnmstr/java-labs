@@ -40,7 +40,7 @@ public class GameView extends JPanel {
         for (TankModel x : gameObjects.enemies()){
             drawTank(g2d,enemiesImages,x);
         }
-        drawImage(g,baseImage,gameObjects.base());
+        drawImage(g,baseImage,gameObjects.base().position());
         for (BlockTO block : gameObjects.blocks()){
             switch (block.blockType()){
                 case TREES -> drawImage(g,treesImage,block.position());

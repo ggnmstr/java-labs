@@ -20,16 +20,12 @@ public class BattleField {
     private Tank mainPlayer;
     private final List<Tank> enemies = new ArrayList<>();
 
-    public final List<EnemySpawnPoint> enemySpawnPoints = new ArrayList<>();
-
+    public final List<FieldBlock> enemySpawnPoints = new ArrayList<>();
+    public FieldBlock playerSpawn;
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<FieldBlock> fieldBlocks = new ArrayList<>();
 
     private final List<Bullet> bulletsToRemove = new ArrayList<>();
-
-    private int playerSpawnX;
-    private int playerSpawnY;
-
     private int enemiesLeft;
 
     private int score = 0;
@@ -132,7 +128,7 @@ public class BattleField {
         clearMap();
         buildMap();
         score = 0;
-        mainPlayer = new Tank(playerSpawnX,playerSpawnY,GameParameters.PLAYERHP);
+        mainPlayer = new Tank(playerSpawn.xPos, playerSpawn.yPos, GameParameters.PLAYERHP);
         generateBorders();
         //spawnEnemy();
         //fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,value);
@@ -153,16 +149,16 @@ public class BattleField {
     public void spawnEnemy(){
         if (enemiesLeft <= 0) return;
         int n = enemySpawnPoints.size();
-        EnemySpawnPoint point = enemySpawnPoints.get(ThreadLocalRandom.current().nextInt(0,n));
+        FieldBlock point = enemySpawnPoints.get(ThreadLocalRandom.current().nextInt(0,n));
         Tank newEnemy = null;
-        if (!pointOccupied(point)) newEnemy = point.spawnTank();
+        if (!pointOccupied(point)) newEnemy = new Tank(point.xPos,point.yPos,1);
         if (newEnemy == null) return;
         enemiesLeft--;
         fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
         enemies.add(newEnemy);
     }
 
-    private boolean pointOccupied(EnemySpawnPoint point){
+    private boolean pointOccupied(FieldBlock point){
         if (isCollision(mainPlayer,point)) return true;
         for (Tank enemy : enemies){
             if (isCollision(enemy,point)) return true;
@@ -199,7 +195,8 @@ public class BattleField {
                     fieldBlocks.add(brick);
                 }
                 if (mapTemplate[i][j] == '2'){
-                    EnemySpawnPoint spawnPoint = new EnemySpawnPoint(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT);
+                    FieldBlock spawnPoint = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
+                            GameParameters.TANKSIZE,GameParameters.TANKSIZE,false);
                     enemySpawnPoints.add(spawnPoint);
                 }
                 if (mapTemplate[i][j] == '3'){
@@ -208,8 +205,7 @@ public class BattleField {
                     fieldBlocks.add(base);
                 }
                 if (mapTemplate[i][j] == '4'){
-                    playerSpawnX = j * GameParameters.BLOCKWIDTH;
-                    playerSpawnY = i * GameParameters.BLOCKHEIGHT;
+                    playerSpawn = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,0,0,false);
                 }
 
             }
@@ -217,8 +213,8 @@ public class BattleField {
     }
 
     private void respawnPlayer() {
-        mainPlayer.xPos = playerSpawnX;
-        mainPlayer.yPos = playerSpawnY;
+        mainPlayer.xPos = playerSpawn.xPos;
+        mainPlayer.yPos = playerSpawn.yPos;
     }
 
     public static boolean isCollision(GamePrimitive o1, GamePrimitive o2){
@@ -265,7 +261,8 @@ public class BattleField {
     public GameObjects toGameObjects() {
         TankModel player = new TankModel(mainPlayer.getxPos(), mainPlayer.getyPos(), mainPlayer.getWidth(),
                 mainPlayer.getHeight(),mainPlayer.getLastMove());
-        Position bp = new Position(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight());
+        BlockTO bp = new BlockTO(new Position(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight()),
+                BlockType.BASE);
         List<BlockTO> bl = new ArrayList<>();
         for (FieldBlock fieldBlock : fieldBlocks){
             if (fieldBlock == base) continue;

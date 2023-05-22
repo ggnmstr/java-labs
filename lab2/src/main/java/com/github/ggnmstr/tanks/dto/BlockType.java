@@ -4,5 +4,5 @@ public enum BlockType {
     TREES,
     BRICK,
     METAL,
-
+    BASE,
 }
