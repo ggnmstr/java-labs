@@ -1,6 +1,9 @@
 package com.github.ggnmstr.tanks.util;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,7 @@ public class ScoreManager {
         if (i <= 9) {
             Score newscore = new Score(name,score);
             highScores.add(i,newscore);
-            highScores.remove(10);
+            if (highScores.size() >= 11) highScores.remove(10);
         }
     }
 
@@ -41,18 +44,14 @@ public class ScoreManager {
     }
 
     public void saveToFile() {
-        // CR: nio
-        File file = new File("scores.txt");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        Path filePath = Path.of("scores.txt");
+        try {
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
             }
-        }
-        try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
             for (Score entry : highScores) {
-                pw.println(entry.playerName() + " : " + entry.value());
+                String line = entry.playerName() + " : " + entry.value() + "\n";
+                Files.writeString(filePath, line, StandardOpenOption.APPEND);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,23 +59,21 @@ public class ScoreManager {
     }
 
     private void loadFromFile() {
-        // CR: same
-        File file = new File("scores.txt");
-        if (!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e){
+        Path filePath = Path.of("scores.txt");
+        try {
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
             }
-        }
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String namescore = line.split(" : ")[0];
-                int valscore = Integer.parseInt(line.split(" : ")[1]);
-                Score score = new Score(namescore,valscore);
+            List<String> lines = Files.readAllLines(filePath);
+            for (String line : lines) {
+                String[] parts = line.split(" : ");
+                String playerName = parts[0];
+                int value = Integer.parseInt(parts[1]);
+                Score score = new Score(playerName, value);
                 highScores.add(score);
             }
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
