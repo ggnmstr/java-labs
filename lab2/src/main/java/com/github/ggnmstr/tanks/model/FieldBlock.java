@@ -15,9 +15,9 @@ public class FieldBlock extends GamePrimitive {
         this.width = GameParameters.BLOCKWIDTH;
     }
 
-    public FieldBlock(int x, int y, int width, int height, boolean isInvincible){
+    public FieldBlock(int x, int y, int width, int height, boolean isInvincible, boolean isTransparent){
         this.isInvincible = isInvincible;
-        this.isTransparent = false;
+        this.isTransparent = isTransparent;
         this.xPos = x;
         this.yPos = y;
         this.height = height;

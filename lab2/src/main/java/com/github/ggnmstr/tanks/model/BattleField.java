@@ -38,6 +38,13 @@ public class BattleField {
         mapTemplate = MapTemplateCreator.create(parameters.level());
     }
 
+    private void initFromGameObjects(GameObjects gameObjects){
+        //public record GameObjects(TankModel mainPlayer, BlockTO base, List<BlockTO> blocks,
+        //                          List<TankModel> enemies, List<Position> bullets) {
+        this.mainPlayer = new Tank(gameObjects.mainPlayer().x(), gameObjects.mainPlayer().y(),3);
+
+    }
+
     public void updateField(){
         moveBullets();
         moveEnemyTanks();
@@ -167,10 +174,10 @@ public class BattleField {
     }
 
     void generateBorders(){
-        FieldBlock left = new FieldBlock(-15,0,15,GameParameters.FIELDWIDTH,true);
-        FieldBlock top = new FieldBlock(0,-15,GameParameters.FIELDHEIGHT,15,true);
-        FieldBlock bottom = new FieldBlock(0,GameParameters.FIELDHEIGHT-40,GameParameters.FIELDWIDTH,10,true);
-        FieldBlock right = new FieldBlock(GameParameters.FIELDWIDTH,0,10,GameParameters.FIELDHEIGHT,true);
+        FieldBlock left = new FieldBlock(-15,0,15,GameParameters.FIELDWIDTH,true,false);
+        FieldBlock top = new FieldBlock(0,-15,GameParameters.FIELDHEIGHT,15,true,false);
+        FieldBlock bottom = new FieldBlock(0,GameParameters.FIELDHEIGHT-40,GameParameters.FIELDWIDTH,10,true,false);
+        FieldBlock right = new FieldBlock(GameParameters.FIELDWIDTH,0,10,GameParameters.FIELDHEIGHT,true,false);
         fieldBlocks.add(left);
         fieldBlocks.add(right);
         fieldBlocks.add(top);
@@ -196,16 +203,16 @@ public class BattleField {
                 }
                 if (mapTemplate[i][j] == '2'){
                     FieldBlock spawnPoint = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
-                            GameParameters.TANKSIZE,GameParameters.TANKSIZE,false);
+                            GameParameters.TANKSIZE,GameParameters.TANKSIZE,false,false);
                     enemySpawnPoints.add(spawnPoint);
                 }
                 if (mapTemplate[i][j] == '3'){
                     base = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
-                            GameParameters.BASEWIDTH,GameParameters.BASEHEIGHT,false);
+                            GameParameters.BASEWIDTH,GameParameters.BASEHEIGHT,false,false);
                     fieldBlocks.add(base);
                 }
                 if (mapTemplate[i][j] == '4'){
-                    playerSpawn = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,0,0,false);
+                    playerSpawn = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,0,0,false,false);
                 }
 
             }
@@ -282,6 +289,8 @@ public class BattleField {
         return new GameObjects(player,bp,bl,viewEnemies,viewBullets);
     }
 
+
+    //HELP this 2 funcs below look suspicious xz
     private BlockTO blockIntoBlockTO(FieldBlock fieldBlock){
         BlockType type = BlockType.BRICK;
         Position position = new Position(
@@ -291,5 +300,15 @@ public class BattleField {
         if (fieldBlock.isTransparent()) type = BlockType.TREES;
         if (fieldBlock.isInvincible()) type = BlockType.METAL;
         return new BlockTO(position,type);
+    }
+    private FieldBlock blockTOIntoFieldBlock(BlockTO block){
+        boolean transparent = false;
+        boolean invincible = false;
+        switch (block.blockType()){
+            case METAL -> invincible = true;
+            case TREES -> transparent = true;
+        }
+        return new FieldBlock(block.position().x(),block.position().y(),block.position().width(),
+                block.position().height(),invincible,transparent);
     }
 }
