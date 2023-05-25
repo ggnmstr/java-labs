@@ -1,12 +1,13 @@
 package com.github.ggnmstr.tanks.presenter;
 
+import com.github.ggnmstr.tanks.dto.LevelObject;
 import com.github.ggnmstr.tanks.model.BattleField;
 import com.github.ggnmstr.tanks.model.FieldListener;
 import com.github.ggnmstr.tanks.util.Direction;
-import com.github.ggnmstr.tanks.util.FieldParameters;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
+import java.nio.file.Path;
 
 public class Presenter implements FieldListener {
 
@@ -23,16 +24,13 @@ public class Presenter implements FieldListener {
         this.mainMenu = mainView;
     }
 
-    public Presenter(BattleField battleField){
-        this.battleField = battleField;
-    }
-
     public void run(){
     }
     
     public void startNewGame(){
         mainMenu.prepareGame();
-        battleField.resetField();
+        battleField = new BattleField(battleField.initialConfig());
+        battleField.setFieldListener(this);
         mainMenu.update(battleField.toGameObjects());
         gameCycle.start();
         enemySpawner.start();
@@ -40,7 +38,7 @@ public class Presenter implements FieldListener {
     }
 
     public void startNewGame(String levelString){
-        battleField = new BattleField(new FieldParameters(levelString,10));
+        battleField = new BattleField(LevelObject.fromFile(levelString + ".json"));
         battleField.setFieldListener(this);
         startNewGame();
     }

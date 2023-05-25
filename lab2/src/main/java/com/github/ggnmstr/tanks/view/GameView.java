@@ -1,9 +1,9 @@
 package com.github.ggnmstr.tanks.view;
 
-import com.github.ggnmstr.tanks.dto.BlockTO;
+import com.github.ggnmstr.tanks.dto.BlockObject;
 import com.github.ggnmstr.tanks.dto.GameObjects;
 import com.github.ggnmstr.tanks.dto.Position;
-import com.github.ggnmstr.tanks.dto.TankModel;
+import com.github.ggnmstr.tanks.dto.TankObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -35,42 +35,44 @@ public class GameView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D)g;
-        drawTank(g2d,playerImages, gameObjects.mainPlayer());
-        for (TankModel x : gameObjects.enemies()){
-            drawTank(g2d,enemiesImages,x);
+        Graphics2D g2d = (Graphics2D) g;
+        drawTank(g2d, playerImages, gameObjects.mainPlayer());
+        for (TankObject x : gameObjects.enemies()) {
+            drawTank(g2d, enemiesImages, x);
         }
-        drawImage(g,baseImage,gameObjects.base().position());
-        for (BlockTO block : gameObjects.blocks()){
-            switch (block.blockType()){
-                case TREES -> drawImage(g,treesImage,block.position());
-                case BRICK -> drawImage(g,brickImage,block.position());
-                case METAL -> drawImage(g,metalImage,block.position());
+        BlockObject baseObject = gameObjects.base();
+        drawImage(g, baseImage, baseObject.x(), baseObject.y(), baseObject.width(), baseObject.height());
+        for (BlockObject block : gameObjects.blocks()) {
+            // TODO: bushes gone :(
+            if (block.isDestructible()) {
+                drawImage(g, brickImage, block.x(), block.y(), block.width(), block.height());
+            }
+            else {
+                drawImage(g, metalImage, block.x(), block.y(), block.width(), block.height());
             }
         }
-        for (Position x : gameObjects.bullets()){
-            drawObject(g2d,x);
+        for (Position x : gameObjects.bullets()) {
+            drawObject(g2d, x);
         }
     }
 
-    private void drawTank(Graphics2D g2d, List<BufferedImage> textures, TankModel tank){
+    private void drawTank(Graphics2D g2d, List<BufferedImage> textures, TankObject tank) {
         int direction = tank.rotation().ordinal();
-        g2d.drawImage(textures.get(direction),tank.x(),tank.y(),
-                tank.width(),tank.height(),null);
+        g2d.drawImage(textures.get(direction), tank.x(), tank.y(),
+                tank.width(), tank.height(), null);
     }
 
-    private void drawImage(Graphics g, BufferedImage image, Position position){
-        g.drawImage(image, position.x(), position.y(),
-                position.width(), position.height(),null);
+    private void drawImage(Graphics g, BufferedImage image, int x, int y, int width, int height) {
+        g.drawImage(image, x, y, width, height, null);
     }
 
     private void drawObject(Graphics g, Position x) {
-        g.drawRect(x.x(),x.y(),x.width(),x.height());
-        g.fillRect(x.x(),x.y(),x.width(),x.height());
+        g.drawRect(x.x(), x.y(), x.width(), x.height());
+        g.fillRect(x.x(), x.y(), x.width(), x.height());
 
     }
 
-    private void loadResources(){
+    private void loadResources() {
         loadTankImages();
         URL brickpath = Thread.currentThread().getContextClassLoader().getResource("textures/brick.png");
         URL basepath = Thread.currentThread().getContextClassLoader().getResource("textures/base.png");
@@ -86,7 +88,7 @@ public class GameView extends JPanel {
         }
     }
 
-    private void loadTankImages(){
+    private void loadTankImages() {
         playerImages = new ArrayList<>();
         enemiesImages = new ArrayList<>();
         URL pd1 = Thread.currentThread().getContextClassLoader().getResource("textures/player/pd1.png");
@@ -116,7 +118,7 @@ public class GameView extends JPanel {
             enemiesImages.add(ImageIO.read(el1));
             enemiesImages.add(ImageIO.read(er1));
             enemiesImages.add(ImageIO.read(eu1));
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 

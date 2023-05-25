@@ -1,5 +1,7 @@
 package com.github.ggnmstr.tanks.model;
 
+import com.github.ggnmstr.tanks.dto.BlockObject;
+
 public class FieldBlock extends GamePrimitive {
 
     private final boolean isInvincible;
@@ -22,6 +24,10 @@ public class FieldBlock extends GamePrimitive {
         this.yPos = y;
         this.height = height;
         this.width = width;
+    }
+
+    public static FieldBlock from(BlockObject blockObject) {
+        return new FieldBlock(blockObject.x(), blockObject.y(), !blockObject.isDestructible(), false);
     }
 
     public boolean isInvincible() {

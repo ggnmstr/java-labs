@@ -2,76 +2,80 @@ package com.github.ggnmstr.tanks.model;
 
 import com.github.ggnmstr.tanks.dto.*;
 import com.github.ggnmstr.tanks.util.Direction;
-import com.github.ggnmstr.tanks.util.FieldParameters;
-import com.github.ggnmstr.tanks.util.MapTemplateCreator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 public class BattleField {
 
-    private FieldBlock base;
+    private final Tank mainPlayer;
+    private final FieldBlock playerSpawn;
+
+    private final List<Tank> enemies = new ArrayList<>();
+    private final List<Spawn> enemySpawns = new ArrayList<>();
+
+    private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Bullet> bulletsToRemove = new ArrayList<>();
+
+    private final List<FieldBlock> fieldBlocks = new ArrayList<>();
+    private final FieldBlock base;
+
+    private final LevelObject initialConfig;
 
     private FieldListener fieldListener;
 
-    private Tank mainPlayer;
-    private final List<Tank> enemies = new ArrayList<>();
-
-    public final List<FieldBlock> enemySpawnPoints = new ArrayList<>();
-    public FieldBlock playerSpawn;
-    private final List<Bullet> bullets = new ArrayList<>();
-    private final List<FieldBlock> fieldBlocks = new ArrayList<>();
-
-    private final List<Bullet> bulletsToRemove = new ArrayList<>();
     private int enemiesLeft;
-
     private int score = 0;
 
-    private final char[][] mapTemplate;
+    public BattleField(LevelObject levelObject) {
+        GameObjects gameObjects = levelObject.gameObjects();
+        TankObject mainPlayerObject = gameObjects.mainPlayer();
 
-    // CR: accept all game objects, initialize itself
-    public BattleField(FieldParameters parameters){
-        this.enemiesLeft = parameters.enemiesLimit();
-        mapTemplate = MapTemplateCreator.create(parameters.level());
+        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp());
+        this.playerSpawn = new FieldBlock(mainPlayerObject.x(), mainPlayerObject.y(), 0, 0, false, false);
+
+        this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(), gameObjects.base().isDestructible(), false);
+
+        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp())).forEach(enemies::add);
+        levelObject.enemySpawns().stream().map(Spawn::from).forEach(enemySpawns::add);
+
+        gameObjects.blocks().stream().map(FieldBlock::from).forEach(fieldBlocks::add);
+        this.initialConfig = levelObject;
+        // TODO: do we need it?
+        generateBorders();
+        // TODO: bullets?
     }
 
-    private void initFromGameObjects(GameObjects gameObjects){
-        //public record GameObjects(TankModel mainPlayer, BlockTO base, List<BlockTO> blocks,
-        //                          List<TankModel> enemies, List<Position> bullets) {
-        this.mainPlayer = new Tank(gameObjects.mainPlayer().x(), gameObjects.mainPlayer().y(),3);
 
-    }
-
-    public void updateField(){
+    public void updateField() {
         moveBullets();
         moveEnemyTanks();
     }
 
     private void moveEnemyTanks() {
-        for (Tank enemyTank : enemies){
+        for (Tank enemyTank : enemies) {
             Direction dir = enemyTank.getLastMove();
             // CR: smart strategy for enemies
-            if (ThreadLocalRandom.current().nextInt(0,2) == 0){
-            //if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
+            if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
+                //if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
                 if (bullet != null) bullets.add(bullet);
             }
 
-            if (moveTank(enemyTank,dir)) continue;
-            // CR: ???
-            else dir = Direction.values()[ThreadLocalRandom.current().nextInt(0,4)];
-            moveTank(enemyTank,dir);
+            if (moveTank(enemyTank, dir)) continue;
+                // CR: ???
+            else dir = Direction.values()[ThreadLocalRandom.current().nextInt(0, 4)];
+            moveTank(enemyTank, dir);
         }
     }
 
     private void moveBullets() {
-        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();){
+        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet bullet = iterator.next();
             bullet.move();
-            if (bulletHasCollision(bullet)){
+            if (bulletHasCollision(bullet)) {
                 bullet.getOwner().makeShootable();
                 iterator.remove();
             }
@@ -85,7 +89,7 @@ public class BattleField {
             FieldBlock fieldBlock = iterator.next();
             if (fieldBlock.isTransparent()) continue;
             if (isCollision(bullet, fieldBlock)) {
-                if (fieldBlock == base){
+                if (fieldBlock == base) {
                     fieldListener.gameLost(score);
                     return true;
                 }
@@ -97,22 +101,22 @@ public class BattleField {
         }
         // TODO: How to add ability to destroy bullet using other bullet?
         // version without bulletsToRemove is broken (ConcurentModificationException)
-        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();){
+        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet otherbullet = iterator.next();
-            if (otherbullet != bullet && isCollision(bullet, otherbullet)){
+            if (otherbullet != bullet && isCollision(bullet, otherbullet)) {
                 otherbullet.getOwner().makeShootable();
                 bulletsToRemove.add(otherbullet);
                 return true;
             }
         }
-        if (bullet.getOwner() == mainPlayer){
-            for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
+        if (bullet.getOwner() == mainPlayer) {
+            for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext(); ) {
                 Tank enemy = iterator.next();
-                if (isCollision(bullet,enemy)){
-                    score+=100;
-                    fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft,score);
+                if (isCollision(bullet, enemy)) {
+                    score += 100;
+                    fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft, score);
                     iterator.remove();
-                    if (enemiesLeft == 0 && enemies.isEmpty()){
+                    if (enemiesLeft == 0 && enemies.isEmpty()) {
                         fieldListener.gameWon(score);
                     }
                     return true;
@@ -120,103 +124,48 @@ public class BattleField {
             }
         }
 
-        if (isCollision(bullet,mainPlayer)){
+        if (isCollision(bullet, mainPlayer)) {
             if (!mainPlayer.takeDamage()) fieldListener.gameLost(score);
-            fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
+            fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft, score);
             respawnPlayer();
             return true;
         }
         return flag;
     }
 
-    public void resetField(){
-        // CR: restore initial config
-        enemiesLeft = 10;
-        clearMap();
-        buildMap();
-        score = 0;
-        mainPlayer = new Tank(playerSpawn.xPos, playerSpawn.yPos, GameParameters.PLAYERHP);
-        generateBorders();
-        //spawnEnemy();
-        //fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,value);
-    }
-
-    private void clearMap() {
-        fieldBlocks.clear();
-        enemies.clear();
-        bullets.clear();
-        enemySpawnPoints.clear();
-        bulletsToRemove.clear();
-    }
-
-    public void setFieldListener(FieldListener fieldListener){
+    public void setFieldListener(FieldListener fieldListener) {
         this.fieldListener = fieldListener;
     }
 
-    public void spawnEnemy(){
+    public void spawnEnemy() {
         if (enemiesLeft <= 0) return;
-        int n = enemySpawnPoints.size();
-        FieldBlock point = enemySpawnPoints.get(ThreadLocalRandom.current().nextInt(0,n));
+        int n = enemySpawns.size();
+        Spawn spawn = enemySpawns.get(ThreadLocalRandom.current().nextInt(0, n));
         Tank newEnemy = null;
-        if (!pointOccupied(point)) newEnemy = new Tank(point.xPos,point.yPos,1);
+        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1);
         if (newEnemy == null) return;
         enemiesLeft--;
-        fieldListener.updateStats(mainPlayer.getHP(),enemiesLeft,score);
+        fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft, score);
         enemies.add(newEnemy);
     }
 
-    private boolean pointOccupied(FieldBlock point){
-        if (isCollision(mainPlayer,point)) return true;
-        for (Tank enemy : enemies){
-            if (isCollision(enemy,point)) return true;
+    private boolean pointOccupied(Spawn point) {
+        if (isCollision(mainPlayer, point)) return true;
+        for (Tank enemy : enemies) {
+            if (isCollision(enemy, point)) return true;
         }
         return false;
     }
 
-    void generateBorders(){
-        FieldBlock left = new FieldBlock(-15,0,15,GameParameters.FIELDWIDTH,true,false);
-        FieldBlock top = new FieldBlock(0,-15,GameParameters.FIELDHEIGHT,15,true,false);
-        FieldBlock bottom = new FieldBlock(0,GameParameters.FIELDHEIGHT-40,GameParameters.FIELDWIDTH,10,true,false);
-        FieldBlock right = new FieldBlock(GameParameters.FIELDWIDTH,0,10,GameParameters.FIELDHEIGHT,true,false);
+    void generateBorders() {
+        FieldBlock left = new FieldBlock(-15, 0, 15, GameParameters.FIELDWIDTH, true, false);
+        FieldBlock top = new FieldBlock(0, -15, GameParameters.FIELDHEIGHT, 15, true, false);
+        FieldBlock bottom = new FieldBlock(0, GameParameters.FIELDHEIGHT - 40, GameParameters.FIELDWIDTH, 10, true, false);
+        FieldBlock right = new FieldBlock(GameParameters.FIELDWIDTH, 0, 10, GameParameters.FIELDHEIGHT, true, false);
         fieldBlocks.add(left);
         fieldBlocks.add(right);
         fieldBlocks.add(top);
         fieldBlocks.add(bottom);
-    }
-
-    // CR: move from model
-    void buildMap(){
-        for (int i = 0; i < mapTemplate.length; i++){
-            for (int j = 0; j < mapTemplate[i].length; j++){
-                if (mapTemplate[i][j] == '0') continue;
-                if (mapTemplate[i][j] == 't'){
-                    FieldBlock trees = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,true);
-                    fieldBlocks.add(trees);
-                }
-                if (mapTemplate[i][j] == '7'){
-                    FieldBlock metal = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,true,false);
-                    fieldBlocks.add(metal);
-                }
-                if (mapTemplate[i][j] == '1'){
-                    FieldBlock brick = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,false,false);
-                    fieldBlocks.add(brick);
-                }
-                if (mapTemplate[i][j] == '2'){
-                    FieldBlock spawnPoint = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
-                            GameParameters.TANKSIZE,GameParameters.TANKSIZE,false,false);
-                    enemySpawnPoints.add(spawnPoint);
-                }
-                if (mapTemplate[i][j] == '3'){
-                    base = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,
-                            GameParameters.BASEWIDTH,GameParameters.BASEHEIGHT,false,false);
-                    fieldBlocks.add(base);
-                }
-                if (mapTemplate[i][j] == '4'){
-                    playerSpawn = new FieldBlock(j*GameParameters.BLOCKWIDTH,i*GameParameters.BLOCKHEIGHT,0,0,false,false);
-                }
-
-            }
-        }
     }
 
     private void respawnPlayer() {
@@ -224,40 +173,31 @@ public class BattleField {
         mainPlayer.yPos = playerSpawn.yPos;
     }
 
-    public static boolean isCollision(GamePrimitive o1, GamePrimitive o2){
-        return o1.xPos < o2.xPos + o2.width &&
-                o1.xPos + o1.width > o2.xPos &&
-                o1.yPos < o2.yPos + o2.height &&
-                o1.height + o1.yPos > o2.yPos;
-    }
-
-    private boolean moveTank(Tank tank, Direction direction){
+    private boolean moveTank(Tank tank, Direction direction) {
         //  CR: Position position = tank.positionAfter(direction);
-        tank.move(direction,true);
-        for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext();){
-            FieldBlock fieldBlock = iterator.next();
+        tank.move(direction, true);
+        for (FieldBlock fieldBlock : fieldBlocks) {
             if (fieldBlock.isTransparent()) continue;
-            if (isCollision(tank, fieldBlock)){
-                tank.move(Direction.opposite(direction),false);
+            if (isCollision(tank, fieldBlock)) {
+                tank.move(Direction.opposite(direction), false);
                 return false;
             }
         }
-        for (Iterator<Tank> iterator = enemies.iterator(); iterator.hasNext();){
-            Tank enemytank = iterator.next();
-            if (tank != enemytank && isCollision(tank,enemytank)){
-                tank.move(Direction.opposite(direction),false);
+        for (Tank enemytank : enemies) {
+            if (tank != enemytank && isCollision(tank, enemytank)) {
+                tank.move(Direction.opposite(direction), false);
                 return false;
             }
         }
-        if (tank != mainPlayer && isCollision(tank,mainPlayer)){
-            tank.move(Direction.opposite(direction),false);
+        if (tank != mainPlayer && isCollision(tank, mainPlayer)) {
+            tank.move(Direction.opposite(direction), false);
             return false;
         }
         return true;
     }
 
-    public void moveMainPlayer(Direction direction){
-        moveTank(mainPlayer,direction);
+    public void moveMainPlayer(Direction direction) {
+        moveTank(mainPlayer, direction);
     }
 
     public void shootTank() {
@@ -266,49 +206,37 @@ public class BattleField {
     }
 
     public GameObjects toGameObjects() {
-        TankModel player = new TankModel(mainPlayer.getxPos(), mainPlayer.getyPos(), mainPlayer.getWidth(),
-                mainPlayer.getHeight(),mainPlayer.getLastMove());
-        BlockTO bp = new BlockTO(new Position(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight()),
-                BlockType.BASE);
-        List<BlockTO> bl = new ArrayList<>();
-        for (FieldBlock fieldBlock : fieldBlocks){
+        TankObject player = new TankObject(mainPlayer.getxPos(), mainPlayer.getyPos(), mainPlayer.getWidth(),
+                mainPlayer.getHeight(), mainPlayer.getLastMove());
+        BlockObject bp = new BlockObject(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight(), false);
+        List<BlockObject> bl = new ArrayList<>();
+        for (FieldBlock fieldBlock : fieldBlocks) {
             if (fieldBlock == base) continue;
-            bl.add(blockIntoBlockTO(fieldBlock));
+            bl.add(new BlockObject(fieldBlock.xPos, fieldBlock.yPos, fieldBlock.width, fieldBlock.height, !fieldBlock.isInvincible()));
         }
-        List<TankModel> viewEnemies = new ArrayList<>();
-        for (Tank enemy : enemies){
-            viewEnemies.add(new TankModel(enemy.getxPos(),enemy.getyPos(),
-                    enemy.getWidth(),enemy.getHeight(),enemy.getLastMove()));
+        List<TankObject> viewEnemies = new ArrayList<>();
+        for (Tank enemy : enemies) {
+            viewEnemies.add(new TankObject(enemy.getxPos(), enemy.getyPos(),
+                    enemy.getWidth(), enemy.getHeight(), enemy.getLastMove()));
         }
         List<Position> viewBullets = new ArrayList<>();
-        for (Bullet bullet : bullets){
+        for (Bullet bullet : bullets) {
             viewBullets.add(new Position(bullet.getxPos(), bullet.getyPos(),
-                    bullet.getWidth(),bullet.getHeight()));
+                    bullet.getWidth(), bullet.getHeight()));
         }
 
-        return new GameObjects(player,bp,bl,viewEnemies,viewBullets);
+        return new GameObjects(player, bp, bl, viewEnemies, viewBullets);
     }
 
+    public LevelObject initialConfig() {
+        return initialConfig;
+    }
 
-    //HELP this 2 funcs below look suspicious xz
-    private BlockTO blockIntoBlockTO(FieldBlock fieldBlock){
-        BlockType type = BlockType.BRICK;
-        Position position = new Position(
-                fieldBlock.getxPos(), fieldBlock.getyPos(),
-                fieldBlock.getWidth(),fieldBlock.getHeight()
-        );
-        if (fieldBlock.isTransparent()) type = BlockType.TREES;
-        if (fieldBlock.isInvincible()) type = BlockType.METAL;
-        return new BlockTO(position,type);
+    private static boolean isCollision(GamePrimitive o1, GamePrimitive o2) {
+        return o1.xPos < o2.xPos + o2.width &&
+                o1.xPos + o1.width > o2.xPos &&
+                o1.yPos < o2.yPos + o2.height &&
+                o1.height + o1.yPos > o2.yPos;
     }
-    private FieldBlock blockTOIntoFieldBlock(BlockTO block){
-        boolean transparent = false;
-        boolean invincible = false;
-        switch (block.blockType()){
-            case METAL -> invincible = true;
-            case TREES -> transparent = true;
-        }
-        return new FieldBlock(block.position().x(),block.position().y(),block.position().width(),
-                block.position().height(),invincible,transparent);
-    }
+
 }

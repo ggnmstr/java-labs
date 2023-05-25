@@ -1,5 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
+import com.github.ggnmstr.tanks.dto.TankObject;
 import com.github.ggnmstr.tanks.util.Direction;
 
 
@@ -18,6 +19,10 @@ public class Tank extends GamePrimitive {
         this.yPos = yPos;
         this.lastMove = Direction.DOWN;
         this.hp = hp;
+    }
+
+    public static Tank from(TankObject tankObject, int hp) {
+        return new Tank(tankObject.x(), tankObject.y(), hp);
     }
 
     public Direction getLastMove() {
