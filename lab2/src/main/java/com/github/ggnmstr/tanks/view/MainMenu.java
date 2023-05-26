@@ -51,7 +51,7 @@ public class MainMenu extends JFrame implements KeyListener {
         while (true){
             String viewString = "Level " + lvlNum;
             String lvlString = "game/level"+lvlNum;
-            URL lvlURL = Thread.currentThread().getContextClassLoader().getResource("maps/"+lvlString+".txt");
+            URL lvlURL = Thread.currentThread().getContextClassLoader().getResource("maps/"+lvlString+".json");
             if (lvlURL == null) break;
             JMenuItem item = new JMenuItem(viewString);
             item.addActionListener(e -> presenter.startNewGame(lvlString));

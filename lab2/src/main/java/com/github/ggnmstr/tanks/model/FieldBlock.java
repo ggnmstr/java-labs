@@ -27,7 +27,7 @@ public class FieldBlock extends GamePrimitive {
     }
 
     public static FieldBlock from(BlockObject blockObject) {
-        return new FieldBlock(blockObject.x(), blockObject.y(), !blockObject.isDestructible(), false);
+        return new FieldBlock(blockObject.x(), blockObject.y(), !blockObject.isDestructible(), blockObject.isTransparent());
     }
 
     public boolean isInvincible() {

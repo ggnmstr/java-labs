@@ -36,12 +36,14 @@ public class BattleField {
         this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp());
         this.playerSpawn = new FieldBlock(mainPlayerObject.x(), mainPlayerObject.y(), 0, 0, false, false);
 
-        this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(), gameObjects.base().isDestructible(), false);
+        this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(),
+                gameObjects.base().width(), gameObjects.base().height(), gameObjects.base().isDestructible(), false);
 
         gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp())).forEach(enemies::add);
         levelObject.enemySpawns().stream().map(Spawn::from).forEach(enemySpawns::add);
 
         gameObjects.blocks().stream().map(FieldBlock::from).forEach(fieldBlocks::add);
+        fieldBlocks.add(base);
         this.initialConfig = levelObject;
         // TODO: do we need it?
         generateBorders();
@@ -99,8 +101,6 @@ public class BattleField {
                 flag = true;
             }
         }
-        // TODO: How to add ability to destroy bullet using other bullet?
-        // version without bulletsToRemove is broken (ConcurentModificationException)
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet otherbullet = iterator.next();
             if (otherbullet != bullet && isCollision(bullet, otherbullet)) {
@@ -208,11 +208,11 @@ public class BattleField {
     public GameObjects toGameObjects() {
         TankObject player = new TankObject(mainPlayer.getxPos(), mainPlayer.getyPos(), mainPlayer.getWidth(),
                 mainPlayer.getHeight(), mainPlayer.getLastMove());
-        BlockObject bp = new BlockObject(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight(), false);
+        BlockObject bp = new BlockObject(base.getxPos(), base.getyPos(), base.getWidth(), base.getHeight(), false,false);
         List<BlockObject> bl = new ArrayList<>();
         for (FieldBlock fieldBlock : fieldBlocks) {
             if (fieldBlock == base) continue;
-            bl.add(new BlockObject(fieldBlock.xPos, fieldBlock.yPos, fieldBlock.width, fieldBlock.height, !fieldBlock.isInvincible()));
+            bl.add(new BlockObject(fieldBlock.xPos, fieldBlock.yPos, fieldBlock.width, fieldBlock.height, !fieldBlock.isInvincible(),fieldBlock.isTransparent()));
         }
         List<TankObject> viewEnemies = new ArrayList<>();
         for (Tank enemy : enemies) {

@@ -13,7 +13,7 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
 
     public static LevelObject fromFile(String fileName) {
         record Size(int width, int height) {}
-        record Block(int x, int y, boolean isDestructible) {}
+        record Block(int x, int y, boolean isDestructible, boolean isTransparent) {}
         record Base(int x, int y, Size size) {}
         record Player(int x, int y, Size size) {}
         record EnemySpawn(int x, int y) {}
@@ -36,11 +36,11 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         List<Block> blocks = level.blocks();
 
         TankObject mainPlayer = new TankObject(player.x, player.y, player.size.width, player.size.height, Direction.NONE);
-        BlockObject baseObject = new BlockObject(base.x, base.y, base.size.width, base.size.height, false);
+        BlockObject baseObject = new BlockObject(base.x, base.y, base.size.width, base.size.height, false,false);
         List<BlockObject> blockObjects = new ArrayList<>();
 
         for (Block block : blocks) {
-            blockObjects.add(new BlockObject(block.x, block.y, blockSize.width, blockSize.height, block.isDestructible));
+            blockObjects.add(new BlockObject(block.x, block.y, blockSize.width, blockSize.height, block.isDestructible,block.isTransparent));
         }
 
         List<EnemySpawnObject> enemySpawnObjects = new ArrayList<>();

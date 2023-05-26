@@ -49,6 +49,7 @@ public class ScoreManager {
             if (!Files.exists(filePath)) {
                 Files.createFile(filePath);
             }
+            Files.write(filePath,"".getBytes());
             for (Score entry : highScores) {
                 String line = entry.playerName() + " : " + entry.value() + "\n";
                 Files.writeString(filePath, line, StandardOpenOption.APPEND);
