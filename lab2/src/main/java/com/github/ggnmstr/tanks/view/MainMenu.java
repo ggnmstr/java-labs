@@ -19,9 +19,7 @@ public class MainMenu extends JFrame implements KeyListener {
     private GameView gameView;
 
     private GameStatMenu statMenu;
-    // CR: move to separate class
-    private JMenuBar menuBar;
-    private JMenuItem newGameMenu, highScoresMenu, aboutMenu, exitMenu;
+
     public MainMenu(){
         super("Tanks");
         this.setPreferredSize(new Dimension(1000,900));
@@ -43,9 +41,9 @@ public class MainMenu extends JFrame implements KeyListener {
     }
 
     private void setupMenuBar(){
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
 
-        newGameMenu = new JMenu("New Game");
+        JMenuItem newGameMenu = new JMenu("New Game");
 
         int lvlNum = 1;
         while (true){
@@ -59,9 +57,9 @@ public class MainMenu extends JFrame implements KeyListener {
             lvlNum++;
         }
 
-        highScoresMenu = new JMenuItem("High Scores");
-        aboutMenu = new JMenuItem("About");
-        exitMenu = new JMenuItem("Exit");
+        JMenuItem highScoresMenu = new JMenuItem("High Scores");
+        JMenuItem aboutMenu = new JMenuItem("About");
+        JMenuItem exitMenu = new JMenuItem("Exit");
 
 
         highScoresMenu.addActionListener(e -> showHighScores());

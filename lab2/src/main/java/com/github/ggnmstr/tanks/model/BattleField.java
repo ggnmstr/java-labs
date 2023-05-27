@@ -57,6 +57,24 @@ public class BattleField {
         moveEnemyTanks();
     }
 
+    private Direction preferedDirection(Tank tank){
+        Direction last = tank.getLastMove();
+        Direction res;
+        int dx = base.xPos - tank.xPos;
+        int dy = base.yPos - tank.yPos;
+        if (dx > 0 && dy > 0){
+            res = Direction.RIGHT;
+            if (last == Direction.RIGHT) res = Direction.DOWN;
+        } else if (dx <= 0 && dy > 0) {
+            res = last == Direction.DOWN ? Direction.LEFT : Direction.DOWN;
+        } else {
+            res = Direction.UP;
+        }
+        int c = ThreadLocalRandom.current().nextInt(0,10);
+        if (c % 3 == 0) res = Direction.opposite(res);
+        return res;
+    }
+
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies) {
             Direction dir = enemyTank.getLastMove();
@@ -68,8 +86,7 @@ public class BattleField {
             }
 
             if (moveTank(enemyTank, dir)) continue;
-                // CR: ???
-            else dir = Direction.values()[ThreadLocalRandom.current().nextInt(0, 4)];
+            else dir = preferedDirection(enemyTank);
             moveTank(enemyTank, dir);
         }
     }
