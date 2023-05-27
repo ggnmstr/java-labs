@@ -44,8 +44,9 @@ public class BattleField {
 
         gameObjects.blocks().stream().map(FieldBlock::from).forEach(fieldBlocks::add);
         fieldBlocks.add(base);
+        this.enemiesLeft = levelObject.nEnemies();
         this.initialConfig = levelObject;
-        // TODO: do we need it?
+
         generateBorders();
         // TODO: bullets?
     }
@@ -87,6 +88,7 @@ public class BattleField {
 
     private boolean bulletHasCollision(Bullet bullet) {
         boolean flag = false;
+        boolean explode = false;
         for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext(); ) {
             FieldBlock fieldBlock = iterator.next();
             if (fieldBlock.isTransparent()) continue;
@@ -96,10 +98,17 @@ public class BattleField {
                     return true;
                 }
                 if (!fieldBlock.isInvincible()) {
+                    explode = true;
                     iterator.remove();
+                    break;
                 }
                 flag = true;
             }
+        }
+        if (explode){
+            Bullet explosion = Bullet.explosionFrom(bullet);
+            triggerExplosion(explosion);
+            return true;
         }
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet otherbullet = iterator.next();
@@ -131,6 +140,18 @@ public class BattleField {
             return true;
         }
         return flag;
+    }
+
+    private void triggerExplosion(Bullet explosion){
+        for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext(); ) {
+            FieldBlock fieldBlock = iterator.next();
+            if (fieldBlock.isTransparent()) continue;
+            if (fieldBlock != base && isCollision(explosion, fieldBlock)) {
+                if (!fieldBlock.isInvincible()) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     public void setFieldListener(FieldListener fieldListener) {
@@ -174,7 +195,6 @@ public class BattleField {
     }
 
     private boolean moveTank(Tank tank, Direction direction) {
-        //  CR: Position position = tank.positionAfter(direction);
         tank.move(direction, true);
         for (FieldBlock fieldBlock : fieldBlocks) {
             if (fieldBlock.isTransparent()) continue;

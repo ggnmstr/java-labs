@@ -5,7 +5,6 @@ import com.github.ggnmstr.tanks.dto.BlockObject;
 public class FieldBlock extends GamePrimitive {
 
     private final boolean isInvincible;
-    // CR: move bushes to view
     private final boolean isTransparent;
 
     public FieldBlock(int x, int y, boolean isInvincible, boolean isTransparent){

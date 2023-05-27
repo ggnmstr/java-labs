@@ -43,7 +43,6 @@ public class GameView extends JPanel {
         BlockObject baseObject = gameObjects.base();
         drawImage(g, baseImage, baseObject.x(), baseObject.y(), baseObject.width(), baseObject.height());
         for (BlockObject block : gameObjects.blocks()) {
-            // TODO: bushes gone :(
             if (block.isDestructible()) {
                 drawImage(g, brickImage, block.x(), block.y(), block.width(), block.height());
             } else if (block.isTransparent()){
