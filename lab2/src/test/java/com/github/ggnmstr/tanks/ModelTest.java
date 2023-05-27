@@ -42,6 +42,28 @@ public class ModelTest {
         assertTrue(field.toGameObjects().bullets().isEmpty());
     }
 
+    @Test
+    void loseByDyingTest(){
+        // Tank with 1 hp left is spawned against bullet
+        BattleField field = new BattleField(LevelObject.fromFile("test/test3.json"));
+        GameLostFieldListener listener = new GameLostFieldListener();
+        field.setFieldListener(listener);
+        field.updateField();
+        assertEquals(1,listener.getInvokedGameLost());
+    }
+
+    @Test
+    void killEnemyTest(){
+        BattleField field = new BattleField(LevelObject.fromFile("test/test4.json"));
+        GameLostFieldListener listener = new GameLostFieldListener();
+        field.setFieldListener(listener);
+        field.spawnEnemy();
+        field.shootTank();
+        field.updateField();
+        assertTrue(field.toGameObjects().enemies().isEmpty());
+    }
+
+
 
     private static class GameLostFieldListener implements FieldListener {
 
