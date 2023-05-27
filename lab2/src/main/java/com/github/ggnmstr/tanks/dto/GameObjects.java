@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public record GameObjects(TankObject mainPlayer, BlockObject base, List<BlockObject> blocks,
-                          List<TankObject> enemies, List<Position> bullets) {
+                          List<TankObject> enemies, List<BulletObject> bullets) {
 
     @Override
     public TankObject mainPlayer() {
@@ -22,7 +22,7 @@ public record GameObjects(TankObject mainPlayer, BlockObject base, List<BlockObj
     }
 
     @Override
-    public List<Position> bullets() {
+    public List<BulletObject> bullets() {
         return bullets;
     }
 

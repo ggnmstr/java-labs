@@ -34,6 +34,14 @@ public class ModelTest {
         assertEquals(0,listener.getInvokedGameLost());
     }
 
+    @Test
+    void bulletsDestroyedTest(){
+        // 2 bullets spawned right against each other here, so only 1 update required to destroy both
+        BattleField field = new BattleField(LevelObject.fromFile("test/test2.json"));
+        field.updateField();
+        assertTrue(field.toGameObjects().bullets().isEmpty());
+    }
+
 
     private static class GameLostFieldListener implements FieldListener {
 

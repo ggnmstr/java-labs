@@ -2,7 +2,7 @@ package com.github.ggnmstr.tanks.view;
 
 import com.github.ggnmstr.tanks.dto.BlockObject;
 import com.github.ggnmstr.tanks.dto.GameObjects;
-import com.github.ggnmstr.tanks.dto.Position;
+import com.github.ggnmstr.tanks.dto.BulletObject;
 import com.github.ggnmstr.tanks.dto.TankObject;
 
 import javax.imageio.ImageIO;
@@ -52,7 +52,7 @@ public class GameView extends JPanel {
                 drawImage(g, metalImage, block.x(), block.y(), block.width(), block.height());
             }
         }
-        for (Position x : gameObjects.bullets()) {
+        for (BulletObject x : gameObjects.bullets()) {
             drawObject(g2d, x);
         }
     }
@@ -67,7 +67,7 @@ public class GameView extends JPanel {
         g.drawImage(image, x, y, width, height, null);
     }
 
-    private void drawObject(Graphics g, Position x) {
+    private void drawObject(Graphics g, BulletObject x) {
         g.drawRect(x.x(), x.y(), x.width(), x.height());
         g.fillRect(x.x(), x.y(), x.width(), x.height());
 

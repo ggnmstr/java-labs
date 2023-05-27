@@ -48,7 +48,7 @@ public class BattleField {
         this.initialConfig = levelObject;
 
         generateBorders();
-        // TODO: bullets?
+        gameObjects.bullets().stream().map(Bullet::from).forEach(bullets::add);
     }
 
 
@@ -79,7 +79,8 @@ public class BattleField {
             Bullet bullet = iterator.next();
             bullet.move();
             if (bulletHasCollision(bullet)) {
-                bullet.getOwner().makeShootable();
+                Tank owner = bullet.getOwner();
+                if (owner != null) owner.makeShootable();
                 iterator.remove();
             }
         }
@@ -113,7 +114,8 @@ public class BattleField {
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet otherbullet = iterator.next();
             if (otherbullet != bullet && isCollision(bullet, otherbullet)) {
-                otherbullet.getOwner().makeShootable();
+                Tank otherowner = otherbullet.getOwner();
+                if (otherowner != null) otherowner.makeShootable();
                 bulletsToRemove.add(otherbullet);
                 return true;
             }
@@ -239,10 +241,10 @@ public class BattleField {
             viewEnemies.add(new TankObject(enemy.getxPos(), enemy.getyPos(),
                     enemy.getWidth(), enemy.getHeight(), enemy.getLastMove()));
         }
-        List<Position> viewBullets = new ArrayList<>();
+        List<BulletObject> viewBullets = new ArrayList<>();
         for (Bullet bullet : bullets) {
-            viewBullets.add(new Position(bullet.getxPos(), bullet.getyPos(),
-                    bullet.getWidth(), bullet.getHeight()));
+            viewBullets.add(new BulletObject(bullet.getxPos(), bullet.getyPos(),
+                    bullet.getWidth(), bullet.getHeight(),bullet.getDirection()));
         }
 
         return new GameObjects(player, bp, bl, viewEnemies, viewBullets);

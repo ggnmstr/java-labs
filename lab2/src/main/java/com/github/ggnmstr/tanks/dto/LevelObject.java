@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.github.ggnmstr.tanks.model.GameParameters;
 import com.github.ggnmstr.tanks.util.Direction;
 
 import java.io.InputStream;
@@ -17,7 +18,9 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         record Base(int x, int y, Size size) {}
         record Player(int x, int y, Size size) {}
         record EnemySpawn(int x, int y) {}
-        record Level(Size size, int playerHp, int enemyHp, int enemiesCount, List<EnemySpawn> enemySpawns, Size blockSize, List<Block> blocks, Base base, Player player) {}
+        record Bullet(int x, int y, Direction direction) {}
+        record Level(Size size, int playerHp, int enemyHp, int enemiesCount, List<EnemySpawn> enemySpawns,
+                     Size blockSize, List<Block> blocks, Base base, Player player, List<Bullet> bullets) {}
 
         ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         Level level;
@@ -34,11 +37,12 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         Size blockSize = level.blockSize;
         Base base = level.base;
         List<Block> blocks = level.blocks();
+        List<Bullet> bullets = level.bullets;
 
         TankObject mainPlayer = new TankObject(player.x, player.y, player.size.width, player.size.height, Direction.NONE);
         BlockObject baseObject = new BlockObject(base.x, base.y, base.size.width, base.size.height, false,false);
-        List<BlockObject> blockObjects = new ArrayList<>();
 
+        List<BlockObject> blockObjects = new ArrayList<>();
         for (Block block : blocks) {
             blockObjects.add(new BlockObject(block.x, block.y, blockSize.width, blockSize.height, block.isDestructible,block.isTransparent));
         }
@@ -48,8 +52,14 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
             enemySpawnObjects.add(new EnemySpawnObject(enemySpawn.x, enemySpawn.y));
         }
 
+        List<BulletObject> bulletObjects = new ArrayList<>();
+        for (Bullet bullet : bullets){
+            bulletObjects.add(new BulletObject(bullet.x,bullet.y,
+                    GameParameters.BULLETSHORT,GameParameters.BULLETLONG,bullet.direction));
+        }
+
         GameObjects gameObjects = new GameObjects(mainPlayer, baseObject,
-                blockObjects, Collections.emptyList(), Collections.emptyList());
+                blockObjects, Collections.emptyList(), bulletObjects);
 
         return new LevelObject(gameObjects, enemySpawnObjects, fieldSize.width, fieldSize.height, level.playerHp, level.enemyHp, level.enemiesCount);
     }

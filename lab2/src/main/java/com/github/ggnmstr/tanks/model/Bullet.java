@@ -1,5 +1,6 @@
 package com.github.ggnmstr.tanks.model;
 
+import com.github.ggnmstr.tanks.dto.BulletObject;
 import com.github.ggnmstr.tanks.util.Direction;
 
 public class Bullet extends GamePrimitive {
@@ -18,6 +19,10 @@ public class Bullet extends GamePrimitive {
         this.yPos = startY;
         this.direction = direction;
         this.owner = tank;
+    }
+
+    public static Bullet from(BulletObject bulletObject){
+        return new Bullet(bulletObject.x(),bulletObject.y(),bulletObject.direction(),null);
     }
 
     public void move() {
