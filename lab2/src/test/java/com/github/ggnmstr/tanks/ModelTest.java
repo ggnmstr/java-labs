@@ -41,6 +41,7 @@ public class ModelTest {
     void bulletsDestroyedTest(){
         // 2 bullets spawned right against each other, so only 1 update is required to destroy both
         BattleField field = new BattleField(LevelObject.fromFile("test/bulletsDestroyedTest.json"));
+        assertEquals(2,field.toGameObjects().bullets().size());
         field.updateField();
         assertTrue(field.toGameObjects().bullets().isEmpty());
     }
@@ -62,6 +63,7 @@ public class ModelTest {
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
         field.spawnEnemy();
+        assertEquals(1,field.toGameObjects().enemies().size());
         field.shootTank();
         field.updateField();
         assertTrue(field.toGameObjects().enemies().isEmpty());
@@ -85,9 +87,9 @@ public class ModelTest {
         // Player tank is spawned against the wall of 4 blocks
         // After 1 shot all of them should be destroyed due to explosion
         BattleField field = new BattleField(LevelObject.fromFile("test/bulletExplosionTest.json"));
+        assertEquals(8, field.toGameObjects().blocks().size());
         field.shootTank();
         field.updateField();
-        field.updateField();field.updateField();field.updateField();field.updateField();
         // 4 blocks left - borders of map
         assertEquals(4,field.toGameObjects().blocks().size());
     }

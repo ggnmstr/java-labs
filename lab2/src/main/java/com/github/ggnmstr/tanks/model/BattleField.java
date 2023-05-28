@@ -115,7 +115,7 @@ public class BattleField {
                     fieldListener.gameLost(score);
                     return true;
                 }
-                if (!fieldBlock.isInvincible()) {
+                if (fieldBlock.isDestructible()) {
                     explode = true;
                     iterator.remove();
                     break;
@@ -166,7 +166,7 @@ public class BattleField {
             FieldBlock fieldBlock = iterator.next();
             if (fieldBlock.isTransparent()) continue;
             if (fieldBlock != base && isCollision(explosion, fieldBlock)) {
-                if (!fieldBlock.isInvincible()) {
+                if (fieldBlock.isDestructible()) {
                     iterator.remove();
                 }
             }
@@ -251,7 +251,7 @@ public class BattleField {
         List<BlockObject> bl = new ArrayList<>();
         for (FieldBlock fieldBlock : fieldBlocks) {
             if (fieldBlock == base) continue;
-            bl.add(new BlockObject(fieldBlock.xPos, fieldBlock.yPos, fieldBlock.width, fieldBlock.height, !fieldBlock.isInvincible(),fieldBlock.isTransparent()));
+            bl.add(new BlockObject(fieldBlock.xPos, fieldBlock.yPos, fieldBlock.width, fieldBlock.height, fieldBlock.isDestructible(),fieldBlock.isTransparent()));
         }
         List<TankObject> viewEnemies = new ArrayList<>();
         for (Tank enemy : enemies) {
