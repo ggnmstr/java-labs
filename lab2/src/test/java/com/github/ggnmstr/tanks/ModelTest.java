@@ -127,6 +127,13 @@ public class ModelTest {
         assertNotEquals(ay,by);
     }
 
+    @Test
+    void spawnOccupiedTest(){
+        // Player and enemy spawn have the same coordinates => spawning an enemy should not do anything
+        BattleField field = new BattleField(LevelObject.fromFile("test/spawnOccupiedTest.json"));
+        field.spawnEnemy();
+        assertTrue(field.toGameObjects().enemies().isEmpty());
+    }
 
     private static class TestFieldListener implements FieldListener {
 
