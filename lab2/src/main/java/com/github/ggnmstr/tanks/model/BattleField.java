@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class BattleField {
 
     private final Tank mainPlayer;
-    private final FieldBlock playerSpawn;
+    private final Spawn playerSpawn;
 
     private final List<Tank> enemies = new ArrayList<>();
     private final List<Spawn> enemySpawns = new ArrayList<>();
@@ -34,7 +34,7 @@ public class BattleField {
         TankObject mainPlayerObject = gameObjects.mainPlayer();
 
         this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp());
-        this.playerSpawn = new FieldBlock(mainPlayerObject.x(), mainPlayerObject.y(), 0, 0, false, false);
+        this.playerSpawn = new Spawn(mainPlayerObject.x(), mainPlayerObject.y());
 
         this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(),
                 gameObjects.base().width(), gameObjects.base().height(), gameObjects.base().isDestructible(), false);
@@ -79,13 +79,14 @@ public class BattleField {
         for (Tank enemyTank : enemies) {
             Direction dir = enemyTank.getLastMove();
             if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
-                //if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
                 if (bullet != null) bullets.add(bullet);
             }
 
-            if (moveTank(enemyTank, dir)) continue;
-            else dir = preferedDirection(enemyTank);
+            if (moveTank(enemyTank, dir)) {
+                continue;
+            }
+            dir = preferedDirection(enemyTank);
             moveTank(enemyTank, dir);
         }
     }
@@ -100,6 +101,7 @@ public class BattleField {
                 iterator.remove();
             }
         }
+        // CR: make local var bulletsToRemove
         bullets.removeAll(bulletsToRemove);
     }
 
@@ -197,6 +199,7 @@ public class BattleField {
     }
 
     void generateBorders() {
+        // CR: relative to field size
         FieldBlock left = new FieldBlock(-15, 0, 15, GameParameters.FIELDWIDTH, true, false);
         FieldBlock top = new FieldBlock(0, -15, GameParameters.FIELDHEIGHT, 15, true, false);
         FieldBlock bottom = new FieldBlock(0, GameParameters.FIELDHEIGHT - 40, GameParameters.FIELDWIDTH, 10, true, false);

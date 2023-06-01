@@ -9,6 +9,5 @@ public class Main {
         MainMenu mainMenu = new MainMenu();
         presenter.setView(mainMenu);
         mainMenu.setPresenter(presenter);
-        presenter.run();
     }
 }

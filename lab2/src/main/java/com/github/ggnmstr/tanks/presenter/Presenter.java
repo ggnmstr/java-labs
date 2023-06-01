@@ -22,9 +22,6 @@ public class Presenter implements FieldListener {
     public void setView(MainMenu mainView){
         this.mainMenu = mainView;
     }
-
-    public void run(){
-    }
     
     public void startNewGame(){
         mainMenu.prepareGame();

@@ -9,6 +9,7 @@ public class Bullet extends GamePrimitive {
 
     public Bullet(int startX, int startY, Direction direction, Tank tank) {
         if (direction == Direction.DOWN || direction == Direction.UP) {
+            // CR: pass in ctor
             this.width = GameParameters.BULLETSHORT;
             this.height = GameParameters.BULLETLONG;
         } else {
@@ -35,7 +36,10 @@ public class Bullet extends GamePrimitive {
     }
 
     public static Bullet explosionFrom(Bullet bullet) {
-        int x = bullet.xPos, y = bullet.yPos, w = 1, h = 1;
+        int x = bullet.xPos;
+        int y = bullet.yPos;
+        int w = 1;
+        int h = 1;
         switch (bullet.getDirection()) {
             case UP -> {
                 x -= 2 * GameParameters.BLOCKWIDTH;

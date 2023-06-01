@@ -2,6 +2,7 @@ package com.github.ggnmstr.tanks.util;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -9,12 +10,12 @@ import java.util.List;
 
 public class ScoreManager {
 
-    private final List<Score> highScores = new ArrayList<>();
+    private final List<Score> highScores;
 
     private static ScoreManager instance;
 
     private ScoreManager(){
-        loadFromFile();
+        this.highScores = loadScores();
     }
 
     public static ScoreManager getInstance(){
@@ -46,12 +47,10 @@ public class ScoreManager {
     public void saveToFile() {
         Path filePath = Path.of("scores.txt");
         try {
-            if (!Files.exists(filePath)) {
-                Files.createFile(filePath);
-            }
-            Files.write(filePath,"".getBytes());
+            Files.write(filePath,"".getBytes(), StandardOpenOption.CREATE);
             for (Score entry : highScores) {
                 String line = entry.playerName() + " : " + entry.value() + "\n";
+                // CR: merge into one write using stream
                 Files.writeString(filePath, line, StandardOpenOption.APPEND);
             }
         } catch (IOException e) {
@@ -59,23 +58,27 @@ public class ScoreManager {
         }
     }
 
-    private void loadFromFile() {
+    private List<Score> loadScores() {
+        List<Score> loadedScores = new ArrayList<>();
         Path filePath = Path.of("scores.txt");
         try {
             if (!Files.exists(filePath)) {
                 Files.createFile(filePath);
+                return loadedScores;
             }
             List<String> lines = Files.readAllLines(filePath);
+            // CR: stream
             for (String line : lines) {
                 String[] parts = line.split(" : ");
                 String playerName = parts[0];
                 int value = Integer.parseInt(parts[1]);
                 Score score = new Score(playerName, value);
-                highScores.add(score);
+                loadedScores.add(score);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return loadedScores;
     }
 
 }

@@ -1,9 +1,7 @@
 package com.github.ggnmstr.tanks.view;
 
-import com.github.ggnmstr.tanks.model.GameParameters;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class GameStatMenu extends JPanel {

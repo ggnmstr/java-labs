@@ -1,6 +1,5 @@
 package com.github.ggnmstr.tanks;
 
-import com.github.ggnmstr.tanks.dto.BlockObject;
 import com.github.ggnmstr.tanks.dto.LevelObject;
 import com.github.ggnmstr.tanks.model.BattleField;
 import com.github.ggnmstr.tanks.model.FieldListener;
@@ -9,12 +8,41 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
 
+- player destroys base +
+- enemy destroys base
+- enemy kills player +
+- player kills enemy
+- enemy shoots enemy
+- player shoots indestructible block +
+- enemy shoots indestructible block
+- -||- destructible block
+- player moves into boundary +
+- player moves into transparent boundary +
+- enemy moves into boundary
+- player kills all enemies
+- player moves into enemy
+- enemy moves into enemy
+- player spawns on enemy +
+- enemy spawns on enemy
+- enemy spawns on player
+- bullets collapse with each other +
+
+(do not move into walls)
+____
+| e |
+| b |
+| e |
+____
+
+ */
 public class ModelTest {
     @Test
     void destroyBaseTest(){
         // Player tank is spawned on the left side of the base
         // Then tank turns right and shoots - base should be destroyed and game lost
+        // CR: initialize level object manually
         BattleField field = new BattleField(LevelObject.fromFile("test/test1.json"));
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -97,7 +125,7 @@ public class ModelTest {
     @Test
     void unbreakableWallTest(){
         // Player tank is spawned against the UNBREAKABLE wall of 4 blocks
-        // After 1 shot and update bullet should be destroyed, blocks should remanin
+        // After 1 shot and update bullet should be destroyed, blocks should remain
         BattleField field = new BattleField(LevelObject.fromFile("test/unbreakableWallTest.json"));
         field.shootTank();
         field.updateField();
@@ -117,7 +145,7 @@ public class ModelTest {
     }
 
     @Test
-    void walkThroughTranparentBlocksTest(){
+    void walkThroughTransparentBlocksTest(){
         // Player tank is spawned above the wall of 4 transparent blocks
         // So it should be available to move up (change coordinates)
         BattleField field = new BattleField(LevelObject.fromFile("test/transparentWallTest.json"));
