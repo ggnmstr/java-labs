@@ -17,7 +17,6 @@ public class BattleField {
     private final List<Spawn> enemySpawns = new ArrayList<>();
 
     private final List<Bullet> bullets = new ArrayList<>();
-    private final List<Bullet> bulletsToRemove = new ArrayList<>();
 
     private final List<FieldBlock> fieldBlocks = new ArrayList<>();
     private final FieldBlock base;
@@ -101,11 +100,10 @@ public class BattleField {
                 iterator.remove();
             }
         }
-        // CR: make local var bulletsToRemove
-        bullets.removeAll(bulletsToRemove);
     }
 
     private boolean bulletHasCollision(Bullet bullet) {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
         boolean flag = false;
         boolean explode = false;
         for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext(); ) {
@@ -159,6 +157,7 @@ public class BattleField {
             respawnPlayer();
             return true;
         }
+        bullets.removeAll(bulletsToRemove);
         return flag;
     }
 
