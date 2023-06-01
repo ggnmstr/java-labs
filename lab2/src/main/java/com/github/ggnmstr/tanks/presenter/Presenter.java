@@ -7,7 +7,6 @@ import com.github.ggnmstr.tanks.util.Direction;
 import com.github.ggnmstr.tanks.view.MainMenu;
 
 import javax.swing.*;
-import java.nio.file.Path;
 
 public class Presenter implements FieldListener {
 

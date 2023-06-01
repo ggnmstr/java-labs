@@ -78,7 +78,6 @@ public class BattleField {
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies) {
             Direction dir = enemyTank.getLastMove();
-            // CR: smart strategy for enemies
             if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
                 //if (enemyTank.getyPos() >= mainPlayer.getyPos()-50 && enemyTank.getyPos() <= mainPlayer.getyPos() + 50){
                 Bullet bullet = enemyTank.shoot();
