@@ -22,9 +22,11 @@ public class EndgameDialog {
 
         JTextField nameField = new JTextField(30);
         nameField.addActionListener(e -> {
-            // CR: check that name is not empty
-            ScoreManager.getInstance().addScore(nameField.getText(),score);
-            dialog.dispose();
+            String name = nameField.getText();
+            if (!name.isBlank()){
+                ScoreManager.getInstance().addScore(nameField.getText(),score);
+                dialog.dispose();
+            }
         });
 
         JPanel panel = new JPanel();
