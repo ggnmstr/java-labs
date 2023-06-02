@@ -91,19 +91,20 @@ public class BattleField {
     }
 
     private void moveBullets() {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
         for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
             Bullet bullet = iterator.next();
             bullet.move();
-            if (bulletHasCollision(bullet)) {
+            if (bulletHasCollision(bullet,bulletsToRemove)) {
                 Tank owner = bullet.getOwner();
                 if (owner != null) owner.makeShootable();
                 iterator.remove();
             }
         }
+        bullets.removeAll(bulletsToRemove);
     }
 
-    private boolean bulletHasCollision(Bullet bullet) {
-        List<Bullet> bulletsToRemove = new ArrayList<>();
+    private boolean bulletHasCollision(Bullet bullet, List<Bullet> bulletsToRemove) {
         boolean flag = false;
         boolean explode = false;
         for (Iterator<FieldBlock> iterator = fieldBlocks.iterator(); iterator.hasNext(); ) {
@@ -157,7 +158,6 @@ public class BattleField {
             respawnPlayer();
             return true;
         }
-        bullets.removeAll(bulletsToRemove);
         return flag;
     }
 
@@ -198,11 +198,10 @@ public class BattleField {
     }
 
     void generateBorders() {
-        // CR: relative to field size
-        FieldBlock left = new FieldBlock(-15, 0, 15, GameParameters.FIELDWIDTH, true, false);
-        FieldBlock top = new FieldBlock(0, -15, GameParameters.FIELDHEIGHT, 15, true, false);
-        FieldBlock bottom = new FieldBlock(0, GameParameters.FIELDHEIGHT - 40, GameParameters.FIELDWIDTH, 10, true, false);
-        FieldBlock right = new FieldBlock(GameParameters.FIELDWIDTH, 0, 10, GameParameters.FIELDHEIGHT, true, false);
+        FieldBlock left = new FieldBlock(-15, 0, 15, initialConfig.height() , true, false);
+        FieldBlock top = new FieldBlock(0, -15, initialConfig.width(), 15, true, false);
+        FieldBlock bottom = new FieldBlock(0, initialConfig.height() - 40,initialConfig.width() , 10, true, false);
+        FieldBlock right = new FieldBlock(initialConfig.width(), 0, 10, initialConfig.height(), true, false);
         fieldBlocks.add(left);
         fieldBlocks.add(right);
         fieldBlocks.add(top);

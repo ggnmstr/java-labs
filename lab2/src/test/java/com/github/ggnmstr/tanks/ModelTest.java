@@ -1,10 +1,12 @@
 package com.github.ggnmstr.tanks;
 
-import com.github.ggnmstr.tanks.dto.LevelObject;
+import com.github.ggnmstr.tanks.dto.*;
 import com.github.ggnmstr.tanks.model.BattleField;
 import com.github.ggnmstr.tanks.model.FieldListener;
 import com.github.ggnmstr.tanks.util.Direction;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,128 +41,271 @@ ____
  */
 public class ModelTest {
     @Test
-    void destroyBaseTest(){
+    void destroyBaseTest() {
         // Player tank is spawned on the left side of the base
         // Then tank turns right and shoots - base should be destroyed and game lost
         // CR: initialize level object manually
-        BattleField field = new BattleField(LevelObject.fromFile("test/test1.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(300, 690, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 1);
+        BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
         field.moveMainPlayer(Direction.RIGHT);
         field.shootTank();
         field.updateField();
 
-        assertEquals(1,listener.getInvokedGameLost());
+        assertEquals(1, listener.getInvokedGameLost());
     }
 
     @Test
-    void baseNotDestroyedTest(){
+    void baseNotDestroyedTest() {
         // Same situation, but tank does not turn right - so base shouldn't be destroyed.
-        BattleField field = new BattleField(LevelObject.fromFile("test/test1.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(300, 690, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 1);
+        BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
         field.shootTank();
         field.updateField();
 
-        assertEquals(0,listener.getInvokedGameLost());
+        assertEquals(0, listener.getInvokedGameLost());
     }
 
     @Test
-    void bulletsDestroyedTest(){
+    void bulletsDestroyedTest() {
         // 2 bullets spawned right against each other, so only 1 update is required to destroy both
-        BattleField field = new BattleField(LevelObject.fromFile("test/bulletsDestroyedTest.json"));
-        assertEquals(2,field.toGameObjects().bullets().size());
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(300, 690, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>() {{
+                    add(new BulletObject(100, 10, 10, 10, Direction.DOWN));
+                    add(new BulletObject(100, 20, 10, 10, Direction.UP));
+                }}
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 1);
+        BattleField field = new BattleField(levelObject);
+        assertEquals(2, field.toGameObjects().bullets().size());
         field.updateField();
         assertTrue(field.toGameObjects().bullets().isEmpty());
     }
 
     @Test
-    void loseByDyingTest(){
+    void loseByDyingTest() {
         // Tank with 1 hp left is spawned against bullet
-        BattleField field = new BattleField(LevelObject.fromFile("test/loseByDyingTest.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 20, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>() {{
+                    add(new BulletObject(100, 10, 10, 10, Direction.DOWN));
+                }}
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 1);
+        BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
         field.updateField();
-        assertEquals(1,listener.getInvokedGameLost());
+        assertEquals(1, listener.getInvokedGameLost());
     }
 
     @Test
-    void killEnemyTest(){
-        // Enemy is spawned right above player tank, then player shoots
-        BattleField field = new BattleField(LevelObject.fromFile("test/killEnemyTest.json"));
+    void killEnemyTest() {
+        // Enemy is right above player tank, then player shoots
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 300, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(){{
+                    add(new TankObject(100,360,60,60,Direction.DOWN));
+                }},
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 10);
+        BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
-        field.spawnEnemy();
-        assertEquals(1,field.toGameObjects().enemies().size());
+        assertEquals(1, field.toGameObjects().enemies().size());
         field.shootTank();
         field.updateField();
         assertTrue(field.toGameObjects().enemies().isEmpty());
     }
 
     @Test
-    void winByKillingEveryoneTest(){
-        // Enemy is spawned right above player tank, then player shoots
-        // but enemyLimit = 1 so that's a winning scenario
-        BattleField field = new BattleField(LevelObject.fromFile("test/killEveryoneTest.json"));
+    void winByKillingEveryoneTest() {
+        // Enemy is right above player tank, then player shoots
+        // but 0 enemies left so that's a winning scenario
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 300, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(){{
+                    add(new TankObject(100,360,60,60,Direction.DOWN));
+                }},
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 0);
+        BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
-        field.spawnEnemy();
         field.shootTank();
         field.updateField();
-        assertEquals(1,listener.getInvokedGameWon());
+        assertEquals(1, listener.getInvokedGameWon());
     }
 
     @Test
-    void bulletExplosionTest(){
+    void bulletExplosionTest() {
         // Player tank is spawned against the wall of 4 blocks
         // After 1 shot all of them should be destroyed due to explosion
-        BattleField field = new BattleField(LevelObject.fromFile("test/bulletExplosionTest.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 285, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(){{
+                    add(new BlockObject(100,360,15,15,true,false));
+                    add(new BlockObject(115,360,15,15,true,false));
+                    add(new BlockObject(130,360,15,15,true,false));
+                    add(new BlockObject(145,360,15,15,true,false));
+
+                }},
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 0);
+        BattleField field = new BattleField(levelObject);
         assertEquals(8, field.toGameObjects().blocks().size());
         field.shootTank();
         field.updateField();
         // 4 blocks left - borders of map
-        assertEquals(4,field.toGameObjects().blocks().size());
+        assertEquals(4, field.toGameObjects().blocks().size());
     }
 
     @Test
-    void unbreakableWallTest(){
+    void unbreakableWallTest() {
         // Player tank is spawned against the UNBREAKABLE wall of 4 blocks
         // After 1 shot and update bullet should be destroyed, blocks should remain
-        BattleField field = new BattleField(LevelObject.fromFile("test/unbreakableWallTest.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 285, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(){{
+                    add(new BlockObject(100,360,15,15,false,false));
+                    add(new BlockObject(115,360,15,15,false,false));
+                    add(new BlockObject(130,360,15,15,false,false));
+                    add(new BlockObject(145,360,15,15,false,false));
+
+                }},
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 0);
+        BattleField field = new BattleField(levelObject);
         field.shootTank();
         field.updateField();
         // 4+4=8 blocks left - borders of map + 4 unbreakable blocks
-        assertEquals(8,field.toGameObjects().blocks().size());
+        assertEquals(8, field.toGameObjects().blocks().size());
     }
 
     @Test
-    void stumbleUponWallTest(){
+    void stumbleUponWallTest() {
         // Player tank is spawned under the wall of 4 blocks
         // So it should NOT be available to move up (change coordinates)
-        BattleField field = new BattleField(LevelObject.fromFile("test/stumbleUponWallTest.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 300, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(){{
+                    add(new BlockObject(100,360,15,15,true,false));
+                    add(new BlockObject(115,360,15,15,true,false));
+                    add(new BlockObject(130,360,15,15,true,false));
+                    add(new BlockObject(145,360,15,15,true,false));
+
+                }},
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 0);
+        BattleField field = new BattleField(levelObject);
         int by = field.toGameObjects().mainPlayer().y();
         field.moveMainPlayer(Direction.DOWN);
         int ay = field.toGameObjects().mainPlayer().y();
-        assertEquals(by,ay);
+        assertEquals(by, ay);
     }
 
     @Test
-    void walkThroughTransparentBlocksTest(){
+    void walkThroughTransparentBlocksTest() {
         // Player tank is spawned above the wall of 4 transparent blocks
         // So it should be available to move up (change coordinates)
-        BattleField field = new BattleField(LevelObject.fromFile("test/transparentWallTest.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 300, 60, 60, Direction.DOWN),
+                new BlockObject(360, 705, 60, 60, true, false),
+                new ArrayList<>(){{
+                    add(new BlockObject(100,360,15,15,true,true));
+                    add(new BlockObject(115,360,15,15,true,true));
+                    add(new BlockObject(130,360,15,15,true,true));
+                    add(new BlockObject(145,360,15,15,true,true));
+
+                }},
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 1, 1, 0);
+        BattleField field = new BattleField(levelObject);
         int by = field.toGameObjects().mainPlayer().y();
         field.moveMainPlayer(Direction.DOWN);
         int ay = field.toGameObjects().mainPlayer().y();
-        assertNotEquals(ay,by);
+        assertNotEquals(ay, by);
     }
 
     @Test
     void spawnOccupiedTest(){
         // Player and enemy spawn have the same coordinates => spawning an enemy should not do anything
-        BattleField field = new BattleField(LevelObject.fromFile("test/spawnOccupiedTest.json"));
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(100, 300, 60, 60, Direction.DOWN),
+                new BlockObject(0, 0, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects,
+                new ArrayList<>(){{
+                    add(new EnemySpawnObject(100,300));
+                }},
+                832, 832, 1, 1, 10);
+        BattleField field = new BattleField(levelObject);
         field.spawnEnemy();
         assertTrue(field.toGameObjects().enemies().isEmpty());
+    }
+
+    @Test
+    void spawnNotOccupiedTest(){
+        // Spawn position not occupied => spawning should work
+        GameObjects gameObjects = new GameObjects(
+                new TankObject(400, 400, 60, 60, Direction.DOWN),
+                new BlockObject(0, 0, 60, 60, true, false),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        LevelObject levelObject = new LevelObject(gameObjects,
+                new ArrayList<>(){{
+                    add(new EnemySpawnObject(100,100));
+                }},
+                832, 832, 1, 1, 10);
+        BattleField field = new BattleField(levelObject);
+        TestFieldListener listener = new TestFieldListener();
+        field.setFieldListener(listener);
+        field.spawnEnemy();
+        assertEquals(1,field.toGameObjects().enemies().size());
     }
 
     private static class TestFieldListener implements FieldListener {
@@ -168,11 +313,11 @@ public class ModelTest {
         private int invokedGameLost;
         private int invokedGameWon;
 
-        public int getInvokedGameLost(){
+        public int getInvokedGameLost() {
             return invokedGameLost;
         }
 
-        public int getInvokedGameWon(){
+        public int getInvokedGameWon() {
             return invokedGameWon;
         }
 
