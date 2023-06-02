@@ -8,19 +8,23 @@ public class Bullet extends GamePrimitive {
     private final Tank owner;
 
     public Bullet(int startX, int startY, Direction direction, Tank tank) {
-        if (direction == Direction.DOWN || direction == Direction.UP) {
-            // CR: pass in ctor
-            this.width = GameParameters.BULLETSHORT;
-            this.height = GameParameters.BULLETLONG;
-        } else {
-            this.width = GameParameters.BULLETLONG;
-            this.height = GameParameters.BULLETSHORT;
-        }
+        this.width = 10;
+        this.height = 10;
         this.xPos = startX;
         this.yPos = startY;
         this.direction = direction;
         this.owner = tank;
     }
+
+    public Bullet(int startX, int startY, int width, int height, Direction direction, Tank tank) {
+        this.width = width;
+        this.height = height;
+        this.xPos = startX;
+        this.yPos = startY;
+        this.direction = direction;
+        this.owner = tank;
+    }
+
 
     public static Bullet from(BulletObject bulletObject){
         return new Bullet(bulletObject.x(),bulletObject.y(),bulletObject.direction(),null);
@@ -28,40 +32,40 @@ public class Bullet extends GamePrimitive {
 
     public void move() {
         switch (direction) {
-            case UP -> yPos -= GameParameters.BULLETSPEED;
-            case DOWN -> yPos += GameParameters.BULLETSPEED;
-            case LEFT -> xPos -= GameParameters.BULLETSPEED;
-            case RIGHT -> xPos += GameParameters.BULLETSPEED;
+            case UP -> yPos -= 10;
+            case DOWN -> yPos += 10;
+            case LEFT -> xPos -= 10;
+            case RIGHT -> xPos += 10;
         }
     }
 
-    public static Bullet explosionFrom(Bullet bullet) {
+    public static Bullet explosionFrom(Bullet bullet, int blocksize) {
         int x = bullet.xPos;
         int y = bullet.yPos;
         int w = 1;
         int h = 1;
         switch (bullet.getDirection()) {
             case UP -> {
-                x -= 2 * GameParameters.BLOCKWIDTH;
+                x -= 2 * blocksize;
                 x += 0.5 * GameParameters.BULLETSHORT;
-                w = 4 * GameParameters.BLOCKWIDTH;
+                w = 4 * blocksize;
             }
             case DOWN -> {
                 y += GameParameters.BULLETLONG;
-                x -= 2 * GameParameters.BLOCKWIDTH;
+                x -= 2 * blocksize;
                 x += 0.5 * GameParameters.BULLETSHORT;
-                w = 4 * GameParameters.BLOCKWIDTH;
+                w = 4 * blocksize;
             }
             case LEFT -> {
-                y -= 2 * GameParameters.BLOCKHEIGHT;
+                y -= 2 * blocksize;
                 y += 0.5 * GameParameters.BULLETSHORT;
-                h = 4 * GameParameters.BLOCKHEIGHT;
+                h = 4 * blocksize;
             }
             case RIGHT -> {
                 x += GameParameters.BULLETLONG;
-                y -= 2 * GameParameters.BLOCKHEIGHT;
+                y -= 2 * blocksize;
                 y += 0.5 * GameParameters.BULLETSHORT;
-                h = 4 * GameParameters.BLOCKHEIGHT;
+                h = 4 * blocksize;
             }
         }
         Bullet explosion = new Bullet(x,y,bullet.direction,null);

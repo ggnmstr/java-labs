@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemySpawns, int width, int height, int playerHp, int enemyHp, int nEnemies) {
+public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemySpawns, int fw, int fh, int bw, int bh, int playerHp, int enemyHp, int nEnemies) {
 
     public static LevelObject fromFile(String fileName) {
         record Size(int width, int height) {}
@@ -61,6 +61,6 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         GameObjects gameObjects = new GameObjects(mainPlayer, baseObject,
                 blockObjects, Collections.emptyList(), bulletObjects);
 
-        return new LevelObject(gameObjects, enemySpawnObjects, fieldSize.width, fieldSize.height, level.playerHp, level.enemyHp, level.enemiesCount);
+        return new LevelObject(gameObjects, enemySpawnObjects, fieldSize.width, fieldSize.height, blockSize.width, blockSize.height,level.playerHp, level.enemyHp, level.enemiesCount);
     }
 }

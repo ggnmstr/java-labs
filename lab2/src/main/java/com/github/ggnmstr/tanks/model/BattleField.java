@@ -52,8 +52,8 @@ public class BattleField {
 
 
     public void updateField() {
-        moveBullets();
         moveEnemyTanks();
+        moveBullets();
     }
 
     private Direction preferedDirection(Tank tank){
@@ -77,11 +77,8 @@ public class BattleField {
     private void moveEnemyTanks() {
         for (Tank enemyTank : enemies) {
             Direction dir = enemyTank.getLastMove();
-            if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
-                Bullet bullet = enemyTank.shoot();
-                if (bullet != null) bullets.add(bullet);
-            }
-
+            Bullet bullet = enemyTank.shoot();
+            if (bullet != null) bullets.add(bullet);
             if (moveTank(enemyTank, dir)) {
                 continue;
             }
@@ -124,7 +121,7 @@ public class BattleField {
             }
         }
         if (explode){
-            Bullet explosion = Bullet.explosionFrom(bullet);
+            Bullet explosion = Bullet.explosionFrom(bullet,initialConfig.bw());
             triggerExplosion(explosion);
             return true;
         }
@@ -198,10 +195,10 @@ public class BattleField {
     }
 
     void generateBorders() {
-        FieldBlock left = new FieldBlock(-15, 0, 15, initialConfig.height() , true, false);
-        FieldBlock top = new FieldBlock(0, -15, initialConfig.width(), 15, true, false);
-        FieldBlock bottom = new FieldBlock(0, initialConfig.height() - 40,initialConfig.width() , 10, true, false);
-        FieldBlock right = new FieldBlock(initialConfig.width(), 0, 10, initialConfig.height(), true, false);
+        FieldBlock left = new FieldBlock(-15, 0, 15, initialConfig.fh() , true, false);
+        FieldBlock top = new FieldBlock(0, -15, initialConfig.fw(), 15, true, false);
+        FieldBlock bottom = new FieldBlock(0, initialConfig.fh() - 40,initialConfig.fw() , 10, true, false);
+        FieldBlock right = new FieldBlock(initialConfig.fw(), 0, 10, initialConfig.fh(), true, false);
         fieldBlocks.add(left);
         fieldBlocks.add(right);
         fieldBlocks.add(top);
