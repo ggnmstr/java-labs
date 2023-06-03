@@ -7,8 +7,8 @@ public final class Spawn extends GamePrimitive {
     public Spawn(int x, int y) {
         this.xPos = x;
         this.yPos = y;
-        this.width = GameParameters.TANKSIZE;
-        this.height = GameParameters.TANKSIZE;
+        this.width = Tank.TANKSIZE;
+        this.height = Tank.TANKSIZE;
     }
 
     public static Spawn from(EnemySpawnObject enemySpawnObject) {

@@ -6,6 +6,9 @@ import com.github.ggnmstr.tanks.util.Direction;
 
 public class Tank extends GamePrimitive {
 
+    public static final int TANKSIZE = 60;
+    private final int TANKSPEED = 5;
+
     private Direction lastMove;
 
     private boolean shootable = true;
@@ -13,8 +16,8 @@ public class Tank extends GamePrimitive {
     private int hp;
 
     public Tank(int xPos, int yPos, int hp) {
-        this.width = GameParameters.TANKSIZE;
-        this.height = GameParameters.TANKSIZE;
+        this.width = TANKSIZE;
+        this.height = TANKSIZE;
         this.xPos = xPos;
         this.yPos = yPos;
         this.lastMove = Direction.DOWN;
@@ -31,10 +34,10 @@ public class Tank extends GamePrimitive {
 
     public void move(Direction direction, boolean changeDir) {
         switch (direction){
-            case UP -> this.yPos -= GameParameters.TANKSPEED;
-            case DOWN -> this.yPos += GameParameters.TANKSPEED;
-            case RIGHT -> this.xPos += GameParameters.TANKSPEED;
-            case LEFT -> this.xPos -= GameParameters.TANKSPEED;
+            case UP -> this.yPos -= TANKSPEED;
+            case DOWN -> this.yPos += TANKSPEED;
+            case RIGHT -> this.xPos += TANKSPEED;
+            case LEFT -> this.xPos -= TANKSPEED;
         }
         if (changeDir) this.lastMove = direction;
 
@@ -58,20 +61,20 @@ public class Tank extends GamePrimitive {
         int startX = 0, startY = 0;
         switch (lastMove) {
             case UP -> {
-                startX = xPos + width / 2 - GameParameters.BULLETSHORT/2;
-                startY = yPos - GameParameters.BULLETLONG;
+                startX = xPos + width / 2 - Bullet.BULLETSHORT/2;
+                startY = yPos - Bullet.BULLETLONG;
             }
             case DOWN -> {
-                startX = xPos + width / 2 - GameParameters.BULLETSHORT/2;
+                startX = xPos + width / 2 - Bullet.BULLETSHORT/2;
                 startY = yPos + height;
             }
             case RIGHT -> {
                 startX = xPos + width;
-                startY = yPos + height / 2 - GameParameters.BULLETSHORT/2;
+                startY = yPos + height / 2 - Bullet.BULLETSHORT/2;
             }
             case LEFT -> {
-                startX = xPos - GameParameters.BULLETLONG;
-                startY = yPos + height / 2 - GameParameters.BULLETSHORT/2;
+                startX = xPos - Bullet.BULLETLONG;
+                startY = yPos + height / 2 - Bullet.BULLETSHORT/2;
             }
         }
         Bullet bullet = new Bullet(startX, startY, lastMove,this);

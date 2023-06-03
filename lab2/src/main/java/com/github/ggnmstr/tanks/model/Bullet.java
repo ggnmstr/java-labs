@@ -4,6 +4,9 @@ import com.github.ggnmstr.tanks.dto.BulletObject;
 import com.github.ggnmstr.tanks.util.Direction;
 
 public class Bullet extends GamePrimitive {
+
+    public static final int BULLETLONG = 10;
+    public static final int BULLETSHORT = 10;
     private final Direction direction;
     private final Tank owner;
 
@@ -47,24 +50,24 @@ public class Bullet extends GamePrimitive {
         switch (bullet.getDirection()) {
             case UP -> {
                 x -= 2 * blocksize;
-                x += 0.5 * GameParameters.BULLETSHORT;
+                x += 0.5 * BULLETSHORT;
                 w = 4 * blocksize;
             }
             case DOWN -> {
-                y += GameParameters.BULLETLONG;
+                y += BULLETLONG;
                 x -= 2 * blocksize;
-                x += 0.5 * GameParameters.BULLETSHORT;
+                x += 0.5 * BULLETSHORT;
                 w = 4 * blocksize;
             }
             case LEFT -> {
                 y -= 2 * blocksize;
-                y += 0.5 * GameParameters.BULLETSHORT;
+                y += 0.5 * BULLETSHORT;
                 h = 4 * blocksize;
             }
             case RIGHT -> {
-                x += GameParameters.BULLETLONG;
+                x += BULLETLONG;
                 y -= 2 * blocksize;
-                y += 0.5 * GameParameters.BULLETSHORT;
+                y += 0.5 * BULLETSHORT;
                 h = 4 * blocksize;
             }
         }

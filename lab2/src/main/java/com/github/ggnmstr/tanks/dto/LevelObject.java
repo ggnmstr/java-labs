@@ -2,7 +2,6 @@ package com.github.ggnmstr.tanks.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.github.ggnmstr.tanks.model.GameParameters;
 import com.github.ggnmstr.tanks.util.Direction;
 
 import java.io.InputStream;
@@ -55,7 +54,7 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         List<BulletObject> bulletObjects = new ArrayList<>();
         for (Bullet bullet : bullets){
             bulletObjects.add(new BulletObject(bullet.x,bullet.y,
-                    GameParameters.BULLETSHORT,GameParameters.BULLETLONG,bullet.direction));
+                    com.github.ggnmstr.tanks.model.Bullet.BULLETSHORT, com.github.ggnmstr.tanks.model.Bullet.BULLETLONG,bullet.direction));
         }
 
         GameObjects gameObjects = new GameObjects(mainPlayer, baseObject,
