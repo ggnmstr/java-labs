@@ -6,8 +6,7 @@ import com.github.ggnmstr.tanks.util.Direction;
 
 public class Tank extends GamePrimitive {
 
-    public static final int TANKSIZE = 60;
-    private final int TANKSPEED = 5;
+    private final int speed;
 
     private Direction lastMove;
 
@@ -15,17 +14,19 @@ public class Tank extends GamePrimitive {
 
     private int hp;
 
-    public Tank(int xPos, int yPos, int hp) {
-        this.width = TANKSIZE;
-        this.height = TANKSIZE;
+    public Tank(int xPos, int yPos, int hp, int w, int h, int fs) {
+        this.width = w;
+        this.height = h;
         this.xPos = xPos;
         this.yPos = yPos;
         this.lastMove = Direction.DOWN;
         this.hp = hp;
+        this.speed = fs / 204;
     }
 
-    public static Tank from(TankObject tankObject, int hp) {
-        return new Tank(tankObject.x(), tankObject.y(), hp);
+    public static Tank from(TankObject tankObject, int hp, int fs) {
+        return new Tank(tankObject.x(), tankObject.y(), hp,
+                tankObject.width(), tankObject.height(), fs);
     }
 
     public Direction getLastMove() {
@@ -33,26 +34,26 @@ public class Tank extends GamePrimitive {
     }
 
     public void move(Direction direction, boolean changeDir) {
-        switch (direction){
-            case UP -> this.yPos -= TANKSPEED;
-            case DOWN -> this.yPos += TANKSPEED;
-            case RIGHT -> this.xPos += TANKSPEED;
-            case LEFT -> this.xPos -= TANKSPEED;
+        switch (direction) {
+            case UP -> this.yPos -= speed;
+            case DOWN -> this.yPos += speed;
+            case RIGHT -> this.xPos += speed;
+            case LEFT -> this.xPos -= speed;
         }
         if (changeDir) this.lastMove = direction;
 
     }
 
-    public boolean takeDamage(){
+    public boolean takeDamage() {
         this.hp--;
         return hp > 0;
     }
 
-    public void makeShootable(){
+    public void makeShootable() {
         this.shootable = true;
     }
 
-    public int getHP(){
+    public int getHP() {
         return hp;
     }
 
@@ -61,23 +62,23 @@ public class Tank extends GamePrimitive {
         int startX = 0, startY = 0;
         switch (lastMove) {
             case UP -> {
-                startX = xPos + width / 2 - Bullet.BULLETSHORT/2;
-                startY = yPos - Bullet.BULLETLONG;
+                startX = xPos + width / 2 - Bullet.BULLETSIZE / 2;
+                startY = yPos - Bullet.BULLETSIZE;
             }
             case DOWN -> {
-                startX = xPos + width / 2 - Bullet.BULLETSHORT/2;
+                startX = xPos + width / 2 - Bullet.BULLETSIZE / 2;
                 startY = yPos + height;
             }
             case RIGHT -> {
                 startX = xPos + width;
-                startY = yPos + height / 2 - Bullet.BULLETSHORT/2;
+                startY = yPos + height / 2 - Bullet.BULLETSIZE / 2;
             }
             case LEFT -> {
-                startX = xPos - Bullet.BULLETLONG;
-                startY = yPos + height / 2 - Bullet.BULLETSHORT/2;
+                startX = xPos - Bullet.BULLETSIZE;
+                startY = yPos + height / 2 - Bullet.BULLETSIZE / 2;
             }
         }
-        Bullet bullet = new Bullet(startX, startY, lastMove,this);
+        Bullet bullet = new Bullet(startX, startY, lastMove, this);
         this.shootable = false;
         return bullet;
     }

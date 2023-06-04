@@ -48,13 +48,13 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
 
         List<EnemySpawnObject> enemySpawnObjects = new ArrayList<>();
         for (EnemySpawn enemySpawn : level.enemySpawns) {
-            enemySpawnObjects.add(new EnemySpawnObject(enemySpawn.x, enemySpawn.y));
+            enemySpawnObjects.add(new EnemySpawnObject(enemySpawn.x, enemySpawn.y, player.size().width()));
         }
 
         List<BulletObject> bulletObjects = new ArrayList<>();
         for (Bullet bullet : bullets){
             bulletObjects.add(new BulletObject(bullet.x,bullet.y,
-                    com.github.ggnmstr.tanks.model.Bullet.BULLETSHORT, com.github.ggnmstr.tanks.model.Bullet.BULLETLONG,bullet.direction));
+                    com.github.ggnmstr.tanks.model.Bullet.BULLETSIZE, com.github.ggnmstr.tanks.model.Bullet.BULLETSIZE,bullet.direction));
         }
 
         GameObjects gameObjects = new GameObjects(mainPlayer, baseObject,

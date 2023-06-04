@@ -32,20 +32,19 @@ public class BattleField {
         GameObjects gameObjects = levelObject.gameObjects();
         TankObject mainPlayerObject = gameObjects.mainPlayer();
 
-        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp());
-        this.playerSpawn = new Spawn(mainPlayerObject.x(), mainPlayerObject.y());
+        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp(),levelObject.fh());
+        this.playerSpawn = new Spawn(mainPlayerObject.x(), mainPlayerObject.y(), mainPlayerObject.width());
 
         this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(),
                 gameObjects.base().width(), gameObjects.base().height(), gameObjects.base().isDestructible(), false);
 
-        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp())).forEach(enemies::add);
+        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp(),levelObject.fh())).forEach(enemies::add);
         levelObject.enemySpawns().stream().map(Spawn::from).forEach(enemySpawns::add);
 
         gameObjects.blocks().stream().map(FieldBlock::from).forEach(fieldBlocks::add);
         fieldBlocks.add(base);
         this.enemiesLeft = levelObject.nEnemies();
         this.initialConfig = levelObject;
-
         generateBorders();
         gameObjects.bullets().stream().map(Bullet::from).forEach(bullets::add);
     }
@@ -179,7 +178,7 @@ public class BattleField {
         int n = enemySpawns.size();
         Spawn spawn = enemySpawns.get(ThreadLocalRandom.current().nextInt(0, n));
         Tank newEnemy = null;
-        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1);
+        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1, mainPlayer.getWidth(), mainPlayer.getHeight(), initialConfig.fh());
         if (newEnemy == null) return;
         enemiesLeft--;
         fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft, score);
@@ -197,7 +196,7 @@ public class BattleField {
     void generateBorders() {
         FieldBlock left = new FieldBlock(-15, 0, 15, initialConfig.fh() , true, false);
         FieldBlock top = new FieldBlock(0, -15, initialConfig.fw(), 15, true, false);
-        FieldBlock bottom = new FieldBlock(0, initialConfig.fh() - 40,initialConfig.fw() , 10, true, false);
+        FieldBlock bottom = new FieldBlock(0, initialConfig.fh(),initialConfig.fw() , 10, true, false);
         FieldBlock right = new FieldBlock(initialConfig.fw(), 0, 10, initialConfig.fh(), true, false);
         fieldBlocks.add(left);
         fieldBlocks.add(right);
