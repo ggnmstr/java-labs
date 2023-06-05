@@ -14,19 +14,19 @@ public class Tank extends GamePrimitive {
 
     private int hp;
 
-    public Tank(int xPos, int yPos, int hp, int w, int h, int fs) {
+    public Tank(int xPos, int yPos, int hp, int w, int h, int speed) {
         this.width = w;
         this.height = h;
         this.xPos = xPos;
         this.yPos = yPos;
         this.lastMove = Direction.DOWN;
         this.hp = hp;
-        this.speed = fs / 204;
+        this.speed = speed;
     }
 
-    public static Tank from(TankObject tankObject, int hp, int fs) {
+    public static Tank from(TankObject tankObject, int hp, int tankSpeed) {
         return new Tank(tankObject.x(), tankObject.y(), hp,
-                tankObject.width(), tankObject.height(), fs);
+                tankObject.width(), tankObject.height(), tankSpeed);
     }
 
     public Direction getLastMove() {

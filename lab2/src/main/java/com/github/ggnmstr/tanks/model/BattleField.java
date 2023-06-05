@@ -178,7 +178,7 @@ public class BattleField {
         int n = enemySpawns.size();
         Spawn spawn = enemySpawns.get(ThreadLocalRandom.current().nextInt(0, n));
         Tank newEnemy = null;
-        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1, mainPlayer.getWidth(), mainPlayer.getHeight(), initialConfig.fh());
+        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1, mainPlayer.getWidth(), mainPlayer.getHeight(), initialConfig.tankSpeed());
         if (newEnemy == null) return;
         enemiesLeft--;
         fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft, score);
