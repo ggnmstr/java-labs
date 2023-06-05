@@ -7,6 +7,8 @@ import com.github.ggnmstr.tanks.util.Direction;
 public class Tank extends GamePrimitive {
 
     private final int speed;
+    
+    private final int bulletSize; 
 
     private Direction lastMove;
 
@@ -14,7 +16,7 @@ public class Tank extends GamePrimitive {
 
     private int hp;
 
-    public Tank(int xPos, int yPos, int hp, int w, int h, int speed) {
+    public Tank(int xPos, int yPos, int hp, int w, int h, int speed, int bulletSize) {
         this.width = w;
         this.height = h;
         this.xPos = xPos;
@@ -22,11 +24,12 @@ public class Tank extends GamePrimitive {
         this.lastMove = Direction.DOWN;
         this.hp = hp;
         this.speed = speed;
+        this.bulletSize = bulletSize;
     }
 
-    public static Tank from(TankObject tankObject, int hp, int tankSpeed) {
+    public static Tank from(TankObject tankObject, int hp, int tankSpeed, int bulletSize) {
         return new Tank(tankObject.x(), tankObject.y(), hp,
-                tankObject.width(), tankObject.height(), tankSpeed);
+                tankObject.width(), tankObject.height(), tankSpeed, bulletSize);
     }
 
     public Direction getLastMove() {
@@ -57,25 +60,29 @@ public class Tank extends GamePrimitive {
         return hp;
     }
 
+    public int getBulletSize() {
+        return bulletSize;
+    }
+
     public Bullet shoot() {
         if (!shootable) return null;
         int startX = 0, startY = 0;
         switch (lastMove) {
             case UP -> {
-                startX = xPos + width / 2 - Bullet.BULLETSIZE / 2;
-                startY = yPos - Bullet.BULLETSIZE;
+                startX = xPos + width / 2 - bulletSize / 2;
+                startY = yPos - bulletSize;
             }
             case DOWN -> {
-                startX = xPos + width / 2 - Bullet.BULLETSIZE / 2;
+                startX = xPos + width / 2 - bulletSize / 2;
                 startY = yPos + height;
             }
             case RIGHT -> {
                 startX = xPos + width;
-                startY = yPos + height / 2 - Bullet.BULLETSIZE / 2;
+                startY = yPos + height / 2 - bulletSize / 2;
             }
             case LEFT -> {
-                startX = xPos - Bullet.BULLETSIZE;
-                startY = yPos + height / 2 - Bullet.BULLETSIZE / 2;
+                startX = xPos - bulletSize;
+                startY = yPos + height / 2 - bulletSize / 2;
             }
         }
         Bullet bullet = new Bullet(startX, startY, lastMove, this);

@@ -21,7 +21,7 @@ public class ModelTest {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>());
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15,5, 1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15,5, 1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -49,7 +49,7 @@ public class ModelTest {
                     add(new TankObject(360, 645, 60, 60, Direction.DOWN));
                 }},
                 new ArrayList<>());
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15,5, 1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15,5, 1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -78,7 +78,7 @@ public class ModelTest {
                 new ArrayList<>());
         LevelObject levelObject = new LevelObject(gameObjects,
                 new ArrayList<>(),
-                832, 832, 15, 15,5, 1, 1, 10);
+                832, 832, 15, 15,5, 1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         int ax = field.toGameObjects().enemies().get(0).x();
         int ay = field.toGameObjects().enemies().get(0).y();
@@ -107,7 +107,7 @@ public class ModelTest {
                 new ArrayList<>());
         LevelObject levelObject = new LevelObject(gameObjects,
                 new ArrayList<>(),
-                832, 832, 15, 15, 5,1, 1, 10);
+                832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         assertEquals(8, field.toGameObjects().blocks().size());
         field.updateField();
@@ -133,7 +133,7 @@ public class ModelTest {
                 new ArrayList<>());
         LevelObject levelObject = new LevelObject(gameObjects,
                 new ArrayList<>(),
-                832, 832, 15, 15, 5,1, 1, 10);
+                832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         assertEquals(8, field.toGameObjects().blocks().size());
         field.updateField();
@@ -161,7 +161,7 @@ public class ModelTest {
                 new ArrayList<>() {{
                     add(new EnemySpawnObject(360, 645,60));
                 }},
-                832, 832, 15, 15, 5,1, 1, 10);
+                832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -190,7 +190,7 @@ public class ModelTest {
                     add(new TankObject(360, 705, 60, 60, Direction.DOWN));
                 }},
                 new ArrayList<>());
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         int ay = field.toGameObjects().mainPlayer().y();
         field.moveMainPlayer(Direction.DOWN);
@@ -217,7 +217,7 @@ public class ModelTest {
                     add(new TankObject(360, 705, 60, 60, Direction.DOWN));
                 }},
                 new ArrayList<>());
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -247,7 +247,7 @@ public class ModelTest {
                     add(new TankObject(360, 705, 60, 60, Direction.DOWN));
                 }},
                 new ArrayList<>());
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         int ax1 = field.toGameObjects().enemies().get(0).x();
         int ay1 = field.toGameObjects().enemies().get(0).y();
@@ -274,7 +274,7 @@ public class ModelTest {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>());
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -297,7 +297,7 @@ public class ModelTest {
                     add(new BulletObject(100, 20, 10, 10, Direction.UP));
                 }}
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         assertEquals(2, field.toGameObjects().bullets().size());
         field.updateField();
@@ -316,7 +316,7 @@ public class ModelTest {
                     add(new BulletObject(100, 10, 10, 10, Direction.DOWN));
                 }}
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 1);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -336,7 +336,7 @@ public class ModelTest {
                 }},
                 new ArrayList<>()
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -359,7 +359,7 @@ public class ModelTest {
                 }},
                 new ArrayList<>()
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 0);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 0);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);
@@ -385,7 +385,7 @@ public class ModelTest {
                 new ArrayList<>(),
                 new ArrayList<>()
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 0);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 0);
         BattleField field = new BattleField(levelObject);
         assertEquals(8, field.toGameObjects().blocks().size());
         field.shootTank();
@@ -411,7 +411,7 @@ public class ModelTest {
                 new ArrayList<>(),
                 new ArrayList<>()
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 0);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 0);
         BattleField field = new BattleField(levelObject);
         field.shootTank();
         field.updateField();
@@ -436,7 +436,7 @@ public class ModelTest {
                 new ArrayList<>(),
                 new ArrayList<>()
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 0);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 0);
         BattleField field = new BattleField(levelObject);
         int by = field.toGameObjects().mainPlayer().y();
         field.moveMainPlayer(Direction.DOWN);
@@ -461,7 +461,7 @@ public class ModelTest {
                 new ArrayList<>(),
                 new ArrayList<>()
         );
-        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 0);
+        LevelObject levelObject = new LevelObject(gameObjects, new ArrayList<>(), 832, 832, 15, 15, 5,1, 1, 10, 0);
         BattleField field = new BattleField(levelObject);
         int by = field.toGameObjects().mainPlayer().y();
         field.moveMainPlayer(Direction.DOWN);
@@ -483,7 +483,7 @@ public class ModelTest {
                 new ArrayList<>() {{
                     add(new EnemySpawnObject(100, 300,60));
                 }},
-                832, 832, 15, 15, 5,1, 1, 10);
+                832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         field.spawnEnemy();
         assertTrue(field.toGameObjects().enemies().isEmpty());
@@ -503,7 +503,7 @@ public class ModelTest {
                 new ArrayList<>() {{
                     add(new EnemySpawnObject(100, 100,60));
                 }},
-                832, 832, 15, 15, 5,1, 1, 10);
+                832, 832, 15, 15, 5,1, 1, 10, 1);
         BattleField field = new BattleField(levelObject);
         TestFieldListener listener = new TestFieldListener();
         field.setFieldListener(listener);

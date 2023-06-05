@@ -32,13 +32,13 @@ public class BattleField {
         GameObjects gameObjects = levelObject.gameObjects();
         TankObject mainPlayerObject = gameObjects.mainPlayer();
 
-        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp(),levelObject.tankSpeed());
+        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp(),levelObject.tankSpeed(), levelObject.bulletSize());
         this.playerSpawn = new Spawn(mainPlayerObject.x(), mainPlayerObject.y(), mainPlayerObject.width());
 
         this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(),
                 gameObjects.base().width(), gameObjects.base().height(), gameObjects.base().isDestructible(), false);
 
-        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp(),levelObject.tankSpeed())).forEach(enemies::add);
+        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp(),levelObject.tankSpeed(), levelObject.bulletSize())).forEach(enemies::add);
         levelObject.enemySpawns().stream().map(Spawn::from).forEach(enemySpawns::add);
 
         gameObjects.blocks().stream().map(FieldBlock::from).forEach(fieldBlocks::add);
@@ -124,8 +124,7 @@ public class BattleField {
             triggerExplosion(explosion);
             return true;
         }
-        for (Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext(); ) {
-            Bullet otherbullet = iterator.next();
+        for (Bullet otherbullet : bullets) {
             if (otherbullet != bullet && isCollision(bullet, otherbullet)) {
                 Tank otherowner = otherbullet.getOwner();
                 if (otherowner != null) otherowner.makeShootable();
@@ -178,7 +177,7 @@ public class BattleField {
         int n = enemySpawns.size();
         Spawn spawn = enemySpawns.get(ThreadLocalRandom.current().nextInt(0, n));
         Tank newEnemy = null;
-        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1, mainPlayer.getWidth(), mainPlayer.getHeight(), initialConfig.tankSpeed());
+        if (!pointOccupied(spawn)) newEnemy = new Tank(spawn.xPos, spawn.yPos, 1, mainPlayer.getWidth(), mainPlayer.getHeight(), initialConfig.tankSpeed(), initialConfig.bulletSize());
         if (newEnemy == null) return;
         enemiesLeft--;
         fieldListener.updateStats(mainPlayer.getHP(), enemiesLeft, score);

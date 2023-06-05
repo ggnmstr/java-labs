@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemySpawns, int fw, int fh, int bw, int bh, int tankSpeed, int playerHp, int enemyHp, int nEnemies) {
+public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemySpawns, int fw, int fh, int bw, int bh, int tankSpeed, int playerHp, int enemyHp, int bulletSize, int nEnemies) {
 
     public static LevelObject fromFile(String fileName) {
         record Size(int width, int height) {}
@@ -34,6 +34,7 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         Player player = level.player;
         Size fieldSize = level.size;
         int tankSpeed = fieldSize.height / 204;
+        int bulletSize = fieldSize.height / 83;
         Size blockSize = level.blockSize;
         Base base = level.base;
         List<Block> blocks = level.blocks();
@@ -55,12 +56,12 @@ public record LevelObject(GameObjects gameObjects, List<EnemySpawnObject> enemyS
         List<BulletObject> bulletObjects = new ArrayList<>();
         for (Bullet bullet : bullets){
             bulletObjects.add(new BulletObject(bullet.x,bullet.y,
-                    com.github.ggnmstr.tanks.model.Bullet.BULLETSIZE, com.github.ggnmstr.tanks.model.Bullet.BULLETSIZE,bullet.direction));
+                    bulletSize, bulletSize, bullet.direction));
         }
 
         GameObjects gameObjects = new GameObjects(mainPlayer, baseObject,
                 blockObjects, Collections.emptyList(), bulletObjects);
 
-        return new LevelObject(gameObjects, enemySpawnObjects, fieldSize.width, fieldSize.height, blockSize.width, blockSize.height, tankSpeed, level.playerHp, level.enemyHp, level.enemiesCount);
+        return new LevelObject(gameObjects, enemySpawnObjects, fieldSize.width, fieldSize.height, blockSize.width, blockSize.height, tankSpeed, level.playerHp, level.enemyHp, bulletSize, level.enemiesCount);
     }
 }

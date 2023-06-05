@@ -4,8 +4,6 @@ import com.github.ggnmstr.tanks.dto.BulletObject;
 import com.github.ggnmstr.tanks.util.Direction;
 
 public class Bullet extends GamePrimitive {
-
-    public static final int BULLETSIZE = 10;
     private final Direction direction;
     private final Tank owner;
 
@@ -17,16 +15,6 @@ public class Bullet extends GamePrimitive {
         this.direction = direction;
         this.owner = tank;
     }
-
-    public Bullet(int startX, int startY, int width, int height, Direction direction, Tank tank) {
-        this.width = width;
-        this.height = height;
-        this.xPos = startX;
-        this.yPos = startY;
-        this.direction = direction;
-        this.owner = tank;
-    }
-
 
     public static Bullet from(BulletObject bulletObject){
         return new Bullet(bulletObject.x(),bulletObject.y(),bulletObject.direction(),null);
@@ -44,29 +32,30 @@ public class Bullet extends GamePrimitive {
     public static Bullet explosionFrom(Bullet bullet, int blocksize) {
         int x = bullet.xPos;
         int y = bullet.yPos;
+        int bulletSize = bullet.getBulletSize();
         int w = 1;
         int h = 1;
         switch (bullet.getDirection()) {
             case UP -> {
                 x -= 2 * blocksize;
-                x += 0.5 * BULLETSIZE;
+                x += 0.5 * bulletSize;
                 w = 4 * blocksize;
             }
             case DOWN -> {
-                y += BULLETSIZE;
+                y += bulletSize;
                 x -= 2 * blocksize;
-                x += 0.5 * BULLETSIZE;
+                x += 0.5 * bulletSize;
                 w = 4 * blocksize;
             }
             case LEFT -> {
                 y -= 2 * blocksize;
-                y += 0.5 * BULLETSIZE;
+                y += 0.5 * bulletSize;
                 h = 4 * blocksize;
             }
             case RIGHT -> {
-                x += BULLETSIZE;
+                x += bulletSize;
                 y -= 2 * blocksize;
-                y += 0.5 * BULLETSIZE;
+                y += 0.5 * bulletSize;
                 h = 4 * blocksize;
             }
         }
@@ -82,5 +71,9 @@ public class Bullet extends GamePrimitive {
 
     public Tank getOwner() {
         return owner;
+    }
+
+    public int getBulletSize() {
+        return owner.getBulletSize();
     }
 }
