@@ -32,13 +32,13 @@ public class BattleField {
         GameObjects gameObjects = levelObject.gameObjects();
         TankObject mainPlayerObject = gameObjects.mainPlayer();
 
-        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp(),levelObject.fh());
+        this.mainPlayer = Tank.from(mainPlayerObject, levelObject.playerHp(),levelObject.tankSpeed());
         this.playerSpawn = new Spawn(mainPlayerObject.x(), mainPlayerObject.y(), mainPlayerObject.width());
 
         this.base = new FieldBlock(gameObjects.base().x(), gameObjects.base().y(),
                 gameObjects.base().width(), gameObjects.base().height(), gameObjects.base().isDestructible(), false);
 
-        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp(),levelObject.fh())).forEach(enemies::add);
+        gameObjects.enemies().stream().map(e -> Tank.from(e, levelObject.enemyHp(),levelObject.tankSpeed())).forEach(enemies::add);
         levelObject.enemySpawns().stream().map(Spawn::from).forEach(enemySpawns::add);
 
         gameObjects.blocks().stream().map(FieldBlock::from).forEach(fieldBlocks::add);
